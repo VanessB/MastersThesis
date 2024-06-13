@@ -1,0 +1,34 @@
+%% Равенство по определению
+\def\defeq{\triangleq}
+
+%% Функции
+\def\blankarg{\,\cdot\,}
+
+%% Множества.
+\def\naturals{\mathbb{N}}  % Натуральные числа.
+\def\integers{\mathbb{Z}}  % Целые числа.
+\def\reals{\mathbb{R}}     % Действительные числа
+\def\complexes{\mathbb{C}} % Комплексные числа.
+
+%% Линейная алгебра.
+\def\diag{\operatorname{diag}} % Диагональная матрица.
+
+%% Математический анализ.
+\newcommand{\limto}[2]{\underset{#1 \to #2}{\longrightarrow}}  % Стрелка, обозначающая предел.
+\newcommand{\overlimto}[3]{\overset{#3}{\limto{#1}{#2}}}       % Стрелка, обозначающая предел, с подписью типа сходимости.
+\def\banachspace{\mathcal{B}}                                  % Банахово пространство.
+\def\hilbertspace{\mathcal{H}}                                 % Гильбертово пространство.
+\def\linopset{\mathcal{L}}                                % Множество линейных ограниченных операторов.
+\newcommand{\dotprod}[2]{\left\langle #1, #2 \right\rangle}    % Скалярное произведение.
+
+\DeclareMathOperator*{\argmin}{\arg\min}
+
+%% Комплексные числа.
+\def\Re{\operatorname{Re}} % Действительная часть.
+\def\Im{\operatorname{Im}} % Мнимая часть.
+
+%% Асимптотические классы.
+\def\Oclass{\mathcal{O}} % О-большое.
+
+%% Выделение определения.
+\DeclareTextFontCommand{\defemph}{\bfseries\em}

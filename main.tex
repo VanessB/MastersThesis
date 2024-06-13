@@ -1,0 +1,45 @@
+\documentclass[a4paper, oneside, 14pt]{extreport}
+
+%% Аннотация.
+%\newenvironment{abstract}{}{}
+\usepackage{abstract}
+
+%% Преамбула.
+\input{include/preambule.tex}
+
+%% Определения команд.
+\input{include/defines.tex}
+
+%% Теория вероятностей.
+\input{include/probability.tex}
+
+%% Численные методы.
+\input{include/numerical.tex}
+
+%% Определение сред.
+\input{include/environments.tex}
+
+%% Список литературы.
+\addbibresource{references.bib}
+
+\begin{document}
+    % Стиль доказательства.
+    \let\oldproofname=\proofname \renewcommand{\proofname}{\rm\bf{\oldproofname}}
+
+    %% Титульный лист.
+    \input{include/title.tex}
+
+    %% Аннотоция.
+    \input{parts/annotation.tex}
+
+    %% Содержание.
+    \tableofcontents{} \setcounter{page}{2} % Начать со второй страницы. \newpage
+
+    \include{parts/introduction.tex} %% Введение.
+    \include{parts/theory.tex}       %% Теоретические сведения.
+    \include{parts/methods.tex}      %% Разработка численных методов.
+    \include{parts/blood.tex}       %% Модель крови.
+
+    %\nocite{*} \bibliography{references}
+    \printbibliography[heading=bibintoc]
+\end{document}

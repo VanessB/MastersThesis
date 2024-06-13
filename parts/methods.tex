@@ -1,0 +1,465 @@
+\chapter{Метод адаптации численных схем}
+\label{chapter:methods} \index{Методы}
+
+В прошлой главе был приведён краткий обзор существующих методов оценки устойчивости динамических систем и численных схем.
+Введены основные элементы линейного и нелинейного анализа устойчивости.
+Введено понятие жёсткости системы, разделённое в дальнейшем на линейную и нелинейную жёсткость.
+Было показано, что с линейной жёсткостью эффективно справляются A-устойчивые и L-устойчивые методы,
+в том числе и экспоненциальные интеграторы, интегрирующие линейную часть системы точно.
+Наконец, обозначена невозможность решения проблем нелинейной жёсткости в рамках линейной теории устойчивости.
+
+Данная глава полностью посвящена разработке новых методов численного решения дифференциальных уравнений,
+совмещающих преимущества устойчивых неявных схем и экспоненциальных интеграторов.
+%потенциально способных показать более устойчивое поведение на нелинейно жёстких системах,
+%оставаясь при этом устойчивыми и с точки зрения линейной жёсткости.
+%В то же время, разрабатываемые методы должны устойчиво интегрировать линейно жёсткие системы.
+Первый раздел посвящен общему подходу к построению новых методов численного интегрирования:
+предлагается адаптивно варьировать коэффициенты существующих разностных схем
+для достижения новых свойств при сохранении преимуществ исходного численного метода.
+Во втором разделе демонстрируется применение разработанного подхода к нескольким выбранным задачам малой размерности.
+Наконец, в третьем разделе предложенный подход применяется для получения нового семейства
+экспоненциальных интеграторов в случае задач произвольной размерности.
+
+
+\section{Общее описание метода}
+\label{section:methods:description}
+
+Суть предлагаемого метода заключается в подборе коэффициентов некоторой численной схемы
+с целью получения более точного (в идеале, совпадающего с аналитическим) численного решения
+для выбранного класса задач (например, для линейных или хорошо линеаризуемых динамических систем).
+
+Формальное описание метода начнём с рассмотрения семейства динамических систем,
+задаваемых уравнением $ \dot{\bvec{x}} = f(\bvec{x}, t) $,
+где $ f \in \rhsfamily $, $ \bvec{x} \in \banachspace $, и $ \banachspace $~--- банахово.
+Предполагаем, что для всех $ f \in \rhsfamily $ и $ \bvec{x}_0 \in \initialcond(f) $ решение соответствующей задачи Коши
+на отрезке $ [0; T] $ существует и единственно:
+\[
+    \exists! \bvec{x} \colon [0; T] \times \initialcond(f) \to \banachspace: \qquad
+    \begin{dcases}
+        \frac{\partial \bvec{x}}{\partial t} = f(\bvec{x}, t) \\
+        \bvec{x}(0; \bvec{x}_0) = \bvec{x}_0
+    \end{dcases}
+\]
+Далее рассмотрим семейство методов численного интегрирования $ \nmfamily $.%
+\footnote{На практике семейство обычно задаётся множеством параметров,
+конкретные значения которых определяет конкретную численную схему
+(например, таблица Бутчера параметризует методы Рунге-Кутты).}
+Обозначим за $ \{ \bvec{x}_M^n(\bvec{x}_0) \}_{n=0}^{N} $ набор численных решений,
+полученных на фиксированной сетке $ \{ t_n \}_{n=0}^N $ согласно методу $ M \in \nmfamily $.
+
+Пусть $ \Phi $~--- функционал качества численного решения
+(например, $ l_2 $-норма отклонения от точного решения на узлах сетки).
+Тогда выберем из $ \nmfamily $ схему,
+достигающую наименьшего значения функционала
+для всех допустимых правых частей $ f $ и начальных условий $ \bvec{x}_0 \in \initialcond(f) $:
+
+\begin{definition}
+    \label{definition:adaptation_method:adapted_numerical_method}
+    \emph{Адаптацией} семейства схем $ \nmfamily $ под семейство систем $ \dot{\bvec{x}} = f(\bvec{x}, t) $,
+    $ f \in \rhsfamily $, $ \bvec{x}(0) \in \initialcond(f) $ на сетке $ \{ t_n \}_{n=0}^N $ с функционалом качества $ \Phi $
+    назовём
+    \begin{equation}
+        \label{eq:adaptation_method:adapted_numerical_method}
+        M^* = \argmin_{M \in \nmfamily} \sup_{f \in \rhsfamily} \sup_{\bvec{x}_0 \in \initialcond(f)} \Phi(\{ \bvec{x}_M^n(\bvec{x}_0) \}_{n=0}^N, \bvec{x}(\blankarg; \bvec{x}_0) )
+    \end{equation}
+\end{definition}
+
+Предложенная процедура адаптации расширяет подход,
+рассмотренный в более ранних работах,
+где для семейства линейных систем $ \dot{\bvec{x}} = A \bvec{x} $, $ A \in \linopset(\banachspace) $
+производился поиск оптимального значения параметра $ \theta \in \reals $ тета-схемы
+как в случае фиксированного $ A $~\cite{liniger1970efficient_integration_methods, lambert1991methods, berzins1992adaptive_theta_method},
+так и в случае $ A \in \{ \lambda I \mid \lambda \in \reals \} $~\cite{liniger1969global_accuracy, johnson1988tunable_integration_method}.
+Можно также показать, что общая процедура экспоненциальной подгонки,
+%(выбирается схема, способная вопроизвести заданный набор полиномов и экспонент),
+рассматриваемая, например, в~\cite{hollevoet2013exponential_fitting},
+является частным случаем адаптации:
+требование точного воспроизведения полиномиальных и экспоненциальных решений
+можно сформулировать в терминах минимизации разницы между численным и точным решением некоторой задачи Коши.
+
+Важно отметить, что адаптацию можно проводить по одной системе,
+но результат применять к другой.
+Например, интересующую нас задачу можно аппроксимировать более простой,
+для которой известно аналитическое решение,
+и уже по этому решению подобрать оптимальную схему,
+которая в дальнейшем будет использована для интегрирования исходного уравнения.
+Более того, адаптацию имеет смысл проводить динамически,
+на каждом шаге интегрирования,
+так как аппроксимация исходной системы может сильно меняться с течением времени.
+
+Приведём несколько дополнительных замечаний, подробнее раскрывающих особенности описанного метода:
+\begin{enumerate}
+    \item
+        %Несмотря на подбор $ M^* $ под конкретную задачу,
+        %мы не выходим за рамки семейства $ \nmfamily $.
+        %которое можно изначально составить из численных схем,
+        %ведущих себя достаточно хорошо в рамках широкого класса динамических систем.
+        Результат адаптации всё ещё лежит в исходном семействе схем: $ M^* \in \nmfamily $.
+        Следовательно, грамотный выбор $ \nmfamily $ гарантирует хорошее поведение $ M^* $
+        на широком классе задач, несмотря на адаптацию под конкретное семейство $ \rhsfamily $.
+
+    \item
+        Частным случаем является подбор численной схемы,
+        дающей точное решение для выбранного множества задач:
+        достаточно в качестве $ \Phi $ взять норму разности численного решения и проекции истинного решения на сетку.
+        Тогда, если минимум достигается и равен нулю,
+        численные решения, получаемые при помощи $ M^* $, совпадают с точными на узлах выбранной сетки.
+
+        Таким образом, предложенный подход обобщает идею, стоящую за экспоненциальными интеграторами
+        и экспоненциальной подгонкой~\cite{liniger1970efficient_integration_methods, lambert1991methods, hollevoet2013exponential_fitting}.
+
+    \item
+        Если схема одношаговая, можно ограничиться $ N = 1 $,
+        то есть подбирать схему для оптимизации качества на одном шаге интегрирования.
+        Это упрощает анализ, а также полностью эквивалентно общему методу в случае,
+        если удаётся точно воспроизвести аналитическое решение.
+\end{enumerate}
+
+
+\section{Примеры использования в задачах малой размерности}
+\label{section:methods:low_dimensional_examples}
+
+В данном разделе предложенный метод будет применён к набору динамических систем малой размерности,
+имеющих аналитическое решение либо всегда, либо при определённых условиях.
+Будет рассмотрена линейная динамическая система,
+уравнение логистического роста и движение материальной точки по круговой орбите.
+Все три примера являются аппроксимациями более сложных систем,
+что оправдывает их использование для подбора численной схемы.
+
+\subsection{Одномерная линейная динамическая система}
+\label{subsection:methods:one_dimensional_linear_system}
+
+Пусть $ f \colon \reals \to \reals $ дифференцируема в некоторой окрестности $ x_0 $.
+Тогда динамическую систему, заданную уравнением $ \dot x = f(x) $,
+можно линеаризовать: $ \dot x \approx f(x_0) + \frac{\partial f}{\partial x}(x_0) \cdot (x - x_0) $.
+Линеаризованный вариант уравнения далее можно использовать для адаптации некоторого выбранного семейства численных схем.
+Результат адаптации потенциально может вести себя устойчивее и давать более точные численные решения,
+так как линейная часть исходной системы будет интегрироваться с меньшей ошибкой.
+
+Рассмотрим систему $ \dot x = a \, x + b $, $ a \in \complexes \setminus \{ 0 \} $,
+эквивалентную линеаризованной.
+Аналитическое решение соответствующей задачи Коши~--- $ x(t) = e^{a t} x_0 + (e^{a t} - 1) b / a $.
+В качестве семейства численных методов возьмём тета-схему:
+%
+\begin{equation}
+    \label{eq:one_dimensional_linear_system:one_dimensional_theta-method}
+    \frac{x^{n+1} - x^n}{\Delta t} = \theta f(x^{n+1}) + (1 - \theta) f(x^n), \qquad \theta \in [0;1]
+\end{equation}
+%
+Подберём $ \theta $ таким образом,
+чтобы численное решение за один шаг $ \Delta t $ совпадало с аналитическим.
+Так как схема одношаговая, а система автономная,
+это гарантирует совпадение численного и аналитического решения на произвольном числе шагов.
+Обозначив $ z = a \Delta t $, имеем
+\[
+    \frac{e^{a \Delta t} x_0 + (e^{a \Delta t} - 1) b / a - x_0}{\Delta t} = \theta a \cdot \left[ e^{a \Delta t} x_0 + (e^{a \Delta t} - 1) b / a \right] + (1 - \theta) a \cdot x_0 + b
+\]
+\[
+    (e^{z} - 1)(x_0 + b / a) = \theta \cdot z (e^{z} - 1)(x_0 + b / a) + z \cdot x_0 + b \Delta t
+\]
+\[
+    (e^{z} - 1) = \theta \cdot z (e^{z} - 1) + z
+\]
+\begin{equation}
+    \label{eq:one_dimensional_linear_system:optimal_theta}
+    \theta^*(z) = \frac{1}{z} - \frac{1}{e^{z} - 1}
+\end{equation}
+%
+Видно, что~\eqref{eq:one_dimensional_linear_system:optimal_theta} не зависит от $ b $;
+это можно было бы учесть ранее, сделав замену $ x' = x - b/a $,
+допустимую в рассматриваемом одномерном случае.
+Тот же самый результат можно получить, приравняв функцию устойчивости тета-метода к экспоненте:
+\[
+    e^z = R_\theta(z) \defeq \frac{1 + (1 - \theta) z}{1 - \theta z}
+\]
+Полученное выражение совпадает с формулой, приведённой в более ранних работах по
+экспоненциальной подгонке тета-схемы~\cite{liniger1970efficient_integration_methods, lambert1991methods, berzins1992adaptive_theta_method};
+мы подробнее проанализируем его в секции~\ref{section:methods:exponential_fitting},
+где будет рассматриваться аналогичная,
+но многомерная задача.
+
+Если правая часть дифференциального уравнения не является линейной,
+значение $ a $ можно оценить либо по нескольким последовательным шагам численного интегрирования~\cite{berzins1992adaptive_theta_method}
+(неявная линеаризация),
+либо через дифференцирование правой части уравнения (явная линеаризация).
+
+Вместо точной подгонки под фиксированное значение $ a \Delta t $
+можно также рассмотреть семейство линейных правых частей,
+соответствующих множеству $ a \Delta t \in [\underline{z}; \overline{z}] \subseteq \reals $.
+Без ограничения общности будем считать $ b = 0 $.
+%Аналогично будем рассматривать только один шаг по времени.
+Также считаем $ \theta \in [0;1] $.
+%В качестве функционала качества рассмотрим абсолютную и относительную ошибку:
+В качестве функционала качества рассмотрим абсолютную ошибку за один шаг интегрирования:
+\[
+    \Phi(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = |x^1_M - x(\Delta t; x_0)| = |x_0| \cdot |R_M(a \Delta t) - e^{a \Delta t}|
+\]
+%\[
+%    \Phi_2(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = \frac{|x^1_M - x(\Delta t; x_0)|}{|x(\Delta t; x_0)|} = | R_M(a \Delta t) e^{-a \Delta t} - 1|
+%\]
+Максимум $ |R_\theta(z) - e^z| $ на отрезке $ [\underline{z}; \overline{z}] $ достигается либо в концах отрезка,
+либо в стационарных точках, либо в точке разрыва.
+
+Стационарные точки:
+\begin{multline*}
+    \frac{\partial}{\partial z} (R_\theta(z) - e^z) = \frac{1}{(\theta z - 1)^2} - e^z = 0 \quad \Longrightarrow \\
+    \Longrightarrow \quad z_1 = 0, \;
+    z_{2,3} = 2 W_n \left( \mp \frac{e^{-1 / (2 \theta)}}{2 \theta} \right) + \frac{1}{\theta},
+\end{multline*}
+где $ W_n $~--- \emph{$ W $-функция Ламберта}, $ n \in \{ -1, 0 \} $.
+Точка разрыва второго рода (соответствует бесконечной ошибке численного решения): $ z_4 = 1/\theta $.
+
+Поскольку все численные решения при $ z > z_4 $ меняют знак,
+имеет смысл рассматривать только $ \theta \leqslant \max \{ 1, 1/\overline{z} \} $.
+Отсюда следует, что не требуется исследовать и точку $ z_3 $,
+так как при указанном ограничении на $ \theta $ имеем $ z_3 > z_4 > \overline{z} $.
+Не требуется рассматривать и $ z_1 $, в которой ошибка равна нулю.
+
+Заметим, что стационарная точка также характеризуется равенством
+$ \theta = (1 \mp e^{-z/2}) / z $, где минус соответствует $ z_2 $.
+Отсюда получаем значение ошибки в точке $ z_2 $:
+\[
+    |R_\theta(z_2) - e^{z_2}| = |1 + z_2 e^{z_2/2} - e^{z_2}| = \left|1 + \frac{z_2}{1 - \theta z_2} - \frac{1}{(1 - \theta z_2)^2} \right|
+\]
+Итоговое оптимальное значение $ \theta^*_{[\underline{z}, \overline{z}]} $
+минимизирует максимальную из ошибок в $ \underline{z} $, $ \overline{z} $ и
+$ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z}] $.
+В частности, если $ \overline{z} = 0 $ и $ \underline{z} \to -\infty $ (случай жёсткого/отрицательного спектра),
+\[
+    \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^*_{(-\infty; 0]},
+\]
+что совпадает со значением, полученным в работе~\cite{liniger1969global_accuracy}.
+
+Значения $ \theta^*_{(-\infty;\overline{z}]} $ для различных $ \overline{z} $ приведены на рис.~\ref{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}.
+Из данного графика видно, что оптимальные $ \theta $ для линейных систем с быстро убывающими решениями тяготеют к единице;
+в то же время, появление положительной части спектра почти сразу опускает оптимум ниже $ 1/2 $.
+Также интересно наличие небольшой <<полочки>> в районе нуля,
+на которой $ \theta^*_{(-\infty; \overline{z}]} = \theta^*_{(-\infty; 0]} $.
+
+% В частности, в~\cite{liniger1969global_accuracy} рассматривался подбор оптимального значения $ \theta $ для тета-схемы
+% в случае $ \dot x = \lambda x $, $ \lambda < 0 $:
+% \[
+%     0.878 \approx \argmin_\theta \max_{- \infty z < 0} | e^z - R_\theta(z) | =
+%     \argmin_\theta \max_{- \infty z < 0} \left| e^z - \frac{1 + (1 - \theta) z}{1 - \theta z} \right|
+% \]
+% В статье~\cite{johnson1988tunable_integration_method} $ \theta $ подбирается
+% отдельно для положительных положительных и отрицательных значения $ \lambda $.
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+            load "./gnuplot/common.gp"
+
+            file_name = "./data/optimal_theta_5.0.csv" 
+            set xrange [-5:5]
+
+            load "./gnuplot/optimal_theta.gp"
+        \end{gnuplot}
+        \caption{$ \overline{z} \in [-5; 5] $}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+            load "./gnuplot/common.gp"
+
+            file_name = "./data/optimal_theta_20.0.csv" 
+            set xrange [-20:20]
+
+            load "./gnuplot/optimal_theta.gp"
+        \end{gnuplot}
+        \caption{$ \overline{z} \in [-20; 20] $}
+    \end{subfigure}
+    \caption{Зависимость оптимального значения $ \theta $ от $ \overline{z} $ при $ \underline{z} \to -\infty $.}
+    \label{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
+\end{figure}
+
+
+На рис.~\ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
+и \ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
+показано поведение адаптированной к отрицательному спектру тета-схемы ($ \theta = \theta^*_{(-\infty; 0]} $) в случае одномерного уравнения Далквиста.
+Из графиком можно сделать вывод,
+что результат адаптации является компромиссом между осциллирующим методом трапеций и <<инертным>> неявным методом Эйлера.
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16.0cm,6.0cm fontscale 0.8}]
+        load './gnuplot/common.gp'
+
+        set style increment default
+        set style data lines
+        set xlabel  '$ t $'
+        set xrange  [ 0 : 10 ] noreverse writeback
+        set ylabel  '$ x(t) $' #rotate by 0
+        set yrange  [ * : * ] noreverse writeback
+
+        set key width -16
+
+        # Параметры.
+        z = -1.5
+        N = 5                    # Число точек.
+        T = 9.0                  # Время интегрирования.
+        lamb = z * (N - 1) / T   # Показатель экспоненты.
+
+        load './gnuplot/Dahlquist.gp'
+
+        set xtics 1
+        set xzeroaxis lw 3
+
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
+             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 3 ps 2, \
+             f(x) t 'точное решение' lw 4 lc 'black', \
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 3 ps 2
+    \end{gnuplot}
+    \caption{Поведение адаптированной к отрицательному спектру тета-схемы при решении одномерного уравнения Далквиста ($ z = -1.5 $).}
+    \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16.0cm,6.0cm fontscale 0.8}]
+        load './gnuplot/common.gp'
+
+        set style increment default
+        set style data lines
+        set xlabel  '$ t $'
+        set xrange  [ 0 : 10 ] noreverse writeback
+        set ylabel  '$ x(t) $' #rotate by 0
+        set yrange  [ * : * ] noreverse writeback
+
+        set key width -16
+
+        # Параметры.
+        z = -15.0
+        N = 5                    # Число точек.
+        T = 9 #6.75              # Время интегрирования.
+        lamb = z * (N - 1) / T   # Показатель экспоненты.
+
+        load './gnuplot/Dahlquist.gp'
+
+        set xtics 1
+        set xzeroaxis lw 3
+
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
+             f(x) t 'точное решение' lw 4 lc 'black', \
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 3 ps 2
+    \end{gnuplot}
+    \caption{Поведение адаптированной к отрицательному спектру тета-схемы при решении одномерного уравнения Далквиста ($ z = -15.0 $).}
+    \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
+\end{figure}
+
+\FloatBarrier
+
+
+\subsection{Логистическое уравнение}
+\label{subsection:methods:logistic_differential_equation}
+
+Рассмотрим логистическое уравнение или \emph{уравнение Ферхюльста}~\cite{verhulst1838logistic_equation, cramer2002origins_of_logistic_regression}:
+\begin{equation}
+    \label{eq:logistic_differential_equation:logistic_differential_equation}
+    \frac{\partial x}{\partial t} = a \cdot x (1 - x / K),
+\end{equation}
+где $ a $~--- параметр роста, $ K $~--- параметр насыщения.
+Данное уравнение моделирует геометрический рост в условиях ограниченных ресурсов,
+а потому часто возникает в качестве предельного или частного случая в химических,
+биологических, экологических и экономических моделях.
+Адаптация численного метода под логистическое уравнение потенциально может повысить точность интегрирования систем,
+в которых наблюдается как взрывной рост, так и насыщение.
+
+Аналитическим решением~\eqref{eq:logistic_differential_equation:logistic_differential_equation}
+является логистическая функция, также известная как сигмоида:
+\begin{equation}
+    \label{eq:logistic_differential_equation:logistic_function}
+    x(t) = \frac{x_0 K e^{a t}}{K + x_0 (e^{a t} - 1)}
+\end{equation}
+
+
+Аналогично предыдущему разделу, адаптируем тета-схему под данную задачу для конкретных значении $ a $ и $ K $.
+%Без ограничения общности положим $ K = 1 $ (соответствует замене переменной $ x' = x / K $).
+Один шаг тета-метода:
+\[
+    x(\Delta t) - x_0 = \Delta t \cdot \left[ \theta \cdot a x(\Delta t) (1 - x(\Delta t) / K) + (1 - \theta) \cdot a x_0 (1 - x_0 / K) \right]
+\]
+Заметим, что
+\[
+    x(t) (1 - x(t) / K) = x_0 (1 - x_0 / K) \frac{K^2 e^{a t}}{(K + x_0 (e^{a t} - 1))^2} = e^{-a t} x_0 (1 - x_0 / K) \frac{(x(t))^2}{x_0^2},
+\]
+\[
+    x(t) - x_0 = \frac{x_0 (1 - x_0 / K) K (e^{a t} - 1)}{K + x_0 (e^{a t} - 1)} = (1 - e^{- a t}) x_0 (1 - x_0 / K) \frac{x(t)}{x_0}
+\]
+откуда
+\[
+    %\frac{K (e^{a \Delta t} - 1)}{K + x_0 (e^{a \Delta t} - 1)} =
+    (1 - e^{a \Delta t}) \frac{x(\Delta t)}{x_0} =
+    a \Delta t \left[ \theta \cdot \left( e^{- a \Delta t} \frac{(x(\Delta t))^2}{x_0^2}  - 1 \right) + 1 \right]
+\]
+Обозначим $ z = a \Delta t $, $ \beta = x(\Delta t) / x_0 $.
+Тогда
+\begin{equation}
+    \label{eq:logistic_differential_equation:optimal_theta}
+    \theta^*(z, \beta) = \frac{\beta (1 - e^{-z}) / z - 1}{\beta^2 e^{-z} - 1}, \qquad \beta(z, x_0/K) = \left[ e^{-z} + \frac{x_0}{K} (1 - e^{-z}) \right]^{-1}
+\end{equation}
+
+На практике параметр $ K $ обычно не известен,
+а значение $ a $ возможно оценить через линеаризацию правой части только
+на начальном (экспоненциальный рост) и на конечном (насыщение) этапе.
+
+Хорошим приближением $ \beta $ может являться отношение численного решения на новом шаге
+к решению на текущем: $ \beta = x^{n+1} / x^n $.
+Также отметим, что в предельном случае $ a \Delta t \to 0 $ зависимостью $ \theta^* $ от $ z $ можно пренебречь:
+\[
+    \lim_{z \to 0} \theta^*(z, \beta) = \frac{\beta - 1}{\beta^2 - 1} = \frac{1}{\beta + 1} \approx \frac{x^n}{x^{n+1} + x^{n}}
+\]
+
+
+
+% Можно воспользоваться~\eqref{eq:logistic_differential_equation:logistic_function} для того,
+% чтобы явно выразить $ \beta $ через $ z $ и $ K $,
+% однако на практике $ K $ может быть не известно,
+% а $ x(\Delta t) / x_0 $ для полученной $ \theta^* $ является отношением новой точки численного решения к предыдущей,
+% что легко вычисляется на каждом шаге.
+% 
+% Поскольку $ a $ в общем случае также может быть неизвестно,
+% члены, содержащие $ z $, имеет смысл заменить через следующие отношения,
+% содержащие только точки решения и соответствующие значения правой части исходного дифференциального уравнения:
+% \[
+%     \beta^2 e^{-z} = \frac{a x(t) (1 - x(t) / K)}{a x_0 (1 - x_0 / K)} = \frac{f(x(\Delta t))}{f(x_0)},
+% \]
+% \[
+%     \beta (1 - e^{-z}) / z = \frac{(x(\Delta t) - x_0) / \Delta t}{a x_0 (1 - x_0 / K)} = \frac{x(\Delta t) - x_0}{\Delta t \cdot f(x_0)},
+% \]
+% где $ f(x) $~--- правая часть уравнения~\eqref{eq:logistic_differential_equation:logistic_differential_equation}.
+% В итоге имеем
+% \[
+%     \theta^* = \frac{f(x(\Delta t)) - f(x_0)}{\frac{x(\Delta t) - x_0}{\Delta t} - f(x_0)}
+% \]
+
+
+\subsection{Движение материальной точки по окружности}
+\label{subsection:methods:circular_orbit}
+
+В задачах небесной механики 
+
+
+
+\section{Общая формула точной адаптации тета-схемы}
+\label{section:methods:general_exact_theta_method_adaptation}
+
+Вернёмся к общей постановке автономной системы дифференциальных уравнений: $ \dot{\bvec{x}} = f(\bvec{x}) $.
+
+
+\section{Многомерная экспоненциальная адаптация}
+\label{section:methods:exponential_fitting}
+
+\subsection{Взвешенный метод Эйлера}
+\label{subsection:methods:weighted_Euler}
+
+\subsection{Дважды взвешенный метод Эйлера}
+\label{subsection:methods:double_weighted_Euler}

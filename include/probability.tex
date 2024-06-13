@@ -1,0 +1,34 @@
+%% Теория вероятностей.
+\def\proba{\mathbb{P}}
+\def\setfamily{\mathcal{F}}
+\def\borel{\mathcal{B}}
+\def\trajectories{\mathcal{X}}
+\def\indicator{\mathbb{I}}
+\def\lebesgue{\mathbb{L}}
+\def\iid{\textnormal{н.о.р.с.в.}}
+
+% Моменты.
+\DeclareMathOperator{\expect}{\mathbb{E}}
+\DeclareMathOperator{\dispersion}{\mathbb{D}}
+\newcommand{\covariance}[2]{\textnormal{cov}\left(#1, #2\right)}
+\newcommand{\rvcenter}[1]{\mathring{#1}}
+
+% Распределения.
+\def\bernoulli{\textnormal{Be}}
+\def\binomial{\textnormal{Bi}}
+\def\poisson{\textnormal{Po}}
+\def\uniform{\textnormal{U}}
+\def\expdistr{\textnormal{Exp}}
+\def\normal{\mathcal{N}}
+
+% Сходимости.
+\DeclareMathOperator*{\limmeansq}{\textnormal{l.i.m.}}
+\newcommand{\converges}[1]{\overset{#1}{\longrightarrow}}
+\def\convmeansq{\converges{\textnormal{с.к.}}}
+\def\convalmost{\converges{\textnormal{п.н.}}}
+\def\convproba{\converges{\proba}}
+\def\convdistr{\converges{d}}
+\def\convnorm{\converges{\| \cdot \|}}
+
+\def\almosteq{\overset{\textnormal{п.н.}}{=}}
+\def\distreq{\overset{d}{=}}

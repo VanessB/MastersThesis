@@ -1,0 +1,103 @@
+%% Пакеты для работы с математикой.
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+\usepackage{nicematrix} % Красивые матрицы.
+
+%% Работа с русским языком.
+\usepackage{cmap}            % поиск в PDF
+%\usepackage{mathtext}       % русские буквы в формулах
+\usepackage[T2A]{fontenc}    % кодировка
+\usepackage[utf8]{inputenc}  % кодировка исходного текста
+\usepackage[russian]{babel}  % локализация и переносы
+
+%% Номера формул.
+\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+%\usepackage{leqno}               % Немуреация формул слева
+
+%% Шрифты.
+%\usepackage{euscript}	 % Шрифт Евклид
+%\usepackage{mathrsfs}   % Красивый матшрифт
+
+%\usepackage{fontspec}
+%\defaultfontfeatures{Ligatures={TeX},Renderer=Basic} 
+%\setmainfont[Ligatures={TeX,Historic}]{Times New Roman}
+
+%\usepackage{mathptmx}
+%\usepackage{newtxtext,newtxmath}
+
+%% Поля (геометрия страницы).
+\usepackage[left=3cm, right=1.5cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry}
+%headheight=28pt
+
+%% Русские списки.
+\usepackage{enumitem}
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+\makeatother
+
+%% Работа с картинками.
+\usepackage{caption}           % Пакет для подписей к рисункам, в частности, для работы caption*.
+\usepackage{subcaption}        % Подкартинки.
+
+\captionsetup{justification=centering} % Центрирование подписей к картинкам.
+\usepackage{graphicx}                  % Для вставки рисунков.
+\graphicspath{{images/}{images2/}}     % Папки с картинками.
+\setlength\fboxsep{3pt}                % Отступ рамки \fbox{} от рисунка.
+\setlength\fboxrule{1pt}               % Толщина линий рамки \fbox{}.
+\usepackage{wrapfig}                   % Обтекание рисунков и таблиц текстом.
+
+%% Работа с таблицами.
+%\usepackage{array,tabularx,tabulary,booktabs} % Дополнительная работа с таблицами.
+%\usepackage{longtable}                        % Длинные таблицы.
+%\usepackage{multirow}                         % Слияние строк в таблице.
+
+%% Интервалы.
+\linespread{1.5}              % Междустрочный интервал.
+\setlength\parindent{1.25cm}  % Абзацный отступ.
+\usepackage{indentfirst}      % Отступ в первом абзаце.
+
+%% TikZ.
+\usepackage{tikz}
+%\usetikzlibrary{graphs,graphs.standard}
+
+%% Графики gnuplot.
+\usepackage[shell, subfolder, cleanup]{gnuplottex}
+\usepackage{gnuplot-lua-tikz}
+
+%% Верхний колонтитул.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%% Перенос знаков в формулах (по Львовскому).
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}{\hbox{$\mathsurround=0pt #1$}}{}}
+
+%% Дополнения.
+\usepackage{float}             % Добавляет возможность работы с командой [H] которая улучшает расположение на странице.
+\usepackage{textcomp, gensymb} % Красивые градусы.
+
+%% Вращение pdf или его наполнения.
+\usepackage{rotating}  % Вращение плавающих объектов.
+\usepackage{pdflscape} % Вращение страницы.
+
+%% Объекты на одтельной странице.
+%\usepackage{afterpage}
+
+%% Контроль положения плавающих объектов.
+\usepackage{placeins}
+
+%% hyperref для ссылок внутри  pdf.
+\usepackage[unicode, pdftex]{hyperref}
+
+%% Список литературы.
+\usepackage[doi=false, isbn=false, url=false, eprint=false, backend=biber, style=gost-numeric]{biblatex}
+\usepackage{csquotes}
+
+%% Стили заголовков.
+\usepackage{titlesec}
+% Глава.
+\titleformat{\chapter}{\centering\normalfont\fontsize{14}{15}\bfseries}{\chaptertitlename\ \thechapter:}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{10pt}
+% Секция.
+\titleformat{\section}{\centering\normalfont\fontsize{14}{15}\bfseries}{\thesection}{1em}{}
+% Подсекция.
+\titleformat{\subsection}{\centering\normalfont\fontsize{14}{15}\bfseries}{\thesubsection}{1em}{}

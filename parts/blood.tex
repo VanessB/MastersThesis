@@ -1,0 +1,226 @@
+\chapter{Модель образования белого тромба}
+\label{chapter:blood} \index{Модель}
+
+\section{Модели распределения тромбоцитов в объёме}
+\label{section:volume_distribution_models}
+
+%При моделировании слипания тромбоцитов и механических свойств слипшейся массы разумно отказаться от феноменологического подхода
+%и получить необходимые законы из вспомогательных теоретических результатов.
+%В перспективе это может позволить уменьшить число параметров модели,
+%сделать их более интерпретируемыми.
+
+%В основе слипания тромбоцитов и роста вязкости тромба лежит связывание тромбоцитов
+%сетью из развёрнутых молекул фактора фон Виллебранда, длина которых 
+
+Распределение тромбоцитов в объёме напрямую влияет на формирование связей между ними,
+что сказывается как на скорости слипания тромбоцитов, так и на механических свойствах слипшейся массы.
+Отсюда следует важность отдельного моделирования объёмного распределения тромбоцитов.
+
+В данном разделе рассматривается вывод закона распределения из небольшого числа интуитивно понятных предположений.
+Во-первых, предполагается, что при достижении предельной концентрации взаимное расположение тромбоцитов
+близко к плотной упаковке трёхмерных шаров.
+Во-вторых, считается, что при малых концентрациях тромбоциты распределены по объёму почти равномерно и случайно,
+их взаимодействие между собой несущественно.
+В-третьих, предполагается существование для средних значений концентрации переходного режима,
+в котором распределение тромбоцитов всё еще достаточно случайное,
+но взаимодействием между ними пренебрегать уже нельзя в силу значительности занимаемого ими объёма.
+
+
+\subsection{Случай высокой концентрации}
+\label{subsection:volume_distribution_models:high_concentration}
+
+Высокая концентрация соответствует сформировавшемуся тромбу.
+Тромбоциты в таком тромбе прилегают друг другу плотно.
+В приближении сферически симметричных тромбоцитов
+можно задействовать известный результат для плотной упаковки трёхмерных шаров:
+
+\begin{theorem}[Гаусс, Кеплер, Хейлз]
+     В пространстве $ \reals^3 $ рассмотрим последовательность ограниченных измеримых множеств $ S_n $ таких,
+     что $ n $-ое множество содержит шар радиуса хотя бы $ n $.
+     Пусть $ \setfamily_n $~--- семейство подмножеств $ S_n $,
+     являющихся дизъюнктным объединением единичных шаров.
+     Пусть $ \varphi \colon \bigcup_{n \in \naturals} \setfamily_n \to \naturals_0 $
+     отображает дизъюнктное объединение шаров в число шаров в этом объединении.
+     Тогда
+     \[
+         \lim_{n \to \infty} \max_{R \in \setfamily_n} \frac{\varphi(R)}{\mu(S_n)} = \frac{\pi}{3 \sqrt{2}}
+     \]
+\end{theorem}
+Таким образом, максимально возможная концентрация частиц радиуса $ R $ равна
+\[
+    n_\textnormal{max} = \frac{\pi}{3 \sqrt{2}} \cdot \frac{1}{\frac{4}{3} \pi R^3}
+    = \frac{1}{4 \sqrt{2} R^3}
+    = \frac{\sqrt{2}}{(2R)^3}
+\]
+Размер тромбоцитов в человеческой крови составляет примерно $ 3 - 4 $ мкм.
+Приняв этот размер за диаметр, получаем значение предельной концентрации:
+от $ 2 \cdot 10^{16} \; \textnormal{м}^{-3} $ до $ 6 \cdot 10^{16} \; \textnormal{м}^{-3} $,
+или примерно $ 40 \cdot 10^6 \; \textnormal{мкл}^{-1} $.
+При нормальных условиях концентрация тромбоцитов в крови человека примерно равна $ 0.3 \cdot 10^6 \; \textnormal{мкл}^{-1} $,
+что более чем в $ 100 $ раз меньше предельной концентрации
+(или, иначе говоря, среднее расстояние между тромбоцитами примерно в $ \sqrt[3]{100} \approx 5 $ раз больше их радиуса).
+
+Таким образом, можно вполне справедливо полагать,
+что на ранних этапах образования тромба концентрация тромбоцитов достаточно мала.
+
+
+\subsection{Случай низкой концентрации}
+\label{subsection:volume_distribution_models:low_concentration}
+
+Рассмотрим сосуд объёма $ V_0 $,
+наполненный жидкостью с равномерно распределённой примесью концентрации $ n = N / V_0 $.
+Число частиц в части сосуда объёма $ V $ распределено биномиально с параметром $ p = V n / N = V / V_0 $:
+\[
+    \proba\{ \textnormal{\# частиц} = k \} = \binom{N}{k} \left(\frac{V}{V_0}\right)^k \left(1 - \frac{V}{V_0} \right)^{N-k}
+\]
+При устремлении $ V_0 / V \to +\infty $ получаем известный результат~---
+распределение Пуассона для числа частиц в малом объёме:
+\begin{multline*}
+    \proba\{ \textnormal{\# частиц} = k \} \sim \frac{N^k}{k!} \left( \frac{V}{V_0} \right)^k \left( 1 - \frac{V}{V_0} \right)^N = \\ =
+    \frac{(V_0 n)^k}{k!} \left( \frac{V}{V_0} \right)^k \left( 1 - \frac{V}{V_0} \right)^{V_0 n} \sim \frac{(V n)^k}{k!} e^{- V n} 
+\end{multline*}
+Заметим, что вероятность обнаружить в объёме $ V $ не менее $ k $ частиц равна
+\begin{multline}
+    \label{eq:volume_distribution_models:volume_distribution}
+    \proba\{ \textnormal{\# частиц} \geqslant k \} =
+    1 - \proba\{ \textnormal{\# частиц} < k \} =
+    1 - \sum_{m = 0}^{k-1} \proba\{ \textnormal{\# частиц} = m \} = \\ =
+    1 - e^{- V n} \sum_{m = 0}^{k-1} \frac{(V n)^m}{m!}
+\end{multline}
+Полученное выражение является функцией распределения для
+\emph{гамма-рас\-пре\-де\-ле\-ния} с параметрами $ k $, $ 1/n $.
+
+
+Нас интересует вероятностное распределение расстояния от выбранной частицы до $ k $-ого ближайшего соседа
+(обозначим это расстояние $ r_k $).
+То есть, что эквивалентно, вероятностное распределение объёма шара,
+в котором есть хотя бы $ k $ частиц (помимо центра).
+
+Обозначим $ V(r) $ и $ S(r) $~--- объём шара и площадь сферы радиуса $ r $ соответственно
+(в трёхмерном случае~--- $ \frac{4}{3} \pi r^3 $ и $ 4 \pi r^2 $ соответственно).
+\begin{equation}
+    \label{eq:volume_distribution_models:kNN-volume_equvalence}
+    \proba\{r_k < x\} = \proba \left\{\textnormal{в $ V = V(x) $ находится $ \geqslant k $ частиц} \right\}
+\end{equation}
+Комбинируя~\eqref{eq:volume_distribution_models:volume_distribution} и \eqref{eq:volume_distribution_models:kNN-volume_equvalence},
+получаем функцию распределения для $ r_k $:
+\begin{equation}
+    \label{eq:volume_distribution_models:kNN_distance_CDF}
+    F_{r_k}(x) = 1 - e^{- V(x) n} \sum_{m = 0}^{k-1} \frac{(V(x) n)^m}{m!}
+\end{equation}
+Дифференцируя по $ x $ (с учётом соотношения $ \partial V(x) / \partial x = S(x) $),
+получаем плотность распределения:
+\begin{multline}
+    \label{eq:volume_distribution_models:kNN_distance_PDF}
+    \rho_{r_k}(x) = e^{-V(x) n} \cdot \left[ S(x) n \sum_{m = 0}^{k-1} \frac{(V(x) n)^m}{m!} -
+    \sum_{m = 1}^{k-1} \frac{S(x) n (V(x) n)^{m-1}}{(m-1)!} \right] = \\ =
+    S(x) n \cdot e^{-V(x) n} \frac{(V(x) n)^{k-1}}{(k-1)!}
+\end{multline}
+Характерный вид $ F_{r_k}(x) $ и $ \rho_{r_k}(x) $ представлен на графике~\ref{fig:volume_distribution_models:kNN_distance_distribution_plots}.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+            load "./gnuplot/common.gp"
+            load "./gnuplot/kNN_distribution.gp"
+
+            set yrange [0:1]
+
+            f_1(x)  = F_r(x,3,1)
+            f_4(x)  = F_r(x,3,4)
+            f_10(x) = F_r(x,3,10)
+
+            plot [0:3] f_1(x) lw 2 t "$ F_{r_1}(x) $", \
+                       f_4(x) lw 2 t "$ F_{r_4}(x) $", \
+                       f_10(x) lw 2 t "$ F_{r_{10}}(x) $"
+        \end{gnuplot}
+        \caption{Функции распределения $ F_{r_k}(x) $.}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+            load "./gnuplot/common.gp"
+            load "./gnuplot/kNN_distribution.gp"
+
+            f_1(x)  = rho_r(x,3,1)
+            f_4(x)  = rho_r(x,3,4)
+            f_10(x) = rho_r(x,3,10)
+
+            plot [0:3] f_1(x) lw 2 t "$ \\rho_{r_1}(x) $", \
+                        f_4(x) lw 2 t "$ \\rho_{r_4}(x) $", \
+                        f_10(x) lw 2 t "$ \\rho_{r_{10}}(x) $"
+        \end{gnuplot}
+        \caption{Функций плотности вероятности $ \rho_{r_k}(x) $.}
+    \end{subfigure}
+    \caption{Графики распределения случайной величины $ r_k $ для $ k \in \{1, 4, 10 \} $.}
+    \label{fig:volume_distribution_models:kNN_distance_distribution_plots}
+\end{figure}
+
+
+% В общем случае объём и площадь поверхности $ d $-мерного шара равны, соответственно,
+% \begin{equation}
+%     \label{eq:volume_distribution_models:d-dim_ball_volume_and_surface}
+%     V_d(r) = \frac{\pi^{d/2}}{\Gamma(d/2 + 1)} \cdot r^d \qquad S_d(r) = 2 \pi V_{d-1}(r)
+% \end{equation}
+% Отсюда имеем
+% \[
+%     r = \frac{1}{\sqrt{\pi}} \left[ \Gamma(d/2+1) V_d(r) \right]^{1/d},
+% \]
+Найдём моменты случайной величины $ r_k $.
+Вспомним, что объём $ d $-мерного шара радиуса $ r $ пропорционален $ r^d $:
+\[
+    V_d(r) = V_d(1) \cdot r^d \quad \Longrightarrow \quad r = \sqrt[d]{V_d(r) / V_d(1)},
+\]
+Тогда
+\begin{align}
+    \label{eq:volume_distribution_models:kNN_distance_expectation}
+    \expect r_k^m &= \int\limits_0^{+\infty} x^m \rho_{r_k}(x) \, dx =
+    \int\limits_0^{+\infty} x^m e^{-V(x) n} \frac{(V(x) n)^{k-1}}{(k-1)!} \, S(x) n \, dx = \\
+    &= \int\limits_0^{+\infty} x^m(V) \cdot e^{-V n} \frac{(V n)^{k-1}}{(k-1)!} \, d(V n) = \\
+    &= V(1)^{-m/d} \int\limits_0^{+\infty} V^{m/d} \cdot e^{-V n} \frac{(V n)^{k-1}}{(k-1)!} \, d(V n) = \\
+    &= \frac{(V(1) n)^{-m/d}}{(k-1)!} \int\limits_0^{+\infty} z^{m/d + k - 1} e^{-z} dz
+    = \frac{\Gamma(m/d + k)}{\Gamma(k)} (V(1) n)^{-m/d}
+\end{align}
+В частности, в трёхмерном случае среднее расстояние до ближайшего соседа примерно равно $ 0.83 \cdot n^{-1/3} $.
+
+% \begin{figure}
+%     \centering
+%     \begin{subfigure}[t]{0.5\textwidth}
+%         \centering
+%         \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.5cm,5.0cm}]
+%             load "./gnuplot/common.gp"
+%             load "./gnuplot/kNN_distribution.gp"
+% 
+%             set yrange [0:1]
+% 
+%             f_1(x)  = F_r_normalized(x,3,1)
+%             f_4(x)  = F_r_normalized(x,3,4)
+%             f_10(x) = F_r_normalized(x,3,10)
+% 
+%             plot [-3:3] f_1(x) lw 2 t "$ F_{r_1}(x) $", \
+%                         f_4(x) lw 2 t "$ F_{r_4}(x) $", \
+%                         f_10(x) lw 2 t "$ F_{r_{10}}(x) $"
+%         \end{gnuplot}
+%         \caption{Характерный вид функций распределения $ F_{r_k}(x) $.}
+%     \end{subfigure}%
+%     \begin{subfigure}[t]{0.5\textwidth}
+%         \centering
+%         \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.5cm,5.0cm}]
+%             load "./gnuplot/common.gp"
+%             load "./gnuplot/kNN_distribution.gp"
+% 
+%             f_1(x)  = rho_r_normalized(x,3,1)
+%             f_4(x)  = rho_r_normalized(x,3,4)
+%             f_10(x) = rho_r_normalized(x,3,10)
+% 
+%             plot [-3:3] f_1(x) lw 2 t "$ \\rho_{r_1}(x) $", \
+%                         f_4(x) lw 2 t "$ \\rho_{r_4}(x) $", \
+%                         f_10(x) lw 2 t "$ \\rho_{r_{10}}(x) $"
+%         \end{gnuplot}
+%         \caption{Характерный вид плотности распределения $ \rho_{r_k}(x) $.}
+%     \end{subfigure}
+% \end{figure}

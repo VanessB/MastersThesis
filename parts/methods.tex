@@ -3,8 +3,8 @@
 
 В прошлой главе был приведён краткий обзор существующих методов оценки устойчивости динамических систем и численных схем.
 Введены основные элементы линейного и нелинейного анализа устойчивости.
-Введено понятие жёсткости системы, разделённое в дальнейшем на линейную и нелинейную жёсткость.
-Было показано, что с линейной жёсткостью эффективно справляются A-устойчивые и L-устойчивые методы,
+Введено понятие жёсткости системы, разделённое в дальнейшем на классическую и нелинейную жёсткость.
+Было показано, что с классической жёсткостью эффективно справляются A"=устойчивые и L"=устойчивые методы,
 в том числе и экспоненциальные интеграторы, интегрирующие линейную часть системы точно.
 Наконец, обозначена невозможность решения проблем нелинейной жёсткости в рамках линейной теории устойчивости.
 
@@ -29,14 +29,14 @@
 для выбранного класса задач (например, для линейных или хорошо линеаризуемых динамических систем).
 
 Формальное описание метода начнём с рассмотрения семейства динамических систем,
-задаваемых уравнением $ \dot{\bvec{x}} = f(\bvec{x}, t) $,
+задаваемых уравнением $ \dot{\bvec{x}} = f(t, \bvec{x}) $,
 где $ f \in \rhsfamily $, $ \bvec{x} \in \banachspace $, и $ \banachspace $~--- банахово.
 Предполагаем, что для всех $ f \in \rhsfamily $ и $ \bvec{x}_0 \in \initialcond(f) $ решение соответствующей задачи Коши
 на отрезке $ [0; T] $ существует и единственно:
 \[
     \exists! \bvec{x} \colon [0; T] \times \initialcond(f) \to \banachspace: \qquad
     \begin{dcases}
-        \frac{\partial \bvec{x}}{\partial t} = f(\bvec{x}, t) \\
+        \frac{\partial \bvec{x}}{\partial t} = f(t, \bvec{x}) \\
         \bvec{x}(0; \bvec{x}_0) = \bvec{x}_0
     \end{dcases}
 \]
@@ -55,7 +55,7 @@
 
 \begin{definition}
     \label{definition:adaptation_method:adapted_numerical_method}
-    \emph{Адаптацией} семейства схем $ \nmfamily $ под семейство систем $ \dot{\bvec{x}} = f(\bvec{x}, t) $,
+    \emph{Адаптацией} семейства схем $ \nmfamily $ под семейство систем $ \dot{\bvec{x}} = f(t, \bvec{x}) $,
     $ f \in \rhsfamily $, $ \bvec{x}(0) \in \initialcond(f) $ на сетке $ \{ t_n \}_{n=0}^N $ с функционалом качества $ \Phi $
     назовём
     \begin{equation}
@@ -64,36 +64,29 @@
     \end{equation}
 \end{definition}
 
-Предложенная процедура адаптации расширяет подход,
-рассмотренный в более ранних работах,
+Предложенная процедура адаптации расширяет подход, рассмотренный в более ранних работах,
 где для семейства линейных систем $ \dot{\bvec{x}} = A \bvec{x} $, $ A \in \linopset(\banachspace) $
 производился поиск оптимального значения параметра $ \theta \in \reals $ тета-схемы
 как в случае фиксированного $ A $~\cite{liniger1970efficient_integration_methods, lambert1991methods, berzins1992adaptive_theta_method},
 так и в случае $ A \in \{ \lambda I \mid \lambda \in \reals \} $~\cite{liniger1969global_accuracy, johnson1988tunable_integration_method}.
-Можно также показать, что общая процедура экспоненциальной подгонки,
-%(выбирается схема, способная вопроизвести заданный набор полиномов и экспонент),
-рассматриваемая, например, в~\cite{hollevoet2013exponential_fitting},
-является частным случаем адаптации:
+Можно также показать, что общая процедура экспоненциальной подгонки, рассматриваемая,
+например, в~\cite{hollevoet2013exponential_fitting}, является частным случаем адаптации:
 требование точного воспроизведения полиномиальных и экспоненциальных решений
 можно сформулировать в терминах минимизации разницы между численным и точным решением некоторой задачи Коши.
 
-Важно отметить, что адаптацию можно проводить по одной системе,
-но результат применять к другой.
+Важно отметить, что адаптацию можно проводить по одной системе, но результат применять к другой.
 Например, интересующую нас задачу можно аппроксимировать более простой,
-для которой известно аналитическое решение,
-и уже по этому решению подобрать оптимальную схему,
+для которой известно аналитическое решение, и уже по этому решению подобрать оптимальную схему,
 которая в дальнейшем будет использована для интегрирования исходного уравнения.
-Более того, адаптацию имеет смысл проводить динамически,
-на каждом шаге интегрирования,
+Более того, адаптацию имеет смысл проводить динамически, на каждом шаге интегрирования,
 так как аппроксимация исходной системы может сильно меняться с течением времени.
+Наконец, адаптация может быть использована для нахождения оптимального баланса
+между устойчивостью численного метода и простотой поиска корней невязки,
+что должно улучшить поведение численного решения при интегрировании жёстких во всех смыслах систем.
 
 Приведём несколько дополнительных замечаний, подробнее раскрывающих особенности описанного метода:
 \begin{enumerate}
     \item
-        %Несмотря на подбор $ M^* $ под конкретную задачу,
-        %мы не выходим за рамки семейства $ \nmfamily $.
-        %которое можно изначально составить из численных схем,
-        %ведущих себя достаточно хорошо в рамках широкого класса динамических систем.
         Результат адаптации всё ещё лежит в исходном семействе схем: $ M^* \in \nmfamily $.
         Следовательно, грамотный выбор $ \nmfamily $ гарантирует хорошее поведение $ M^* $
         на широком классе задач, несмотря на адаптацию под конкретное семейство $ \rhsfamily $.
@@ -224,57 +217,51 @@ $ \theta = (1 \mp e^{-z/2}) / z $, где минус соответствует 
 Итоговое оптимальное значение $ \theta^*_{[\underline{z}, \overline{z}]} $
 минимизирует максимальную из ошибок в $ \underline{z} $, $ \overline{z} $ и
 $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z}] $.
-В частности, если $ \overline{z} = 0 $ и $ \underline{z} \to -\infty $ (случай жёсткого/отрицательного спектра),
+В частности, если $ \overline{z} = 0 $ и $ \underline{z} \to -\infty $ (случай жёсткого спектра),
 \[
     \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^*_{(-\infty; 0]},
 \]
 что совпадает со значением, полученным в работе~\cite{liniger1969global_accuracy}.
 
-Значения $ \theta^*_{(-\infty;\overline{z}]} $ для различных $ \overline{z} $ приведены на рис.~\ref{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}.
+Значения $ \theta^*_{(-\infty;\overline{z}]} $ для различных $ \overline{z} $
+приведены на рис.~\ref{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}.
 Из данного графика видно, что оптимальные $ \theta $ для линейных систем с быстро убывающими решениями тяготеют к единице;
 в то же время, появление положительной части спектра почти сразу опускает оптимум ниже $ 1/2 $.
 Также интересно наличие небольшой <<полочки>> в районе нуля,
 на которой $ \theta^*_{(-\infty; \overline{z}]} = \theta^*_{(-\infty; 0]} $.
 
-% В частности, в~\cite{liniger1969global_accuracy} рассматривался подбор оптимального значения $ \theta $ для тета-схемы
-% в случае $ \dot x = \lambda x $, $ \lambda < 0 $:
-% \[
-%     0.878 \approx \argmin_\theta \max_{- \infty z < 0} | e^z - R_\theta(z) | =
-%     \argmin_\theta \max_{- \infty z < 0} \left| e^z - \frac{1 + (1 - \theta) z}{1 - \theta z} \right|
-% \]
-% В статье~\cite{johnson1988tunable_integration_method} $ \theta $ подбирается
-% отдельно для положительных положительных и отрицательных значения $ \lambda $.
-
-
 \begin{figure}[ht!]
     \centering
+    \small
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
         \captionsetup{aboveskip=-\baselineskip}
-        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.9}]
             load "./gnuplot/common.gp"
 
-            file_name = "./data/optimal_theta_5.0.csv" 
+            file_name = "./data/fitted_theta_method/optimal_theta_5.0.csv" 
             set xrange [-5:5]
 
             load "./gnuplot/optimal_theta.gp"
         \end{gnuplot}
-        \caption{$ \overline{z} \in [-5; 5] $}
+        \caption{$ z \in [-5; 5] $}
     \end{subfigure}%
     \begin{subfigure}[t]{0.5\textwidth}
         \centering
         \captionsetup{aboveskip=-\baselineskip}
-        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.8}]
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.9}]
             load "./gnuplot/common.gp"
 
-            file_name = "./data/optimal_theta_20.0.csv" 
+            file_name = "./data/fitted_theta_method/optimal_theta_20.0.csv" 
             set xrange [-20:20]
 
             load "./gnuplot/optimal_theta.gp"
         \end{gnuplot}
-        \caption{$ \overline{z} \in [-20; 20] $}
+        \caption{$ z \in [-20; 20] $}
     \end{subfigure}
-    \caption{Зависимость оптимального значения $ \theta $ от $ \overline{z} $ при $ \underline{z} \to -\infty $.}
+    \caption{Зависимость оптимального значения
+        $ \theta^*_{[\underline{z};\overline{z}]} $ от $ \overline{z} $ при $ \underline{z} \to -\infty $.
+        Для сравнения также приведён график $ \theta^*(z) $ из уравнения~\eqref{eq:one_dimensional_linear_system:optimal_theta}.}
     \label{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
 \end{figure}
 
@@ -295,7 +282,7 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         set style data lines
         set xlabel  '$ t $'
         set xrange  [ 0 : 10 ] noreverse writeback
-        set ylabel  '$ x(t) $' #rotate by 0
+        set ylabel  '$ x(t) $' offset -1 #rotate by 0
         set yrange  [ * : * ] noreverse writeback
 
         set key width -16
@@ -309,15 +296,15 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         load './gnuplot/Dahlquist.gp'
 
         set xtics 1
-        set xzeroaxis lw 3
+        set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
-             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 3 ps 2, \
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
+             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 2 ps 2, \
              f(x) t 'точное решение' lw 4 lc 'black', \
-             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 3 ps 2
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 2 ps 2
     \end{gnuplot}
-    \caption{Поведение адаптированной к отрицательному спектру тета-схемы при решении одномерного уравнения Далквиста ($ z = -1.5 $).}
+    \caption{Поведение тета-схемы, адаптированной к отрицательному спектру, при решении одномерного уравнения Далквиста ($ z = -1.5 $).}
     \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
 \end{figure}
 
@@ -330,7 +317,7 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         set style data lines
         set xlabel  '$ t $'
         set xrange  [ 0 : 10 ] noreverse writeback
-        set ylabel  '$ x(t) $' #rotate by 0
+        set ylabel  '$ x(t) $' offset -1 #rotate by 0
         set yrange  [ * : * ] noreverse writeback
 
         set key width -16
@@ -344,14 +331,14 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         load './gnuplot/Dahlquist.gp'
 
         set xtics 1
-        set xzeroaxis lw 3
+        set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
-             f(x) t 'точное решение' lw 4 lc 'black', \
-             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 3 ps 2
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
+             f(x) t 'точное решение' lw 3 lc 'black', \
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 2 ps 2
     \end{gnuplot}
-    \caption{Поведение адаптированной к отрицательному спектру тета-схемы при решении одномерного уравнения Далквиста ($ z = -15.0 $).}
+    \caption{Поведение тета-схемы, адаптированной к отрицательному спектру, при решении одномерного уравнения Далквиста ($ z = -15.0 $).}
     \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
 \end{figure}
 

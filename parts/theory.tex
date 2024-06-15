@@ -35,7 +35,7 @@
 \begin{equation}
     \label{eq:linear_stability_theory:initial_value_problem}
     \begin{dcases}
-        \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) \\
+        \dot{\bvec{x}} = f(t, \bvec{x}) \\
         \bvec{x}(0) = \bvec{x}_0
     \end{dcases}
     \qquad
@@ -51,7 +51,7 @@
 \begin{equation}
     \label{eq:linear_stability_theory:autonomous_initial_value_problem}
     \begin{dcases}
-        \frac{d \bvec{x}}{d t} = f(\bvec{x}), \\
+        \dot{\bvec{x}} = f(\bvec{x}), \\
         \bvec{x}(0) = \bvec{x}_0
     \end{dcases}
 \end{equation}
@@ -62,7 +62,7 @@
 \begin{equation}
     \label{eq:linear_stability_theory:linearized_initial_value_problem}
     \begin{dcases}
-        \frac{d \bvec{x}}{d t} = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0), \\
+        \dot{\bvec{x}} = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0), \\
         \bvec{x}(0) = \bvec{x}_0,
     \end{dcases}
 \end{equation}
@@ -80,7 +80,7 @@
 аппарат функционального анализа позволяет определить~\eqref{eq:linear_stability_theory:linearized_solution}
 для всех $ F_0 $.
 
-\begin{definition}[\cite{takesaki2001opalgebras1}]
+\begin{definition}[\cite{takesaki2001opalgebras1}, утверждение 2.7]
     \label{definition:linear_stability_theory:regular_function_operator}
     Пусть $ A $~--- линейный ограниченный оператор, действующий в банаховом пространстве $ \banachspace $ над $ \complexes $,
     $ \sigma(A) $~--- спектр оператора $ A $, а
@@ -125,7 +125,7 @@
 Фактически, линеаризация означает разложение системы на две составляющие:
 общий нелинейный тренд, задающий динамику невозмущённого решения,
 и линейную часть, отвечающую за реакцию системы на небольшие возмущения.
-Предполагая малый вклад квадратичных членов, а также невырожденность $ F_0 $,
+Предполагая малый вклад нелинейных членов, а также невырожденность $ F_0 $,
 можно сделать замену $ \bvec{x}: = \bvec{x} - \bvec{x}_0 + F_0^{-1} \cdot f_0 $
 (ноль становится положением равновесия)
 и свести задачу к линейному проверочному \emph{уравнению Далквиста} \cite{dahlquist1963special}:
@@ -147,7 +147,7 @@
 через действие некоторого линейного оператора:
 %
 \begin{equation}
-    \label{eq:stability_function}
+    \label{eq:linear_stability_theory:stability_function}
     \bvec{x}^{n+1} = R(\Delta t \cdot F_0) \cdot \bvec{x}^n,
 \end{equation}
 %
@@ -276,14 +276,15 @@
     Из этого следует, что $ \forall \varepsilon > 0 $
     \[
         \lim_{t \to +\infty} e^{-t \cdot s(A)} \cdot \| T(t) \| \geqslant K^{-1} > 0,
-        \qquad
+    \]
+    \[
         \lim_{t \to +\infty} e^{-t \cdot (s(A) + \varepsilon)} \cdot \| T(t) \| \leqslant \lim_{t \to +\infty} K \cdot e^{-t \cdot \varepsilon / 2} = 0
     \]
     Отсюда по определению точной верхней грани получаем доказываемое утверждение.
 \end{proof}
 
 Следствие~\ref{corollary:asymptotic:spectral_radius_norm_bounds}
-позволяет на основе данных о спектре линейного оператора $ A $ оценить асимптотику $ \| A^n \| $,
+позволяет по спектру линейного оператора $ A $ оценить асимптотику $ \| A^n \| $,
 а лемма~\ref{lemma:asymptotic:operator_exponential_norm_convergence}~--- $ \| \exp(t \cdot A) \| $.
 
 Вернёмся к проверочному уравнению Далквиста \eqref{eq:linear_stability_theory:Dahlquist_equation}.
@@ -312,7 +313,7 @@
 \end{statement}
 
 \begin{proof}
-    В силу \eqref{eq:asymptotic:stability_function} имеем первое утверждение:
+    В силу \eqref{eq:linear_stability_theory:stability_function} имеем первое утверждение:
     $ \bvec{x}^n = \left( R(\Delta t \cdot F_0) \right)^n \cdot \bvec{x}_0 $.
     Далее заметим, что по теореме \ref{theorem:asymptotic:spectral_mapping_theorem}
     \[
@@ -326,28 +327,29 @@
     Наконец, применяя следствие \ref{corollary:asymptotic:spectral_radius_norm_bounds}, завершаем доказательство утверждения.
 \end{proof}
 
-В теории линейной устойчивости важная роль отводится \emph{A-устойчивости}~--- свойству численного решения проверочного уравнения Далквиста не возрастать по норме,
-если не возрастает норма истинного решения.
+В теории линейной устойчивости важная роль отводится \emph{A-ус\-той\-чи\-вос\-ти}~---
+свойству численного решения проверочного уравнения Далквиста асимптотически не возрастать по норме,
+если асимптотически не возрастает норма истинного решения.
 Если к тому же при увеличении шага интегрирования норма численного решения на следующей итерации (или, быть может, через некоторе заранее известное число итераций)
-также стремится к нулю, то говорят об \emph{L-устойчивости}.
+также стремится к нулю, то говорят об \emph{L"=устойчивости}.
 Дадим формальное определение.
 
 \begin{definition}
     \label{definition:asymptotic:A_stability}
-    Численный метод называется \emph{A-устойчивым} в случае,
-    если $ \complexes^- \equiv \{ z \in \complexes \mid \Re z < 0 \} \subseteq \stabreg $.
+    Численный метод называется \emph{A"=устойчивым} в случае,
+    если $ \complexes^- \defeq \{ z \in \complexes \mid \Re z < 0 \} \subseteq \stabreg $.
 \end{definition}
 
 \begin{definition}
     \label{definition:asymptotic:L_stability}
-    Численный метод называется \emph{L-устойчивым} в случае,
-    если он A-устойчив и выполнено $ \displaystyle\lim_{\Re z \to -\infty} R(z) = 0 $.
+    Численный метод называется \emph{L"=устойчивым} в случае,
+    если он A"=устойчив и выполнено $ \displaystyle\lim_{\Re z \to -\infty} R(z) = 0 $.
 \end{definition}
 
 \begin{statement}
     \label{statement:asymptotic:A_stability_criterion}
     Пусть $ R(z) $ регулярна в $ \complexes^- $.
-    Соответствующий численный метод A-устойчив тогда и только тогда, когда $ \forall F_0 $ выполнено
+    Соответствующий численный метод A"=устойчив тогда и только тогда, когда $ \forall F_0 $ выполнено
     \[
         \| \exp(t \cdot F_0) \| \limto{t}{+\infty} 0 \qquad \Longrightarrow \qquad \forall \Delta t > 0 \quad \left \| \left( R(\Delta t \cdot F_0) \right)^n \right\| \limto{n}{\infty} 0
     \]
@@ -367,102 +369,47 @@
 \end{proof}
 
 \begin{statement}
-    \label{stat:L_stability_property}
+    \label{statement:asymptotic:L_stability_property}
     Пусть $ R(z) $ регулярна в $ \complexes^- $.
-    Если соответствующий численный метод L-устойчив, то $ \forall F_0 $ выполнено
+    Если соответствующий численный метод L"=устойчив, то $ \forall F_0 $ выполнено
     \[
         \| \exp(t \cdot F_0) \| \limto{t}{+\infty} 0 \qquad \Longrightarrow \qquad r \left( R(\Delta t \cdot F_0) \right) \limto{\Delta t}{+\infty} 0
     \]
 \end{statement}
 
 \begin{proof}
-    Аналогично доказательству утверждения \ref{stat:A_stability_criterion} перепишем импликацию в виде
+    Аналогично доказательству утверждения \ref{statement:asymptotic:A_stability_criterion} перепишем импликацию в виде
     \[
         \sigma(F_0) \subseteq \complexes^- \quad \Longrightarrow \quad r \left( R(\Delta t \cdot F_0) \right) \limto{\Delta t}{+\infty} 0
     \]
-    В силу теоремы \ref{thm:spectral_mapping_theorem} это эквивалентно
+    В силу теоремы \ref{theorem:asymptotic:spectral_mapping_theorem} это эквивалентно
     \[
         \sigma(F_0) \subseteq \complexes^- \quad \Longrightarrow \quad \sup \{ |\lambda| \mid \lambda \in R(\Delta t \cdot \sigma(F_0)) \} \limto{\Delta t}{+\infty} 0,
     \]
     что при произвольном $ F_0 $ равносильно $ \forall z \in \complexes^- \; | R(\Delta t \cdot z) | \limto{\Delta t}{+\infty} 0 $.
-    Это верно для L-устойчивых методов по определению \ref{def:L_stability}.
+    Это верно для L"=устойчивых методов по определению \ref{definition:asymptotic:L_stability}.
 \end{proof}
 
-Стоит отметить, что утверждение \ref{stat:L_stability_property}, в отличие от \ref{stat:A_stability_criterion}, сформулировано в форме признака, а не критерия.
+Стоит отметить, что утверждение \ref{statement:asymptotic:L_stability_property},
+в отличие от \ref{statement:asymptotic:A_stability_criterion},
+сформулировано в форме признака, а не критерия.
 Также в нём получено лишь утверждение о пределе спектрального радиуса, а не нормы.
-На деле это означает, что получаемая для L-устойчивого метода матрица перехода с увеличением размера шага становится <<почти нильпотентной>>.
-Если $ F_0 $ диагонализуемая, то из стремления к нулю спектрального радиуса матрицы перехода будет автоматически следовать и стремление к нулю её нормы.
+На деле это означает, что получаемая для L"=устойчивого метода матрица перехода
+с увеличением размера шага становится <<почти нильпотентной>>.
+Если $ F_0 $ диагонализуемая, то из стремления к нулю спектрального радиуса матрицы перехода
+будет автоматически следовать и стремление к нулю её нормы.
 
-
-\subsection{Логарифмическая норма}
-\label{subsec:logarithmic_norm}
-
-Выше были приведены основные результаты линейной теории устойчивости.
-Все они в значительной степени опираются на спектральный анализ.
-С одной стороны, это облегчает исследование свойств численных методов,
-так как теорема об отображении спектра позволяет по функции устойчивости метода
-определить асимптотические свойства матрицы перехода.
-С другой стороны, спектральный анализ не позволяет получить оценки,
-справедливые в течение всего рассматриваемого времени,
-включая начальный этап эволюции линейной системы.
-
-Для получения более строгих в указанном смысле оценок вводится \emph{логарифмическая норма}:
-
-\begin{definition}
-    \label{def:logarithmic_norm}
-    Пусть $ A $~--- линейный ограниченный оператор, действующий в банаховом пространстве $ \banachspace $ над $ \complexes $.
-    Число
-    \begin{equation}
-        \label{eq:logarithmic_norm}
-        \lognorm{A} = \lim_{h \to +0} \frac{\| I + h \cdot A \| - 1}{h}
-    \end{equation}
-    называется \emph{логарифмической нормой} оператора $ A $.
-\end{definition}
-
-Далее приведём без доказательства несколько утверждений,
-связывающих логарифмическую норму с теорией линейной устойчивости.
-Все утверждения взяты из работ \cite{soderlind2006lognorm, lambert1991methods}.
-
-\begin{statement}
-    \label{stat:logarithmic_norm_properties}
-    Пусть $ A $, $ B $~--- линейные операторы, действующие в конечномерном банаховом пространстве $ \banachspace $ над $ \complexes $.
-    Тогда верно следующее:
-    \begin{enumerate}[itemsep=0em]
-        \item $ \lognorm{A} $ определена.
-        \item $ \lognorm{A} \leqslant \| A \| $.
-        \item $ \lognorm{\gamma \cdot A} = \gamma \cdot \lognorm{A} $ для любого $ \gamma > 0 $.
-        \item $ \lognorm{A + z \cdot I} = \lognorm{A} + \Re z $.
-        \item $ \lognorm{A + B} \leqslant \lognorm{A} + \lognorm{B} $.
-        \item $ s(A) \leqslant \lognorm{A} $. \label{itm:logarithmic_norm_and_spectral_bound}
-        \item $ \| \exp(t \cdot A) \| \leqslant e^{t \cdot \lognorm{A}} $ для любого $ t \geqslant 0 $. \label{itm:logarithmic_norm_exponential_bound}
-    \end{enumerate}
-\end{statement}
-
-Пункт \ref{itm:logarithmic_norm_and_spectral_bound} связывает логарифмическую норму со спектральными свойствами $ A $.
-Пункт \ref{itm:logarithmic_norm_exponential_bound} даёт справедливую всё неотрицательное время оценку на оператор эволюции,
-получаемый из $ A $, но, в силу пункта \ref{itm:logarithmic_norm_and_spectral_bound},
-а также леммы \ref{lem:operator_exponential_norm_convergence},
-данная оценка может не являться асимптотически оптимальной.
-
-
-\subsection{Линейная жёсткость}
-\label{subsec:linear_stiffness}
-
-Как видно из приведённых результатов, спектр матрицы $ F_0 $ может задавать определённые ограничения на шаг интегрирования.
-Действительно, если $ \lognorm{F_0} < 0 $, но численный метод не A-устойчив, полученное с его помощью решение может вести себя некорректно при некоторых $ F_0 $ и $ \Delta t $:
-если $ \Delta t \cdot \sigma(F_0) \not\subseteq \stabreg $, то численное решение может возрастать,
-в то время как норма точного решения ограничена сверху убывающей экспонентой.
-С другой стороны, такая ситуация невозможна независимо от $ \Delta t $ при использовании A-устойчивых методов.
-Но A-устойчивость не гарантирует соизмеримую с точным решением скорость затухания численного; возможен даже случай $ \displaystyle \lim_{\Re z \to -\infty} |R(z)| = 1 $,
-что приводит к слабо затухающим осцилляциям численного решения вокруг нуля при сравнительно быстром стремлении к нулю истинного решения.
-Если требуется рост скорости затухания за конечное число шагов при увеличении $ \Delta t $, следует пользоваться L-устойчивыми методами.
-
-На рисунках \ref{fig:linear_instability_example}, \ref{fig:linear_instability_example_2} проиллюстрировано поведение явного метода Эйлера (не A-ус\-той\-чи\-вый),
-метода трапеций (A-устойчивый, но не L-устойчивый) и неявного метода Эйлера (L-устойчивый) при разных значениях $ \Delta t \cdot F_0 $ в одномерной задаче Далквиста.
+На рисунках~\ref{fig:asymptotic:linear_instability_example},
+\ref{fig:asymptotic:linear_instability_example_2}
+проиллюстрировано поведение явного метода Эйлера (не A"=устойчивый),
+метода трапеций (A"=устойчивый, но не L"=устойчивый)
+и неявного метода Эйлера (L"=устойчивый) при разных значениях $ \Delta t \cdot F_0 $ в одномерной задаче Далквиста
+(на втором графике явный метод Эйлера расходится).
 
 \begin{figure}[ht!]
     \centering
-    \begin{gnuplot}[terminal=epslatex, terminaloptions={color dashed size 16cm,6cm}]
+    \small
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16cm,6cm fontscale 0.9}]
         load './gnuplot/common.gp'
 
         set style increment default
@@ -483,21 +430,21 @@
         load './gnuplot/Dahlquist.gp'
 
         set xtics 1
-        set xzeroaxis lw 3
+        set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
-             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 3 ps 2, \
-             f(x) t 'точное решение' lw 4 lc 'black'
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
+             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 2 ps 2, \
+             f(x) t 'точное решение' lw 3 lc 'black'
     \end{gnuplot}
-
     \caption{Поведение простейших численных методов при решении одномерного уравнения Далквиста ($ \Delta t \cdot F_0 = -1.5 $).}
-    \label{fig:linear_instability_example}
+    \label{fig:asymptotic:linear_instability_example}
 \end{figure}
 
 \begin{figure}[ht!]
     \centering
-    \begin{gnuplot}[terminal=epslatex, terminaloptions={color dashed size 16cm,6cm}]
+    \small
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16cm,6cm fontscale 0.9}]
         load './gnuplot/common.gp'
 
         set style increment default
@@ -518,256 +465,255 @@
         load './gnuplot/Dahlquist.gp'
 
         set xtics 1
-        set xzeroaxis lw 3
+        set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 3 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 3 ps 2, \
-             f(x) t 'точное решение' lw 4 lc 'black'
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
+             f(x) t 'точное решение' lw 3 lc 'black'
     \end{gnuplot}
 
     \caption{Поведение простейших численных методов при решении одномерного уравнения Далквиста ($ \Delta t \cdot F_0 = -15 $).}
-    \label{fig:linear_instability_example_2}
+    \label{fig:asymptotic:linear_instability_example_2}
 \end{figure}
 
-Зачастую область устойчивости не A-устойчивых методов ограничена (в частности, это верно для всех явных линейных численных методов) или содержит лишь некоторый подсектор $ \complexes^- $,
-поэтому ограничение на шаг интегрирования оказывается ограничением сверху.
-Таким образом, спектральные свойства $ F_0 $ обуславливают максимально допустимый шаг численного интегрирования.
-Ситуацию осложняет следующая теорема,
-требующая в случае одностадийных схем делать выбор между устойчивостью, высоким порядком аппроксимации и линейностью схемы:
 
-\begin{theorem}[второй барьер Далквиста]
-    \label{thm:Dahlquist_second_barrier}
-    Не существует A-устойчивых линейных многошаговых одностадийных схем с порядком аппроксимации выше второго.
-\end{theorem}
 
-Ограничение на $ \Delta t $ может сохранятся даже при решении нелинейных задач вида \eqref{eq:autonomous_initial_value_problem}.
-Исходя из вышеизложенного анализа можно ввести следующие определения характерных масштабов времени:
+\subsection{Неасимптотический анализ}
+\label{subsection:linear_stability_theory:non_asymptotic}
 
-\begin{definition}
-    \label{def:linear_and_nonlinear_timescales}
-    Обозначим характерное время изменения $ F = \frac{\partial f}{\partial \bvec{x}}(\bvec{x}(t)) $ как~$ \taunonlin $,
-    %а $ r \! \left( \frac{\partial f}{\partial \bvec{x}} \right) = 1 / r(F) $~---
-    а $ 1 / r(F) $~---
-    характерное время реакции линеаризованной системы на небольшие возмущения~--- как~$ \taulin $.
-\end{definition}
+В предыдущем разделе были приведены основные результаты асимптотической линейной теории устойчивости.
+Все они в значительной степени опираются на спектральный анализ.
+С одной стороны, это облегчает исследование свойств численных методов,
+так как теорема об отображении спектра позволяет определить
+асимптотические свойства матрицы перехода по функции устойчивости метода.
+С другой стороны, спектральный анализ не позволяет получить оценки,
+справедливые в течение всего рассматриваемого времени,
+включая начальный этап эволюции линейной системы.
 
-%Рассмотрим случай, когда $ \taunonlin $~--- характерное время изменения $ F = \frac{\partial f}{\partial \bvec{x}}(\bvec{x}(t)) $~---
-%много больше $ \taulin = 1/r(F) $~--- характерного времени реакции системы на небольшие возмущения.
-Рассмотрим случай, когда $ \taulin \ll \taunonlin $.
-Тогда линеаризация \eqref{eq:linearized_initial_value_problem} остаётся достаточно точной гораздо дольше $ \taulin $.
-Это автоматически оставляет в силе ограничения на шаг интегрирования, полученные для линейных систем.
-В частности, если $ \lognorm{F} < 0 $, но $ \Delta t \cdot \sigma(F) \not\subseteq \stabreg $, численное решение может вести себя неустойчиво к небольшим возмущениям,
-в то время как точное решение, наоборот, будет обладать эффектом демпфирования.
-
-Приведённые выше рассуждения показывают, что определённые системы дифференциальных уравнений могут обладать свойствами,
-вынуждающими использовать малый шаг интегрирования при их решении недостаточно устойчивыми в смысле \ref{def:A_stability} и \ref{def:L_stability} методами.
-Традиционно такие системы называют \emph{жёсткими}.
-Как указано в \cite{heirer1999solvingode2, lambert1991methods}, существует несколько определений жёсткости,
-каждое из которых обладает своими достоинствами и недостатками.
-Приведём здесь одно из них:
+Для вывода более строгих в указанном смысле оценок вводится \emph{логарифмическая норма}:
 
 \begin{definition}
-    \label{def:stiffness}
-    Система вида $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ называется \emph{жёсткой} в том случае,
-    если для получения корректного (то есть в заданной степени близкого к точному решению как качественно, так и количественно)
-    численного решения необходимо использовать шаг интегрирования,
-    много меньший характерных масштабов времени, на которых меняется точное решение.
+    \label{definition:non_asymptotic:logarithmic_norm}
+    Пусть $ A $~--- линейный ограниченный оператор, действующий в банаховом пространстве $ \banachspace $ над $ \complexes $.
+    Число
+    \begin{equation}
+        \label{eq:logarithmic_norm}
+        \lognorm{A} = \lim_{h \to +0} \frac{\| I + h \cdot A \| - 1}{h}
+    \end{equation}
+    называется \emph{логарифмической нормой} оператора $ A $.
 \end{definition}
 
-Данное определение слишком общее и не отвечает на вопросы о природе ограничения на шаг интегрирования.
-На основе всего вышеизложенного анализа мы дадим более узкое, но в некоторой степени и более информативное определение жёсткости.
+Далее приведём без доказательства несколько утверждений,
+связывающих логарифмическую норму с теорией линейной устойчивости.
+Все утверждения взяты из работ \cite{soderlind2006lognorm, lambert1991methods}.
 
-\begin{definition}
-    \label{def:linear_stiffness}
-    Система вида $ \frac{d \bvec{x}}{d t} = f(\bvec{x}) $ называется \emph{линейно жёсткой} в том случае,
-    если характерное время реакции линеаризованной системы на небольшие возмущения $ \taulin $
-    много меньше характерных масштабов времени,
-    %на которых меняется точное решение.
-    на которых ищется решение.
-\end{definition}
+\begin{statement}
+    \label{statement:non_asymptotic:logarithmic_norm_properties}
+    Пусть $ A $, $ B $~--- линейные операторы, действующие в конечномерном банаховом пространстве $ \banachspace $ над $ \complexes $.
+    Тогда верно следующее:
+    \begin{enumerate}[itemsep=0em]
+        \item $ \lognorm{A} $ определена;
+        \item $ \lognorm{A} \leqslant \| A \| $;
+        \item $ \lognorm{\gamma \cdot A} = \gamma \cdot \lognorm{A} $ для любого $ \gamma > 0 $;
+        \item $ \lognorm{A + z \cdot I} = \lognorm{A} + \Re z $;
+        \item $ \lognorm{A + B} \leqslant \lognorm{A} + \lognorm{B} $;
+        \item $ s(A) \leqslant \lognorm{A} $; \label{item:non_asymptotic:logarithmic_norm_and_spectral_bound}
+        \item $ \| \exp(t \cdot A) \| \leqslant e^{t \cdot \lognorm{A}} $ для любого $ t \geqslant 0 $. \label{item:non_asymptotic:logarithmic_norm_exponential_bound}
+    \end{enumerate}
+\end{statement}
 
-Зачастую численное решение ищется на интервалах,
-сопоставимых с характерными временн\'{ы}ми масштабами наиболее медленно протекающих процессов, описываемых системой
-(это действительно так, если в численном решении требуется полноценно отобразить всю динамику системы).
-Также для численных методов с ограниченной областью устойчивости условие $ \Delta t \cdot \sigma(F) \subseteq \stabreg $ влечет $ \Delta t \sim \taulin $.
-Тогда \ref{def:linear_stiffness} оказывается частным случаем \ref{def:stiffness},
-причём необходимость выбора малого шага оказывается обусловленной <<жёстким>> линейным поведением системы в окрестности истинных решений.
-В таком случае некорректность численного решения понимается в смысле неустойчивости к малым возмущениям там,
-где точное решение к ним устойчиво.%
-\footnote{Эта интерпретация будет позже формализована при помощи введения понятия \emph{сжимаемости}
-(см. секцию \ref{subsec:nonlinear_stability}, определения \ref{def:contractivity} и \ref{def:contractivity_sequence}).}
+Пункт \ref{item:non_asymptotic:logarithmic_norm_and_spectral_bound}
+связывает логарифмическую норму со спектральными свойствами $ A $.
+Пункт \ref{item:non_asymptotic:logarithmic_norm_exponential_bound}
+даёт справедливую в течение всего неотрицательного времени оценку на оператор эволюции,
+соответствующий оператору $ A $;
+однако в силу пункта \ref{item:non_asymptotic:logarithmic_norm_and_spectral_bound},
+а также леммы \ref{lemma:asymptotic:operator_exponential_norm_convergence},
+данная оценка может не являться асимптотически оптимальной.
 
-Стоит также отметить, что в случае линейных или слабо нелинейных
-(то есть линеаризацию которых можно долго считать достаточно точной) систем
-характерные масштабы времени наиболее медленно протекающих процессов задаются наименьшими по модулю элементами спектра матрицы $ F $.
-Тогда для линейно жёстких систем спектр $ F $ распадается на две части: \emph{ведущую} и \emph{паразитическую}.
+Для иллюстрации различий между $ s(A) $, $ \lognorm{A} $ и $ \| \exp(t \cdot A) \| $
+можно рассмотреть пространство $ \reals^2 $ с $ l_1 $-нормой и оператор
+\begin{equation}
+    \label{eq:non_asymptotic:matrix_1}
+    A =
+    \begin{bmatrix}
+        -1 & \alpha \\
+        0 & -2
+    \end{bmatrix},
+    \qquad
+    \exp(t \cdot A) =
+    \begin{bmatrix}
+        e^{-t} & \alpha e^{-t} (1 - e^{-t}) \\
+        0 & e^{-2 t}
+    \end{bmatrix}
+\end{equation}
+Нетрудно получить
+\[
+    s(A) = -1, \quad
+    \lognorm{A} =
+    \begin{cases}
+        -1, &\; |\alpha| < 1 \\
+        |a| - 2, &\; |\alpha| \geqslant 1
+    \end{cases},
+\]
+\[
+    \| \exp(t \cdot A) \|_1 =
+    \begin{cases}
+        e^{-1}, &\; |\alpha| < 1 \\
+        |\alpha| e^{-t}(1 - e^{-t}) + e^{-2t}, &\; |\alpha| \geqslant 1
+    \end{cases}
+\]
+Видно, что при $ |\alpha| > 1 $ оценка $ |\alpha| \exp(t \cdot s(A)) $ асимптотически оптимальна,
+но в окрестности нуля отличается от $ \| \exp(t \cdot A) \| $ в $ |\alpha| $ раз;
+с другой стороны, оценка $ \exp(t \cdot \lognorm{A}) $ точна в нуле,
+но отличается от $ \| \exp(t \cdot A) \| $ асимптотически.
+Разница становится еще более существенной в случае Жордановой клетки:
+\begin{equation}
+    \label{eq:non_asymptotic:matrix_2}
+    A =
+    \begin{bmatrix}
+        -1 & \alpha \\
+        0 & -1
+    \end{bmatrix},
+    \qquad
+    \exp(t \cdot A) =
+    \begin{bmatrix}
+        e^{-t} & \alpha \, t e^{-t} \\
+        0 & e^{-t}
+    \end{bmatrix}
+\end{equation}
+\[
+    s(A) = -1, \quad
+    \lognorm{A} = |a| - 1, \quad
+    \| \exp(t \cdot A) \|_1 = e^{-t} (1 + |\alpha| t)
+\]
+Здесь при $ \alpha \neq 0 $ выражение $ C \cdot \exp(t \cdot s(A)) $ не является оценкой сверху на $ \| \exp(t \cdot A) \| $
+для любого $ t \geqslant 0 $ ни при каких $ C \in \reals $.
+Также в обоих случаях $ \exp(t \cdot \lognorm{A}) $ может монотонно возрастать при определённых значениях $ \alpha $,
+хотя норма оператора эволюции всегда стремится к нулю при $ t \to +\infty $.
+Графики оценок для обоих примеров при $ \alpha = 3/2 $ приведены на рис~\ref{fig:non_asymptotic:matrix_norm_examples}.
 
-\begin{definition}
-    \label{def:driving_and_parasitic_spectrum}
-    Будем называть спектр оператора $ A $ \emph{распадающимся на ведущую и паразитическую части}, если
-    существует расщепление $ \sigma(A) = \sigma_d(A) \sqcup \sigma_p(A) $ такое, что
-    \[
-        r_d(F) \equiv \sup \{ | \lambda | \mid \lambda \in \sigma_d(F) \} \ll \inf \{ | \lambda | \mid \lambda \in \sigma_p(F) \} \equiv b_p(F)
-    \]
-    %Число $ b_p / r_d \gg 1 $ при этом отражает отношение масштабов времени быстро и медленно текущих процессов.
-\end{definition}
+\begin{figure}[ht!]
+    \centering
+    \small
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.9}]
+            load "./gnuplot/common.gp"
 
-%где $ r_d(F) = \sup \{ | \lambda | \mid \lambda \in \sigma_d(F) \} \ll \sup \{ | \lambda | \mid \lambda \in \sigma_p(F) \} = r_p(F) $.
-Более того, в случае седловых задач доля паразитического спектра может иметь положительную действительную часть.
-Это может вызывать <<взрывное>> поведение даже A-устойчивых методов,
-ведь в таком случае попадание $ \Delta t \cdot \sigma(F) $ в область устойчивости не гарантируется.
-В задачах, где известно, что такое поведение точного решение нефизично и отсутствует в виду выбора правильных начальных условий,
-данное свойство численного решения является нежелательным.
+            set yrange [0:1.6]
+            set xlabel "$ t $"
 
+            alpha = 1.5
+            spectral_bound = -1
+            logarithmic_norm = (abs(alpha) < 1.0) ? -1 : abs(alpha) - 2.0
 
-\subsection{Экспоненциальные интеграторы}
-\label{subsec:exponential_integrators}
+            eonorm(x) = (abs(alpha) < 1.0 ? exp(-x) : abs(alpha) * exp(-x) * (1.0 - exp(-x)) + exp(-2.0 * x))
+            spectral_ub(x) = abs(alpha) * exp(spectral_bound * x)
+            logarithmic_norm_ub(x) = exp(logarithmic_norm * x)
 
-Линейный анализ устойчивости известен давно, а потому достаточно подробно разработан
-\cite{auzinger1993modern, dahlquist1963special, dahlquist1975stability, liu2019study, heirer1999solvingode2, lambert1991methods}.
-Как следствие, велик и арсенал тех методов, которые способны в той или иной степени решить проблемы, вызываемые линейной жёсткостью.
-В основном это различные многошаговые или многостадийные линейные схемы, обладающие теми или иными свойствами линейной устойчивости:
-неявные методы Рунге-Кутты, методы Гира, формулы дифференцирования назад и прочее.
-%Все они обладают достаточно большой областью устойчивости, что, как видно из приведённого ранее анализа,
-%делает их полезными для интегрирования линейно жёстких систем.
-Обладая достаточной устойчивостью, они одновременно могут иметь высокий порядок аппроксимации.
-Тем не менее, их область устойчивости меньше области устойчивости неявного метода Эйлера,
-что мотивирует разработку новых методов.
+            plot [0:3] logarithmic_norm_ub(x) lw 2 t "$ \\exp(t \\cdot \\lognorm{A}) $", \
+                       spectral_ub(x) lw 2 t "$ |\\alpha| \\exp(t \\cdot s(A)) $", \
+                       eonorm(x) lw 3 lc "black" t "$ \\| \\exp(t \\cdot A) \\|_1 $"
+        \end{gnuplot}
+        \caption{Оператор из примера~\eqref{eq:non_asymptotic:matrix_1}.}
+    \end{subfigure}%
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \captionsetup{aboveskip=-\baselineskip}
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 8.0cm,5.0cm fontscale 0.9}]
+            load "./gnuplot/common.gp"
 
-В настоящей работе предлагается отойти от стандартных линейных схем с постоянными коэффициентами и обратить внимание на численные методы,
-утилизирующие информацию о матрице Якоби правой части системы \eqref{eq:autonomous_initial_value_problem}.
-Она может предоставить достаточный объём информации о локальном линейном поведении системы.
-Эта информация полезна в том числе и для решения проблемы линейной жёсткости.
-Стоит добавить, что, при решении жёстких систем обычно используются неявные методы.
-Возникающие при этом алгебраические уравнения зачастую решаются методом Ньютона.
-Это означает, что матрица Якоби правой части вычисляется в любом случае,
-поэтому её использование для модификации численной схемы не приносит дополнительной вычислительной сложности
-(кроме, быть может, последующих операций с матрицей).
+            set yrange [0:2.0]
+            set xlabel "$ t $"
 
-Методы, использующие матрицу Якоби правой части интегрируемой системы называются \emph{адаптивными}.
-Среди них можно перечислить методы Розенброка, Обрешкова, а также \emph{экспоненциальные интеграторы}.
-В данной работе основное внимание будет уделено именно последним.
+            alpha = 1.5
+            spectral_bound = -1
+            logarithmic_norm = abs(alpha) - 1.0
 
-\begin{definition}
-    \label{def:exponential_integrator}
-    Экспоненциальным интегратором называется численный метод,
-    дающий применительно к линейной задаче \eqref{eq:linearized_initial_value_problem} точное решение.
-\end{definition}
+            eonorm(x) = exp(-x) * (1 + abs(alpha) * x)
+            spectral_ub(x) = 3.0 * abs(alpha) * exp(spectral_bound * x)
+            logarithmic_norm_ub(x) = exp(logarithmic_norm * x)
 
-\begin{remark}
-    \label{rem:exponential_integrator_stability_function}
-    Любой экспоненциальный интегратор обладает функцией устойчивости $ R(z) = e^z $.
-    Он также является L-устойчивым.
-\end{remark}
+            plot [0:3] logarithmic_norm_ub(x) lw 2 t "$ \\exp(t \\cdot \\lognorm{A}) $", \
+                       spectral_ub(x) lw 2 t "$ 3 |\\alpha| \\exp(t \\cdot s(A)) $", \
+                       eonorm(x) lw 3 lc "black" t "$ \\| \\exp(t \\cdot A) \\|_1 $"
+        \end{gnuplot}
+        \caption{Оператор из примера~\eqref{eq:non_asymptotic:matrix_2}.}
+    \end{subfigure}
+    \caption{Графики $ l_1 $-норм операторов эволюции
+    из уравнений~\eqref{eq:non_asymptotic:matrix_1} и \eqref{eq:non_asymptotic:matrix_2},
+    а также соответствующих оценок;
+    $ \alpha = 3/2 $.}
+    \label{fig:non_asymptotic:matrix_norm_examples}
+\end{figure}
 
-Из определения и замечания видно, что экспоненциальный интегратор точно интегрирует линейную часть системы.
-Это позволяет исключить влияние линейной жёcткости на решение.
-Преимуществом экспоненциальных интеграторов также является полное отсутствие численной
-(то есть обусловленной исключительно методом, а не задачей) диссипации в линейных системах.
-В некоторых задачах, близких к линейным, это качественно отличает данные методы от
-стандартных A-устойчивых схем с большими областями устойчивости
-(пример можно увидеть в разделе \ref{sec:Lotka-Volterra}).
-
-Некоторые авторы также расширяют определение экспоненциальных интеграторов на все методы,
-использующие экспоненту матрицы Якоби правой части системы.
-Обзор существующих экспоненциальных интеграторов можно найти, например, в работах \cite{minchev2005expint, hochbruck_ostermann_2010}.
-Мы же остановимся только на простейших из них, необходимых для дальнейшего анализа.
-
-%Рассмотрим две схемы, полученных из явного и неявного методов Эйлера соответственно
-%(так называемые <<exponential time differencing>>-методы Рунге-Кутты первого порядка):
-Рассмотрим явный и неявный экспоненциальные методы Эйлера:
-%
-\begin{align}
-    \text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \left( \exp(\Delta t \cdot F) - I \right) F^{-1} \cdot f(\bvec{x}^n) \label{eq:ETDRK1_explicit} \\
-    \text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= \left( I - \exp(- \Delta t \cdot F) \right) F^{-1} \cdot f(\bvec{x}^{n+1}) \label{eq:ETDRK1_implicit}
-\end{align}
-%
-Здесь, как и ранее, $ F = \frac{\partial f}{\partial \bvec{x}} $~--- матрица Якоби правой части системы.
-%\footnote{Отметим, что мы явно не указываем, в какой именно точке вычисляется $ F $.
-%    Для линейных систем это не важно, но для нелинейных является определённой степенью свободы,
-%    заложенной в методе.}
-При этом за пользователем остаётся свобода выбора точки, в которой вычисляются производные:
-для линейных систем это не важно, но для нелинейных является определённой степенью свободы, заложенной в методе.
-На самом деле, возможно даже использование приближённого значения матрицы,
-но при этом экспоненциальный интегратор не будет давать точного решения на тестовой задаче Далквиста.
-
-Зная \eqref{eq:linearized_solution}, несложно проверить, что при рассмотрении линеаризованной задачи
-$ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
-оба метода дают точное решение.
-Следует отметить, что коэффициент при $ f $ в обоих методах может расти экспоненциально быстро с увеличением $ \Delta t $.
-В таком случае с увеличением шага численное решение может быстро выйти за пределы окрестности, в которой применима линеаризация правой части.
-Это следует отнести к недостаткам данных методов, так как такое поведение потенциально может являться источником неустойчивости в случае сильной нелинейности правой части.
-%Пример такому поведению будет дан в следующих разделах.
-В качестве одного из результатов работы также будет приведён двухточечный экспоненциальный интегратор,
-построенный по аналогии с \eqref{eq:ETDRK1_explicit} и \eqref{eq:ETDRK1_implicit}, но лишённый упомянутого недостатка.
-
+\FloatBarrier
 
 
 \section{Нелинейная теория устойчивости}
-\label{sec:nonlinear_stability}
+\label{section:theory:nonlinear_stability_theory}
 
-В предыдущем разделе были приведены основные положения линейной теории устойчивости,
-введено понятие жёсткости и линейной жёсткости,
-упомянуты адаптивные численные методы, использующие знание матрицы Якоби правой части системы для борьбы с линейной жёсткостью.
-Вместе с этим, в общих чертах обозначены предполагаемые границы применимости линейной теории устойчивости:
+Линейная теория устойчивости является удобным инструментом для получения достаточных признаков устойчивости численного решения.
+Однако используемое при анализе линейное приближение правой части системы
+имеет вполне определённые границы применимости:
 \begin{enumerate}
     \item
         Линейный анализ устойчивости некорректно применять при наличии возмущений,
         величина или характер которых ставит под сомнение точность линеаризации системы.
     \item
         Линейный анализ устойчивости некорректно применять,
-        если характерное время линейной реакции на малые возмущения сопоставимо с или больше характерных масштабов времени,
+        если характерное время линейной реакции на малые возмущения не является пренебрежимо малым в сравнении с характерными масштабами времени,
         на которых меняется матрица Якоби правой части системы.
 \end{enumerate}
-
-В главе 7 работы \cite{lambert1991methods} приведены примеры систем,
+В главе 7 работы \cite{lambert1991methods} даны примеры систем,
 применение линейного анализа к которым даёт некорректные результаты
-(по крайней мере, если ограничиваться лишь спектральными признаками и не использовать оценки, приведённые в разделе \ref{subsec:logarithmic_norm}).
-В этой связи в настоящем разделе рассмотрены основные результаты нелинейной теории устойчивости.
-Вместе с тем также приведены некоторые сведения,
-касающиеся поведения неявных численных методов при интегрировании существенно нелинейных систем.
+(по крайней мере, если ограничиваться лишь спектральными признаками и не использовать оценки,
+приведённые в разделе~\ref{subsection:linear_stability_theory:non_asymptotic}).
 
-
-\subsection{Нелинейная устойчивость}
-\label{subsec:nonlinear_stability}
-
-В линейном анализе устойчивости существенная роль отводится линейным системам,
-решения которых стремятся к нулю при устремлении времени к плюс бесконечности.
-Такое поведение также означает, что любые два решения с течением времени <<сближаются>> друг с другом.
-В секции \ref{subsec:linear_stiffness} этому важному феномену дана интерпретация:
-при небольших возмущениях начальных условий решение будет стремится к невозмущенному с течением времени.
-При использовании устойчивых в различных смыслах методов это в той или иной степени гарантирует аналогичное поведение и у численного решения.
-Поэтому при появлении сомнений в корректности линейного анализа устойчивости логично попытаться обобщить определение данного явления на произвольную систему.
+Результаты линейной теории устойчивости, однако, можно обобщить на произвольные системы,
+в том числе и на не поддающиеся линеаризации.
+Для этого следует вспомнить, что уравнение Далквиста~\eqref{eq:linear_stability_theory:Dahlquist_equation}
+используется для описания реакции системы на малые возмущения.
+Убывание решений уравнения Далквиста соответствует сближению
+возмущённого и невозмущенного решения исходного уравнения с течением времени~--- \emph{сжиманию}.
+Сжимание можно обобщить на решения произвольной системы,
+а не только линеаризованной:
 
 \begin{definition}
-    \label{def:contractivity}
-    Пусть $ \bvec{x}(t) $ и $ \bvec{y}(t) $~--- решения системы $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $.
+    \label{definition:nonlinear_stability_theory:contractivity}
+    Пусть $ \bvec{x}(t) $ и $ \bvec{y}(t) $~--- решения системы $ \dot{\bvec{x}} = f(t, \bvec{x}) $.
     Данные решения называются \emph{сжимающимися} на отрезке $ [a; b] $ в случае
     \[
-        \forall t_1, t_2: \; a \leqslant t_1 \leqslant t_2 \leqslant b \qquad \| \bvec{x}(t_2) - \bvec{y}(t_2) \| \leqslant \| \bvec{x}(t_1) - \bvec{y}(t_1) \|
+        \forall t_1, t_2: \; a \leqslant t_1 \leqslant t_2 \leqslant b \qquad \| \bvec{x}(t_2) - \bvec{y}(t_2) \|
+        \leqslant \| \bvec{x}(t_1) - \bvec{y}(t_1) \|
     \]
 \end{definition}
 
 Аналогичное определение можно ввести и для численных решений (и, вообще говоря, для любых последовательностей):
 
 \begin{definition}
-    \label{def:contractivity_sequence}
-    Пусть $ \{\bvec{x}_n\}_{n \in \naturals_0} $ и $ \{\bvec{y}_n\}_{n \in \naturals_0} $~--- последовательности элементов некоторого линейного нормированного пространства.
+    \label{definition:nonlinear_stability_theory:contractivity_sequence}
+    Пусть $ \{\bvec{x}_n\}_{n \in \naturals_0} $ и $ \{\bvec{y}_n\}_{n \in \naturals_0} $~---
+    последовательности элементов некоторого линейного нормированного пространства.
     Данные последовательности называются \emph{сжимающимися} на отрезке $ [a; b] $ в случае
     \[
         \forall n_1, n_2: \; a \leqslant n_1 \leqslant n_2 \leqslant b \quad \| \bvec{x}_{n_2} - \bvec{y}_{n_2} \| \leqslant \| \bvec{x}_{n_1} - \bvec{y}_{n_1} \|
     \]
 \end{definition}
 
-Для систем вида $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ известно \cite{auzinger1990note, auzinger1993modern} достаточное условие
-сжимаемости точных решений.
+Сжимание решений говорит об устойчивости системы к возмущениям.
+Сжимание численных решений~--- об устойчивости численного метода.
+Для систем вида $ \dot{\bvec{x}} = f(t, \bvec{x}) $ известно достаточное условие
+сжимаемости точных решений~\cite{auzinger1990note, auzinger1993modern}.
 
 \begin{definition}
-    \label{def:one-sided_lipschitz}
+    \label{definition:nonlinear_stability_theory:one-sided_lipschitz}
     Пусть $ \hilbertspace $~--- гильбертово пространство над $ \complexes $.
     Функция $ f(t, \bvec{x}) = f: \reals \times D \to \hilbertspace $
     (где $ D \subseteq \hilbertspace $~--- выпуклая область)
-    и система $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ называются \emph{односторонне липшициевыми} на отрезке $ [a; b] $ в случае
+    и система $ \dot{\bvec{x}} = f(t, \bvec{x}) $ называются \emph{односторонне липшициевыми} на отрезке $ [a; b] $ в случае
     \[
         \exists \nu(t): \; \forall \bvec{x}, \bvec{y} \in D, \; \forall t \in [a, b] \quad
         \Re \dotprod{f(t, \bvec{x}) - f(t, \bvec{y})}{\bvec{x} - \bvec{y}} \leqslant \nu(t) \| \bvec{x} - \bvec{y} \|^2
@@ -775,24 +721,26 @@ $ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
 \end{definition}
 
 \begin{definition}
-    \label{def:dissipative}
-    Пусть в определении \ref{def:one-sided_lipschitz} $ \nu(t) \leqslant 0 $.
-    Тогда функция $ f(t, \bvec{x}) $ и система $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ называются \emph{диссипативными}.
+    \label{definition:nonlinear_stability_theory:dissipative}
+    Пусть в определении \ref{definition:nonlinear_stability_theory:one-sided_lipschitz} $ \nu(t) \leqslant 0 $.
+    Тогда функция $ f(t, \bvec{x}) $ и система $ \dot{\bvec{x}} = f(t, \bvec{x}) $ называются \emph{диссипативными}.
 \end{definition}
 
 \begin{statement}[достаточный признак сжимаемости]
-    \label{def:contractivity_condition}
-    Пусть система $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ диссипативна на $ [a; b] $.
+    \label{statement:nonlinear_stability_theory:contractivity_condition}
+    Пусть система $ \dot{\bvec{x}} = f(t, \bvec{x}) $ диссипативна на $ [a; b] $.
     Тогда все её решения являются сжимающимися на $ [a; b] $.
 \end{statement}
 
 \begin{remark}
-    \label{rem:linear_one-sided_lipschitz}
+    \label{remark:nonlinear_stability_theory:linear_one-sided_lipschitz}
     Линейная функция $ f(t, \bvec{x}) = A(t) \cdot \bvec{x} + f_0(t) $ односторонне липшициева на всей области определения $ A(t) $
     с наименьшим возможным коэффициентом $ \nu(t) = \lognorm{A(t)} $.
 \end{remark}
 
-Замечание \ref{rem:linear_one-sided_lipschitz} позволяет связать линейную теорию устойчивости с нелинейной.
+Замечание \ref{remark:nonlinear_stability_theory:linear_one-sided_lipschitz}
+позволяет связать линейную теорию устойчивости с нелинейной
+(см. раздел~\ref{subsection:linear_stability_theory:non_asymptotic}).
 Его естественным продолжением является следующая теорема:
 
 \begin{theorem}[Далквист, 1959]
@@ -804,18 +752,19 @@ $ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
     \[
         \forall t \in [a; b], \; \forall \bvec{x} \in D \quad \lognorm{\frac{\partial f}{\partial \bvec{x}}(t, \bvec{x})} \leqslant \nu(t)
     \]
-    Тогда, если $ \bvec{x}(t) $ и $ \bvec{y}(t) $~--- два решения системы $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $,
+    Тогда, если $ \bvec{x}(t) $ и $ \bvec{y}(t) $~--- два решения системы $ \dot{\bvec{x}} = f(t, \bvec{x}) $,
     то для любых $ t_1, t_2 \in \reals: \; a \leqslant t_1 \leqslant t_2 \leqslant b $ выполнено
     \[
         \| \bvec{x}(t_2) - \bvec{y}(t_2) \| \leqslant \exp\left( \int\limits_{t_1}^{t_2} \nu(s) ds \right) \| \bvec{x}(t_1) - \bvec{y}(t_1) \|
     \]
 \end{theorem}
 
-Наконец, приведём достаточное условие сжимаемости численных решений.
+Наконец, приведём достаточное условие сжимаемости численных решений,
+позволяющее распространить анализ устойчивости численных методов на нелинейные системы.
 
 \begin{theorem}[Далквист, 1978]
     Пусть рассматривается конечномерное гильбертово пространство над $ \reals $.
-    Если численный метод A-устойчивый, то существует норма (называемая \emph{G-нормой}),
+    Если численный метод A"=устойчивый, то существует норма (называемая \emph{G-нормой}),
     в которой любые два численных решения диссипативной на $ [a; b] $ системы будут сжимающимися на $ [a; b] $.
 \end{theorem}
 
@@ -829,37 +778,284 @@ $ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
 Стоит, однако, отметить, что это возможно исключительно благодаря ослаблению утверждений до формы достаточных условий,
 а также благодаря использованию логарифмической нормы вместо спектральной границы.
 Напомним, что первая даёт справедливую в течение всего времени оценку на норму оператора эволюции линейной системы,
-а вторая~--- только асимптотическую оценку (пусть и не менее строгую).
+а вторая~--- только асимптотическую, пусть и, зачастую, более строгую.
+
+
+
+\section{Жесткие системы дифференциальных уравнений}
+\label{section:stiffness}
+
+На практике часто встречаются задачи,
+численное решение которых возможно только с малым шагом интегрирования,
+либо с использованием сложных и дорогих численных методов.
+Такие задачи традиционно называются \emph{жёсткими}.
+Как указано в~\cite{heirer1999solvingode2, lambert1991methods}, существует несколько определений жёсткости,
+каждое из которых обладает своими достоинствами и недостатками.
+Приведём здесь одно из них:
+
+\begin{definition}
+    \label{definition:stiffness:stiffness}
+    Система вида $ \dot{\bvec{x}} = f(t, \bvec{x}) $ называется \emph{жёсткой} в том случае,
+    если для получения корректного (то есть в заданной степени близкого к точному решению)
+    численного решения необходимо использовать шаг интегрирования,
+    много меньший характерных масштабов времени, на которых меняется точное решение.
+\end{definition}
+
+Данное определение слишком общее и не отвечает на вопросы о природе ограничений на шаг интегрирования.
+На основе всего вышеизложенного анализа мы дадим более узкое,
+но в некоторой степени и более информативное определение жёсткости.
+
+
+\subsection{Классическая жёсткость}
+\label{subsection:stiffness:classical_stiffness}
+
+Как видно из приведённого обзора классических результатов теории устойчивости,
+спектр матрицы Якоби правой части $ F \defeq \frac{\partial f}{\partial x} $
+может задавать определённые ограничения на шаг интегрирования.
+Действительно, если $ \lognorm{F} < 0 $, но численный метод не A"=устойчив,
+полученное с его помощью решение может вести себя некорректно при некоторых $ F $ и $ \Delta t $.
+В частности, если $ \Delta t \cdot \sigma(F) \not\subseteq \stabreg $,
+то небольшие возмущения численного решения могут неограниченно усиляться,
+в то время как возмущения точного решения будут, наоборот, затухать.
+Зачастую область устойчивости не A"=устойчивых методов ограничена
+(в частности, это верно для всех явных линейных численных методов)
+или содержит лишь некоторый подсектор $ \complexes^- $,
+поэтому ограничение на шаг интегрирования оказывается ограничением сверху.
+Таким образом, спектральные свойства $ F $ обуславливают максимально допустимый шаг численного интегрирования.
+
+Использование A"=устойчивых методов позволяет избежать указанных проблем.
+Однако A"=устойчивость не гарантирует, что возмущения численного решения будут затухать с той же скоростью,
+что и возмущения точного;
+возможен даже случай $ \displaystyle \lim_{\Re z \to -\infty} |R(z)| = 1 $,
+соответствующий слабо затухающим осцилляциям численного решения там,
+где точное решение обладает сильным эффектом демпфирования
+(см. рисунок~\ref{fig:asymptotic:linear_instability_example_2}).
+Если требуется адекватно воспроизводить сильное затухание за конечное число шагов при увеличении $ \Delta t $,
+следует пользоваться L"=устойчивыми методами.
+
+Поскольку любой линейный A"=устойчивый метод является неявным~\cite{lambert1991methods},
+платой за повышенную устойчивость численного решения
+является необходимость на каждом шаге интегрирования решать (в общем случае нелинейное) уравнение на корни невязки.
+Ситуацию осложняет следующая теорема,
+требующая в случае одностадийных схем делать выбор между устойчивостью, высоким порядком аппроксимации и линейностью схемы:
+
+\begin{theorem}[второй барьер Далквиста]
+    \label{theorem:classical_stiffness:Dahlquist_second_barrier}
+    Не существует A"=устойчивых линейных многошаговых одностадийных схем с порядком аппроксимации выше второго.
+\end{theorem}
+
+Многостадийные неявные методы требуют решения уже нескольких алгебраических уравнений
+на каждом шаге интегрирования,
+что еще более увеличивает их вычислительную сложность.
+
+Приведённые выше рассуждения показывают,
+что определённые системы дифференциальных уравнений могут обладать свойствами,
+вынуждающими либо использовать малый шаг интегрирования,
+либо задействовать дорогостоящие неявные численные методы,
+устойчивые в смысле определений~\ref{definition:asymptotic:A_stability} и \ref{definition:asymptotic:L_stability}.
+%Такие системы попадают под общее определение жёсткости~\ref{definition:stiffness:stiffness}.
+%Конкретизируем его, используя классические результаты теории устойчивости.
+Это позволяет конкретизировать определение жёсткости~\ref{definition:stiffness:stiffness},
+используя классические результаты теории устойчивости.
+
+\begin{definition}
+    \label{definition:classical_stiffness:linear_and_nonlinear_timescales}
+    Обозначим характерное время изменения $ F = \frac{\partial f}{\partial \bvec{x}}(\bvec{x}(t)) $ как~$ \taunonlin $,
+    а $ 1 / r(F) $~---
+    характерное время реакции линеаризованной системы на небольшие возмущения~--- как~$ \taulin $.
+\end{definition}
+
+Рассмотрим случай $ \taulin \ll \taunonlin $,
+позволяющий применять линейный анализ устойчивости.
+
+\begin{definition}
+    \label{definition:classical_stiffness:linear_stiffness}
+    Система вида $ \dot{\bvec{x}} = f(\bvec{x}) $ называется \emph{линейно жёсткой} в том случае,
+    если характерное время реакции линеаризованной системы на небольшие возмущения $ \taulin $
+    много меньше характерных масштабов времени,
+    на которых ищется решение.
+\end{definition}
+
+Зачастую численное решение ищется на интервалах,
+сопоставимых с характерными временн\'{ы}ми масштабами наиболее медленно протекающих процессов, описываемых системой
+(это действительно так, если в численном решении требуется полноценно отобразить всю динамику системы).
+Также для численных методов с ограниченной областью устойчивости условие $ \Delta t \cdot \sigma(F) \subseteq \stabreg $ влечет $ \Delta t \sim \taulin $.
+Тогда определение~\ref{definition:classical_stiffness:linear_stiffness} оказывается
+частным случаем определения~\ref{definition:stiffness:stiffness},
+причём необходимость выбора малого шага оказывается обусловленной <<жёстким>> линейным поведением системы в окрестности истинных решений.
+
+Стоит также отметить, что в случае линейных или слабо нелинейных
+(то есть линеаризацию которых можно долго считать достаточно точной) систем
+характерные масштабы времени наиболее медленно протекающих процессов задаются наименьшими по модулю элементами спектра матрицы $ F $.
+Тогда для линейно жёстких систем спектр $ F $ распадается на две части: \emph{ведущую} и \emph{паразитическую}.
+
+\begin{definition}
+    \label{definition:classical_stiffness:driving_and_parasitic_spectrum}
+    Будем называть спектр оператора $ A $ \emph{распадающимся на ведущую и паразитическую части}, если
+    существует расщепление $ \sigma(A) = \sigma_d(A) \sqcup \sigma_p(A) $ такое, что
+    \[
+        r_d(A) \defeq \sup \{ | \lambda | \mid \lambda \in \sigma_d(A) \} \ll
+        \inf \{ | \lambda | \mid \lambda \in \sigma_p(A) \} \defeq b_p(A)
+    \]
+\end{definition}
+
+Более того, в случае седловых задач доля паразитического спектра может иметь положительную действительную часть.
+Это может вызывать <<взрывное>> поведение даже A"=устойчивых методов,
+ведь в таком случае попадание $ \Delta t \cdot \sigma(F) $ в область устойчивости не гарантируется.
+В задачах, где известно, что такое поведение точного решение нефизично и отсутствует в виду выбора правильных начальных условий,
+данное свойство численного решения является нежелательным.
+
+Нелинейный анализ устойчивости позволяет обобщить определение~\ref{definition:classical_stiffness:linear_stiffness}
+на случай, когда $ \taunonlin \not\ll \taulin $.
+Для этого требуется рассмотреть характерное время затухания возмущений в диссипативных системах
+и сравнить его с характерным временем эволюции невозмущённого решения.
+
+\begin{definition}
+    \label{definition:classical_stiffness:dissipation_timescale}
+    Обозначим $ 1 / \nu(t) $~--- характерное время релаксации возмущений в диссипативной системе
+    $ \dot{\bvec{x}} = f(t, \bvec{x}) $~--- как~$ \taudiss $.
+\end{definition}
+
+\begin{definition}
+    \label{definition:classical_stiffness:classical_stiffness}
+    Диссипативная система вида $ \dot{\bvec{x}} = f(\bvec{x}) $ называется \emph{(классически) жёсткой} в том случае,
+    если характерное время реакции системы на небольшие возмущения $ \taudiss $
+    много меньше характерных масштабов времени,
+    на которых ищется решение.
+\end{definition}
+
+Стоит отметить, что определения~\ref{definition:classical_stiffness:linear_stiffness}
+и \ref{definition:classical_stiffness:classical_stiffness}
+фактически связывают жёсткость с сильно диссипативным характером системы,
+вынуждающим либо уменьшать шаг интегрирования,
+чтобы последний несколько раз укладывался в характерное время диссипации,
+либо использовать неявные устойчивые методы,
+которые численно воспроизводят эффект диссипации даже в случае больших шагов.
+Для недиссипативных систем формальное определение жёсткости ввести труднее,
+так как нет возможности достоверно отделить неустойчивое поведение численного метода
+от неустойчивого поведения исходной системы.
+
+% Рассмотренные определения не учитывают другие возможные эффекты,
+% которые тоже могут считаться проявлениями жёсткости,
+% так как вынуждают уменьшать шаг интегрирования.
+% Поэтому далее по тексту жёсткость,
+% введённая в определениях~\ref{definition:classical_stiffness:linear_stiffness}
+% и \ref{definition:classical_stiffness:classical_stiffness},
+% будет называться \emph{классической}.
+
+
+\subsection{Экспоненциальные интеграторы}
+\label{subsection:stiffness:exponential_integrators}
+
+Линейный и нелинейный анализ устойчивости достаточно глубоко проработан.
+Как следствие, в литературе предложено множество численных методов,
+успешно справляющихся с эффектами
+классической жёсткости~\cite{auzinger1993modern, dahlquist1963special, dahlquist1975stability, liu2019study, heirer1999solvingode2, lambert1991methods}.
+В основном это различные многошаговые или многостадийные линейные схемы, обладающие теми или иными свойствами линейной устойчивости:
+неявные методы Рунге-Кутты, методы Гира, формулы дифференцирования назад и прочее.
+Обладая достаточной устойчивостью, они одновременно могут иметь высокий порядок аппроксимации.
+Тем не менее, неявный характер данных методов может нивелировать все преимущества увеличенного шага интегрирования.
+
+В настоящем разделе предлагается отойти от стандартных линейных схем с постоянными коэффициентами
+и обратить внимание на численные методы,
+утилизирующие информацию о матрице Якоби правой части дифференциального уравнения.
+Понимание локального поведения системы может позволить частично или полностью устранить эффекты линейной жёсткости.
+Более того, так как при решении жёстких систем обычно используются неявные методы,
+и возникающие при этом алгебраические уравнения зачастую решаются методом Ньютона,
+матрица Якоби правой части вычисляется в любом случае.
+Поэтому её использование для модификации численной схемы не приносит дополнительной вычислительной сложности
+(кроме, быть может, последующих операций с матрицей).
+
+Методы, использующие матрицу Якоби правой части интегрируемой системы, называются \emph{адаптивными}.
+Среди них можно перечислить методы Розенброка, Обрешкова, а также \emph{экспоненциальные интеграторы}.
+В данной работе основное внимание будет уделено именно последним.
+
+\begin{definition}
+    \label{definition:exponential_integrators:exponential_integrator}
+    Экспоненциальным интегратором называется численный метод,
+    дающий применительно к линейной задаче~\eqref{eq:linear_stability_theory:linearized_initial_value_problem} точное решение.
+\end{definition}
+
+\begin{remark}
+    \label{remark:exponential_integrators:exponential_integrator_stability_function}
+    Любой экспоненциальный интегратор обладает функцией устойчивости $ R(z) = e^z $.
+    Он также является L"=устойчивым.
+\end{remark}
+
+Из определения и замечания видно, что экспоненциальный интегратор точно интегрирует линейную часть системы.
+Это позволяет исключить влияние линейной жёcткости на решение;
+при этом численная схема вполне может быть полностью явной,
+позволяя избавиться от необходимости решать алгебраические уравнения на каждом шаге интегрирования.
+Преимуществом экспоненциальных интеграторов также является полное отсутствие численной
+(то есть обусловленной исключительно методом, а не задачей) диссипации в линейных системах.
+В некоторых задачах, близких к линейным, это качественно отличает данные методы от
+стандартных A"=устойчивых схем с большими областями устойчивости
+(пример можно увидеть в разделе \ref{sec:Lotka-Volterra}).
+
+Некоторые авторы также расширяют определение экспоненциальных интеграторов на все методы,
+использующие экспоненту матрицы Якоби правой части системы.
+Обзор существующих экспоненциальных интеграторов можно найти, например,
+в работах~\cite{minchev2005expint, hochbruck_ostermann_2010, hollevoet2013exponential_fitting}.
+Мы же остановимся только на простейших из них, необходимых для дальнейшего анализа.
+
+Рассмотрим явный и неявный экспоненциальные методы Эйлера:
+%
+\begin{align}
+    %\text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \left( \exp(\Delta t \cdot F) - I \right) F^{-1} \cdot f(\bvec{x}^n) \label{eq:exponential_integrators:ETDRK1_explicit} \\
+    %\text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= \left( I - \exp(- \Delta t \cdot F) \right) F^{-1} \cdot f(\bvec{x}^{n+1}) \label{eq:exponential_integrators:ETDRK1_implicit}
+    \text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \varphi_1(\Delta t \cdot F) \cdot \Delta t \, f(\bvec{x}^n), \label{eq:exponential_integrators:ETDRK1_explicit} \\
+    \text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= -\varphi_1(-\Delta t \cdot F) \cdot \Delta t \, f(\bvec{x}^{n+1}), \label{eq:exponential_integrators:ETDRK1_implicit}
+\end{align}
+%
+где $ \varphi_1(z) $ определена в замечании~\ref{remark:linear_stability_theory:phi_1_function},
+а $ F = \frac{\partial f}{\partial \bvec{x}} $~--- матрица Якоби правой части системы.
+При этом точка, в которой вычисляются производные, может варьироваться.
+Для линейных систем это не важно, но для нелинейных является определённой степенью свободы, заложенной в методе.
+На самом деле, возможно даже использование приближённого значения матрицы,
+но при этом экспоненциальный интегратор не будет давать точного решения на тестовой задаче Далквиста.
+
+Несложно проверить, что при рассмотрении линеаризованной задачи
+$ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
+оба метода дают точное решение~\eqref{eq:linear_stability_theory:linearized_solution}.
+Следует отметить, что коэффициент при $ f(\blankarg) $ в обоих методах может расти экспоненциально с увеличением $ \Delta t $.
+В таком случае с увеличением шага численное решение может быстро выйти за пределы окрестности,
+в которой применима линеаризация правой части.
+Это следует отнести к недостаткам данных методов,
+так как такое поведение потенциально может являться источником неустойчивости в случае сильной нелинейности правой части.
+В качестве одного из результатов работы также будет приведён двухточечный экспоненциальный интегратор,
+построенный по аналогии с \eqref{eq:exponential_integrators:ETDRK1_explicit}
+и \eqref{eq:exponential_integrators:ETDRK1_implicit},
+но лишённый упомянутого недостатка.
 
 
 \subsection{Нелинейная жёсткость}
-\label{subsec:nonlinear_stiffness}
+\label{subsection:theory:nonlinear_stiffness}
 
-В предыдущей секции были приведены важные утверждения,
-позволяющие формально распространить определение линейной жёсткости на нелинейные системы,
-а также показывающие, что A-устойчивые методы позволяют в известной степени устранять эффекты линейной жёсткости даже для нелинейных систем.
-
+В предыдущих разделах было показано, что с классической жёсткостью успешно справляются
+устойчивые неявные методы, а также экспоненциальные интеграторы,
+точно интегрирующие жёсткую часть системы в линейном приближении.
 Практика, однако, показывает, что при решении систем с сильно нелинейной в том или ином смысле правой частью
 могут возникать различные нежелательные эффекты неустойчивости,
-даже если используются A-устойчивые, L-устойчивые или адаптивные методы.
+даже если используются A"=устойчивые, L"=устойчивые или адаптивные методы.
 Данные эффекты также вынуждают ограничивать величину шага.
-Таким образом, система проявляет свойства жёсткости, которые невозможно объяснить одной только линейной составляющей.
+Таким образом, система проявляет свойства,
+которые невозможно объяснить в рамках классического понимания жёсткости.
 
 Для примера рассмотрим задачу Коши
 %
 \begin{equation}
-    \label{eq:cosine_system}
+    \label{eq:nonlinear_stiffness:cosine_system}
     \begin{dcases}
         \frac{d x}{d t} = \cos\left( \frac{\pi}{2} \cdot x \right) \\
         x(0) = x_0 = 0
     \end{dcases}
     \qquad
-    F(x) = \frac{\partial f}{\partial x} = - \frac{\pi}{2} \sin\left( \frac{\pi}{2} \cdot x \right),
+    F(x) = \frac{\partial f}{\partial x}(x) = - \frac{\pi}{2} \sin\left( \frac{\pi}{2} \cdot x \right),
 \end{equation}
 %
 имеющую точное решение
 \begin{equation}
-    \label{eq:cosine_system_solution}
+    \label{eq:nonlinear_stiffness:cosine_system_solution}
     x(t) = \frac{2}{\pi} \arcsin\left( \tanh\left( \frac{\pi}{2} t \right) \right)
 \end{equation}
 
@@ -868,102 +1064,139 @@ $ f(\bvec{x}) = f_0 + F_0 \cdot (\bvec{x} - \bvec{x}_0) $
 В окрестности каждого из положений равновесия система достаточно хорошо линеаризуема (с кубической точностью).
 Более того, в любой точке функция $ f(x) $ отличается от свой линеаризации в ближайшем положении равновесия не более, чем на
 $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
-%Наконец, на участке $ [0; 1) $ (от начальной точки и до одного из устойчивых положений равновесия)
-%$ f(x) > 0 $ и сублинейно стремится к нулю при $ x \to 1 $ (так как $ -\pi /2 \leqslant F(x) < 0 $ при $ x \in [0;1) $).
-%Значит, точное решение не покинет отрезка $ [0; 1] $ и будет с экспоненциальной скоростью стремиться к $ x = 1 $.
 Наконец, в любой момент времени точное решение находится в промежутке $ [0; 1) $,
 с экспоненциальной скоростью стремясь к положению равновесия $ x = 1 $.
 Для $ x \in [0; 1) $ имеем $ -\pi /2 < F(x) \leqslant 0 $, то есть $ F(x) \in \complexes^- $.
-Исходя из этого можно выдвинуть предположение, что численное решение данной системы при помощи A-устойчивого метода не вызвовет никаких проблем,
+Исходя из этого можно выдвинуть предположение, что численное решение данной системы
+при помощи A"=устойчивого метода не вызвовет никаких проблем,
 даже если взять шаг интегрирования, сравнимый с $ \min (1 / |F|) = 2 / \pi \sim \taulin $.
 
-Воспользуемся L-устойчивым неявным методом Эйлера.
-Шаг интегрирования возьмём $ \Delta t = 2 $,
-возникающие при интегрировании нелинейные уравнения будем решать методом Ньютона с начальным приближением в текущей точке.
-Для сравнения построим также график точного решения.
-%референсное решение методом трапеций с шагом $ \Delta t = 0.02 $
-Оба графика можно видеть на рисунке \ref{fig:nonlinear_instability_example}.
-Несложно заметить, что полученное методом Эйлера решение некорректно.
-Использование экспоненциальных интеграторов из раздела \ref{subsec:exponential_integrators}
-также не приносит положительных результатов (см. рис. \ref{fig:nonlinear_instability_example_2}),
-несмотря на то, что данные методы точно интегрируют линейную составляющую системы
-(для сравнения также добавлен график численного решения, полученного методом, описанным в следующей главе).
+Результаты интегрирования рассматриваемой системы различными численными методами
+приведены на рисунке~\ref{fig:nonlinear_stiffness:nonlinear_instability_example}.
+Использовался шаг по времени $ \Delta t = 2 $.
+В случае неявных схем возникающие при интегрировании нелинейные уравнения
+решались методом Ньютона с начальным приближением в текущей точке.
+Для сравнения также приведён график точного решения.
 
 \begin{figure}[ht!]
     \centering
-    \begin{gnuplot}[terminal=epslatex, terminaloptions={color dashed size 16cm,6cm}]
+    \small
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16cm,9.0cm fontscale 0.9}]
         load './gnuplot/common.gp'
 
         #set style increment default
         set style data linespoints
-        set xlabel  '$ t $'
+        set xlabel  "$ t $"
         set xrange  [ 0 : * ] noreverse writeback
-        set ylabel  '$ x(t) $' #rotate by 0
-        set yrange  [ -2 : 2 ] noreverse writeback
-
-        set key width -16
-
-        f(x) = 2 * asin( tanh(pi * x / 2.0) ) / pi
-
-        set xtics 2
-        set ytics 1
-        set xzeroaxis lw 3
-
-        plot './data/exponential_integrators/tests.csv' every ::1 using 1:3 t 'неявный метод Эйлера' lw 3 ps 2, \
-             f(x) t 'точное решение' with lines lw 4 lc 'black'
-    \end{gnuplot}
-
-    \caption{Поведение L-устойчивого метода Эйлера при решении уравнения \eqref{eq:cosine_system}}
-    \label{fig:nonlinear_instability_example}
-\end{figure}
-
-\begin{figure}[ht!]
-    \centering
-    \begin{gnuplot}[terminal=epslatex, terminaloptions={color dashed size 16cm,9.0cm}]
-        load './gnuplot/common.gp'
-
-        #set style increment default
-        set style data linespoints
-        set xlabel  '$ t $'
-        set xrange  [ 0 : * ] noreverse writeback
-        set ylabel  '$ x(t) $' #rotate by 0
+        set ylabel  "$ x(t) $" #rotate by 0
         set yrange  [ -2 : 4 ] noreverse writeback
 
         set key width -32
 
-        f(x) = 2 * asin( tanh(pi * x / 2.0) ) / pi
+        true_solution(x) = 2 * asin( tanh(pi * x / 2.0) ) / pi
 
         set xtics 2
         set ytics 1
-        set xzeroaxis lw 3
+        set xzeroaxis lw 2
 
-        plot './data/exponential_integrators/tests.csv' every ::1 using 1:6 t 'неявный экспоненциальный метод Эйлера' lw 3 ps 2, \
-             './data/exponential_integrators/tests.csv' every ::1 using 1:5 t 'явный экспоненциальный метод Эйлера' lw 3 ps 2, \
-             './data/exponential_integrators/tests.csv' every ::1 using 1:7 t 'предложенный в разделе \ref{sec:weighted_Euler} метод' lw 3 lc 'web-blue' ps 2, \
-             f(x) t 'точное решение' with lines lw 4 lc 'black'
+        plot './data/exponential_integrators/tests.csv' every ::1 using 1:2 t 'явный (+явный экспоненциальный) метод Эйлера' lw 2 ps 2, \
+             './data/exponential_integrators/tests.csv' every ::1 using 1:3 t 'неявный (+неявный экспоненциальный) метод Эйлера' lw 2 ps 2, \
+             './data/exponential_integrators/tests.csv' every ::1 using 1:4 t 'метод трапеций' lw 2 ps 2, \
+             true_solution(x) t 'точное решение' with lines lw 3 lc 'black'
     \end{gnuplot}
-
-    \caption{Поведение простейших экспоненциальных интеграторов при решении уравнения \eqref{eq:cosine_system}}
-    \label{fig:nonlinear_instability_example_2}
+    \caption{Поведение простейших экспоненциальных интеграторов при решении уравнения~\eqref{eq:nonlinear_stiffness:cosine_system}}
+    \label{fig:nonlinear_stiffness:nonlinear_instability_example}
 \end{figure}
 
-Данный пример показывает, что явление жёсткости не ограничивается только линейной её составляющей.
-Выпишем невязку неявного метода Эйлера и его матрицу Якоби:
+Как можно видеть, при использовании явного метода Эйлера наблюдаются незатухающие осцилляции
+численного решения вокруг устойчивого положения равновесия $ x = 1 $,
+что говорит о необходимости использования устойчивых методов.
+Однако L"=устойчивый неявный метод Эйлера даёт совершенно некорректное решение,
+уходящее в противоположную от аналитического решения сторону
+и осциллирующее вокруг положения неустойчивого равновесия $ x = -1 $.
+Использование экспоненциальных интеграторов из раздела~\ref{subsection:stiffness:exponential_integrators}
+даёт идентичные результаты, так как в точках $ x = 2k, \; k \in \integers $ производная правой части вырождается.
+Это означает, что наблюдаемое явление не объясняется только классической жёсткостью,
+эффекты которой должны устраняться неявным методом Эйлера и экспоненциальными интеграторами.
+С другой стороны, использование метода трапеций позволяет получить корректное и довольно точное численное решение.
+
+Данный пример показывает, что явление жёсткости не ограничивается только
+классическими определениями~\ref{definition:classical_stiffness:linear_stiffness}
+и \ref{definition:classical_stiffness:classical_stiffness},
+но также связано с нелинейностью правой части,
+<<транслируемой>> неявными методами на дискретное уравнение.
+Чтобы лучше проиллюстрировать это,
+выпишем невязку и соответствующую матрицу Якоби тета-метода,
+частными случаями которого являются рассмотренные явный и неявный методы Эйлера и метод трапеций:
 %
 \begin{equation}
-    \label{eq:implicit_Euler_residual}
-    \res(t^{n+1}, \bvec{x}^{n+1}) = \bvec{x}^{n+1} - \bvec{x}^n - \Delta t \cdot f(t^{n+1}, \bvec{x}^{n+1})
+    \label{eq:nonlinear_stiffness:theta-method_residual}
+    \res(t^{n+1}, \bvec{x}^{n+1}) = \bvec{x}^{n+1} - \bvec{x}^n -
+    \Delta t \cdot \left[ \theta f(t^{n+1}, \bvec{x}^{n+1}) + (1 - \theta) f(t^n, \bvec{x}^n) \right]
 \end{equation}
 %
 \begin{equation}
-    \label{eq:implicit_Euler_jacobian}
-    \jac(t^{n+1}, \bvec{x}^{n+1}) = \frac{\partial \res}{\partial \bvec{x}}(t^{n+1}, \bvec{x}^{n+1}) = I - \Delta t \cdot F(t^{n+1}, \bvec{x}^{n+1})
+    \label{eq:nonlinear_stiffness:theta-method_jacobian}
+    \jac(t^{n+1}, \bvec{x}^{n+1}) = \frac{\partial \res}{\partial \bvec{x}}(t^{n+1}, \bvec{x}^{n+1}) =
+    I - \Delta t \cdot \theta F(t^{n+1}, \bvec{x}^{n+1})
 \end{equation}
 %
 В нашем случае $ f(x) $ и $ F(x) $ имеют целое семейство корней.
-Поэтому при достаточно большом $ \Delta t $ несколько корней также имеет $ \res(x) $,
+Поэтому при достаточно большом $ \Delta t $ и $ \theta \neq 0 $ несколько корней также имеет $ \res(x) $,
 а $ \jac(x) $ перестаёт быть отделимым от нуля.
-Теорема Канторовича \cite{kantorovich1949method,ortega2000iterative} даёт достаточные условия сходимости метода Ньютона к корню уравнения.
+На рисунке~\ref{fig:nonlinear_stiffness:example_theta-method_residual}
+показан график $ \res(x) $ для $ \Delta t = 2 $ и $ \theta \in \{0, 1/2, 1\} $;
+также указано положение точного решения в момент времени $ t = \Delta t $.
+
+\begin{figure}[ht!]
+    \centering
+    \small
+    \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16cm,6.0cm fontscale 0.9}]
+        load './gnuplot/common.gp'
+
+        #set style increment default
+        set style data linespoints
+        set xlabel  "$ x $"
+        set xrange  [ -4 : 4 ] noreverse writeback
+        set ylabel  "$ \\res(x) $" #rotate by 0
+        set yrange  [ -6 : 6 ] noreverse writeback
+
+        set key bottom
+
+        delta_t = 2.0
+
+        f(x, theta) = x - delta_t * (theta * cos(0.5 * pi * x) + (1.0 - theta) * 1.0)
+        f_0(x)  = f(x, 0.0)
+        f_05(x) = f(x, 0.5)
+        f_1(x)  = f(x, 1.0)
+        true_solution(x) = 2 * asin( tanh(pi * x / 2.0) ) / pi
+
+        set xtics 1
+        set ytics 2
+        set xzeroaxis lw 2
+        set yzeroaxis lw 2
+
+        xPos = true_solution(delta_t)
+        set arrow 1 at xPos, graph 0 to xPos, graph 1 nohead lc "black" lw 3
+        set label 1 at xPos, graph 1 "$ x(\\Delta t) $" offset 0.5,-1.0
+
+        plot f_0(x)  t "$ \\theta = 0   $" with lines lw 2, \
+             f_05(x) t "$ \\theta = 1/2 $" with lines lw 2, \
+             f_1(x)  t "$ \\theta = 1   $" with lines lw 2
+    \end{gnuplot}
+    \caption{График невязки~\eqref{eq:nonlinear_stiffness:theta-method_residual}
+        при численном интегрировании системы~\eqref{eq:nonlinear_stiffness:cosine_system} с шагом $ \Delta t = 2 $.}
+    \label{fig:nonlinear_stiffness:example_theta-method_residual}
+\end{figure}
+
+Видно, что $ \theta = 0 $ приводит к промаху мимо положения равновесия
+(неустойчивое поведение явного метода Эйлера),
+$ \theta = 1 $ порождает два дополнительных паразитических корня
+(неявный метод Эйлера <<транслирует>> нелинейность $ f(x) $ на дискретизованную задачу),
+а $ \theta = 1/2 $ позволяет добиться хорошего баланса между устойчивостью метода и линейностью уравнения $ \res(x) = 0 $.
+
+Теорема Канторовича \cite{kantorovich1949method,ortega2000iterative}
+даёт достаточные условия сходимости метода Ньютона к корню уравнения.
 Одним из условий как раз является отделимость матрицы Якоби от нуля.
 Таким образом, из-за нелинейности правой части и большого шага интегрирования, с одной стороны,
 теряются достаточные условия сходимости метода Ньютона, и, с другой стороны, появляются некорректные корни невязки.
@@ -981,7 +1214,7 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
 
 \begin{definition}
     \label{def:nonlinear_stiffness}
-    Система вида $ \frac{d \bvec{x}}{d t} = f(t, \bvec{x}) $ называется \emph{нелинейно жёсткой} в том случае,
+    Система вида $ \dot{\bvec{x}} = f(t, \bvec{x}) $ называется \emph{нелинейно жёсткой} в том случае,
     если нелинейные свойства правой части существенно влияют на
     %допустимую величину шага интегрирования,
     %при которой возможна сходимость используемого метода поиска корней невязки выбранной численной схемы,
@@ -1013,13 +1246,16 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
 большим шагом по времени и простотой метода решения нелинейных уравнений.
 
 Таким образом, борьба с нелинейной жёсткостью переводится в плоскость методов оптимизации.
-Среди способов улучшения сходимости метода Ньютона можно перечислить линейный поиск \cite{armijo1966minimization, wolfe1969convergence},
-метод доверительных областей \cite{sorensen1982newton} и различного рода ускорения \cite{anderson1965iterative, nesterov27method, brown1994convergence}.
+Среди способов улучшения сходимости метода Ньютона можно перечислить линейный поиск~\cite{armijo1966minimization, wolfe1969convergence},
+метод доверительных областей \cite{sorensen1982newton} и различного рода ускорения~\cite{anderson1965iterative, nesterov27method, brown1994convergence}.
 Линейный поиск минимизирует невязку вдоль выбранного направления путём подбора оптимального шага.
 Метод доверительных областей изменяют направление шага, используя информацию о производных высшего порядка.
 Ускоренные методы используют историю шагов при решении задачи оптимизации.
 Возможна также комбинация упомянутых методов \cite{brune2015composing}.
 Квазиньютоновские методы активно используются для решения уравнений, возникающих при интегрировании жёстких систем
 \cite{brown1985experiments, alexander1991modified, moore1994stepsize, schlenkrich2006application}.
-Данная группа методов решает задачу оптимизации или поиска корней уравнения, используя аппроксимации производных, а не их точные значения.
+Данная группа методов решает задачу оптимизации или поиска корней уравнения,
+используя аппроксимации производных, а не их точные значения.
+Особо жёсткие задачи могут потребовать применения крайне медленных и непрактичных алгоритмов
+полного поиска корней~\cite{farrell2016computation}.
 Все эти методы отличаются необходимым количеством вычислений невязки, якобиана или гессиана в ходе поиска решения.

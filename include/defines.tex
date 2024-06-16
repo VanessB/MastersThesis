@@ -1,27 +1,49 @@
-%% Равенство по определению
-\def\defeq{\triangleq}
+%% Математические символы и прочие дефайны.
+
+\def\defarr{\overset{\triangle}{\Longleftrightarrow}} % <<По определению>>
+\def\defeq{\triangleq}                                % <<По определению равно>>
+\def\symdiff{\,\triangle\,}                           % <<Симметрическая разность>>
+\def\connected{\leftrightsquigarrow}                  % Связность в графах.
+
+% Большая черта в множествах.
+\def\Mid{\;\middle|\;}
+
+% Стрелки для сходимостей.
+\newcommand{\limarrow}[2][\longrightarrow]{\underset{#2}{#1}}
+\newcommand{\limto}[2]{\limarrow{#1 \to #2}}
+
+
+% Математическое операторы.
+\DeclareMathOperator{\diam}{\textnormal{diam}}
+\DeclareMathOperator{\rad}{\textnormal{rad}}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\DeclareMathOperator*{\dom}{\textnormal{dom}}
+\DeclareMathOperator*{\range}{\textnormal{range}}
+\DeclareMathOperator*{\closure}{\textnormal{cl}}
+\DeclareMathOperator*{\lowlim}{\underline{lim}}
+\DeclareMathOperator*{\uplim}{\overline{lim}}
+
+\newcommand{\mean}[1]{\left\langle #1 \right\rangle} % Усреднение.
+
+% Математические множества.
+\def\naturals{\mathbb{N}}  % Натуральные числа.
+\def\integers{\mathbb{Z}}  % Целые числа.
+\def\rationals{\mathbb{Q}} % Рациональные числа.
+\def\reals{\mathbb{R}}     % Действительные числа.
+\def\complexes{\mathbb{C}} % Комплексные числа.
 
 %% Функции
 \def\blankarg{\,\cdot\,}
 
-%% Множества.
-\def\naturals{\mathbb{N}}  % Натуральные числа.
-\def\integers{\mathbb{Z}}  % Целые числа.
-\def\reals{\mathbb{R}}     % Действительные числа
-\def\complexes{\mathbb{C}} % Комплексные числа.
-
 %% Линейная алгебра.
 \def\diag{\operatorname{diag}} % Диагональная матрица.
 
-%% Математический анализ.
-\newcommand{\limto}[2]{\underset{#1 \to #2}{\longrightarrow}}  % Стрелка, обозначающая предел.
-\newcommand{\overlimto}[3]{\overset{#3}{\limto{#1}{#2}}}       % Стрелка, обозначающая предел, с подписью типа сходимости.
+%% Функциональный анализ.
 \def\banachspace{\mathcal{B}}                                  % Банахово пространство.
 \def\hilbertspace{\mathcal{H}}                                 % Гильбертово пространство.
-\def\linopset{\mathcal{L}}                                % Множество линейных ограниченных операторов.
+\def\linopset{\mathcal{L}}                                     % Множество линейных ограниченных операторов.
 \newcommand{\dotprod}[2]{\left\langle #1, #2 \right\rangle}    % Скалярное произведение.
-
-\DeclareMathOperator*{\argmin}{\arg\min}
 
 %% Комплексные числа.
 \def\Re{\operatorname{Re}} % Действительная часть.

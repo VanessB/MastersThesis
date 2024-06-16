@@ -132,12 +132,12 @@
 Рассмотрим систему $ \dot x = a \, x + b $, $ a \in \complexes \setminus \{ 0 \} $,
 эквивалентную линеаризованной.
 Аналитическое решение соответствующей задачи Коши~--- $ x(t) = e^{a t} x_0 + (e^{a t} - 1) b / a $.
-В качестве семейства численных методов возьмём тета-схему:
+В качестве семейства численных методов возьмём тета-схему~\eqref{eq:linear_stability_theory:weighted_two_point}.
 %
-\begin{equation}
-    \label{eq:one_dimensional_linear_system:one_dimensional_theta-method}
-    \frac{x^{n+1} - x^n}{\Delta t} = \theta f(x^{n+1}) + (1 - \theta) f(x^n), \qquad \theta \in [0;1]
-\end{equation}
+%\begin{equation}
+%    \label{eq:one_dimensional_linear_system:one_dimensional_theta-method}
+%    \frac{x^{n+1} - x^n}{\Delta t} = \theta f(x^{n+1}) + (1 - \theta) f(x^n), \qquad \theta \in [0;1]
+%\end{equation}
 %
 Подберём $ \theta $ таким образом,
 чтобы численное решение за один шаг $ \Delta t $ совпадало с аналитическим.
@@ -180,16 +180,17 @@
 можно также рассмотреть семейство линейных правых частей,
 соответствующих множеству $ a \Delta t \in [\underline{z}; \overline{z}] \subseteq \reals $.
 Без ограничения общности будем считать $ b = 0 $.
-%Аналогично будем рассматривать только один шаг по времени.
 Также считаем $ \theta \in [0;1] $.
-%В качестве функционала качества рассмотрим абсолютную и относительную ошибку:
-В качестве функционала качества рассмотрим абсолютную ошибку за один шаг интегрирования:
+В качестве функционала качества рассмотрим абсолютную ошибку за один шаг интегрирования,
+поделённую на $ |x_0| $:
 \[
-    \Phi(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = |x^1_M - x(\Delta t; x_0)| = |x_0| \cdot |R_M(a \Delta t) - e^{a \Delta t}|
+    \Phi(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = |x^1_M - x(\Delta t; x_0)| / |x_0| = |R_M(a \Delta t) - e^{a \Delta t}|
 \]
-%\[
-%    \Phi_2(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = \frac{|x^1_M - x(\Delta t; x_0)|}{|x(\Delta t; x_0)|} = | R_M(a \Delta t) e^{-a \Delta t} - 1|
-%\]
+\begin{equation}
+    \label{eq:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
+    \theta^*(\underline{z}, \overline{z}) = \argmin_{\theta \in [0;1]}
+    \max_{z \in [\underline{z}; \overline{z}]} |R_\theta(a \Delta t) - e^{a \Delta t}|
+\end{equation}
 Максимум $ |R_\theta(z) - e^z| $ на отрезке $ [\underline{z}; \overline{z}] $ достигается либо в концах отрезка,
 либо в стационарных точках, либо в точке разрыва.
 
@@ -212,23 +213,24 @@
 $ \theta = (1 \mp e^{-z/2}) / z $, где минус соответствует $ z_2 $.
 Отсюда получаем значение ошибки в точке $ z_2 $:
 \[
-    |R_\theta(z_2) - e^{z_2}| = |1 + z_2 e^{z_2/2} - e^{z_2}| = \left|1 + \frac{z_2}{1 - \theta z_2} - \frac{1}{(1 - \theta z_2)^2} \right|
+    |R_\theta(z_2) - e^{z_2}| = |1 + z_2 e^{z_2/2} - e^{z_2}| =
+    \left|1 + \frac{z_2}{1 - \theta z_2} - \frac{1}{(1 - \theta z_2)^2} \right|
 \]
-Итоговое оптимальное значение $ \theta^*_{[\underline{z}, \overline{z}]} $
+Итоговое оптимальное значение $ \theta^*(\underline{z}, \overline{z}) $
 минимизирует максимальную из ошибок в $ \underline{z} $, $ \overline{z} $ и
 $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z}] $.
 В частности, если $ \overline{z} = 0 $ и $ \underline{z} \to -\infty $ (случай жёсткого спектра),
 \[
-    \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^*_{(-\infty; 0]},
+    \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^*(-\infty, 0),
 \]
 что совпадает со значением, полученным в работе~\cite{liniger1969global_accuracy}.
 
-Значения $ \theta^*_{(-\infty;\overline{z}]} $ для различных $ \overline{z} $
+Значения $ \theta^*(-\infty, \overline{z}) $ для различных $ \overline{z} $
 приведены на рис.~\ref{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}.
 Из данного графика видно, что оптимальные $ \theta $ для линейных систем с быстро убывающими решениями тяготеют к единице;
 в то же время, появление положительной части спектра почти сразу опускает оптимум ниже $ 1/2 $.
 Также интересно наличие небольшой <<полочки>> в районе нуля,
-на которой $ \theta^*_{(-\infty; \overline{z}]} = \theta^*_{(-\infty; 0]} $.
+на которой $ \theta^*(-\infty; \overline{z}) = \theta^*(-\infty; 0) $.
 
 \begin{figure}[ht!]
     \centering
@@ -260,15 +262,17 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         \caption{$ z \in [-20; 20] $}
     \end{subfigure}
     \caption{Зависимость оптимального значения
-        $ \theta^*_{[\underline{z};\overline{z}]} $ от $ \overline{z} $ при $ \underline{z} \to -\infty $.
+        $ \theta^*(\underline{z};\overline{z}) $~\eqref{eq:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
+        от $ \overline{z} $ при $ \underline{z} \to -\infty $.
         Для сравнения также приведён график $ \theta^*(z) $ из уравнения~\eqref{eq:one_dimensional_linear_system:optimal_theta}.}
     \label{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
 \end{figure}
 
 
-На рис.~\ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
+На рисунках~\ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
 и \ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
-показано поведение адаптированной к отрицательному спектру тета-схемы ($ \theta = \theta^*_{(-\infty; 0]} $) в случае одномерного уравнения Далквиста.
+показано поведение адаптированной к отрицательному спектру тета-схемы ($ \theta = \theta^*(-\infty; 0) $)
+в случае одномерного уравнения Далквиста.
 Из графиком можно сделать вывод,
 что результат адаптации является компромиссом между осциллирующим методом трапеций и <<инертным>> неявным методом Эйлера.
 
@@ -397,13 +401,14 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 На практике параметр $ K $ обычно не известен,
 а значение $ a $ возможно оценить через линеаризацию правой части только
 на начальном (экспоненциальный рост) и на конечном (насыщение) этапе.
-
 Хорошим приближением $ \beta $ может являться отношение численного решения на новом шаге
 к решению на текущем: $ \beta = x^{n+1} / x^n $.
 Также отметим, что в предельном случае $ a \Delta t \to 0 $ зависимостью $ \theta^* $ от $ z $ можно пренебречь:
 \[
     \lim_{z \to 0} \theta^*(z, \beta) = \frac{\beta - 1}{\beta^2 - 1} = \frac{1}{\beta + 1} \approx \frac{x^n}{x^{n+1} + x^{n}}
 \]
+Альтернативно, параметры $ a $ и $ K $ можно находить через подгонку логистической кривой
+под значения численного решения на прошлых итерациях.
 
 
 
@@ -432,14 +437,11 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 \subsection{Движение материальной точки по окружности}
 \label{subsection:methods:circular_orbit}
 
-В задачах небесной механики 
-
-
-
-\section{Общая формула точной адаптации тета-схемы}
-\label{section:methods:general_exact_theta_method_adaptation}
-
-Вернёмся к общей постановке автономной системы дифференциальных уравнений: $ \dot{\bvec{x}} = f(\bvec{x}) $.
+В задачах небесной механики конические сечения часто служат
+хорошей аппроксимацией траекторий движения небесных тел~\cite{landau2022mechanics}.
+Адаптация численных схем для точного воспроизведения эллиптических, параболических и гиперболических траекторий
+может позволить существенно увеличить шаг интегрирования систем,
+точные решения которых слабо отклоняются от конических сечений.
 
 
 \section{Многомерная экспоненциальная адаптация}

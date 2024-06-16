@@ -30,15 +30,16 @@
     \input{include/title.tex}
 
     %% Аннотоция.
-    \input{parts/annotation.tex}
+    \input{chapters/annotation.tex}
 
     %% Содержание.
     \tableofcontents{} \setcounter{page}{2} % Начать со второй страницы. \newpage
 
-    \include{parts/introduction.tex} %% Введение.
-    \include{parts/theory.tex}       %% Теоретические сведения.
-    \include{parts/methods.tex}      %% Разработка численных методов.
-    \include{parts/blood.tex}       %% Модель крови.
+    \include{chapters/definitions.tex}  %% Сокращения, обозначения, термины, определения.
+    \include{chapters/introduction.tex} %% Введение.
+    \include{chapters/theory.tex}       %% Теоретические сведения.
+    \include{chapters/methods.tex}      %% Разработка численных методов.
+    \include{chapters/blood.tex}        %% Модель крови.
 
     %\nocite{*} \bibliography{references}
     \printbibliography[heading=bibintoc]

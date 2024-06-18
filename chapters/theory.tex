@@ -18,6 +18,138 @@
 не связанных с жёстким характером реакции динамической системы на малые возмущения.
 
 
+\section{Регулярные функции операторного аргумента}
+\label{section:regular_function_operator}
+
+В ходе работы часто будут встречаться выражения,
+с которыми проще и удобнее работать в терминах теории регулярных функций операторного аргумента.
+В настоящем разделе компактно приведены необходимые результаты из соответствующей области.
+
+\begin{definition}
+    \label{definition:regular_function_operator:spectrum}
+    Пусть $ \banachspace $~--- банахово пространство,
+    $ A \in \linopset(\banachspace) $~--- линейный ограниченный оператор над $ \banachspace $,
+    $ \identity $~--- единичный оператор над $ \banachspace $.
+    \emph{Спектром оператора $ A $} называется
+    $ \sigma(A) = \{ \lambda \mid A - \lambda \identity \; \text{необратим} \} $.
+\end{definition}
+
+\begin{definition}[\cite{takesaki2001opalgebras1}, утверждение 2.7]
+    \label{definition:regular_function_operator:regular_function_operator}
+    Пусть $ A $~--- линейный ограниченный оператор, действующий в банаховом пространстве $ \banachspace $ над $ \complexes $,
+    $ \sigma(A) $~--- спектр оператора $ A $, а
+    $ f \colon U \to \complexes $~--- регулярная в области $ U \supset \sigma(A) $ функция.
+    Тогда можно определить
+    \begin{equation}
+        \label{eq:regular_function_operator:regular_function_operator}
+        f(A) = \frac{1}{2 \pi i} \int\limits_{\Gamma} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi,
+    \end{equation}
+    где $ \Gamma $~--- произвольный гладкий контур в $ U $ такой,
+    что $ \sigma(A) $ целиком находится по левую сторону при положительном обходе $ \Gamma $.
+\end{definition}
+
+Для численных методов часто бывает важным понять,
+переводит ли некоторая регулярная функция вещественные матрицы в вещественные.
+В связи с этим полезны следующие результаты:
+
+\begin{remark}[Производная Виртингера регулярной функции]
+    \label{remark:regular_function_operator:Wirtinger_derivative}
+    Условие $ \frac{\partial f(z)}{\partial z^*} = 0 $ эквивалентно условиям Коши-Римана,
+    а потому выполнено для всех регулярных функций.
+\end{remark}
+
+
+\begin{lemma}
+    \label{lemma:regular_function_operator:complex_conjugate_regularity}
+    Если $ f(z) \colon U \to \complexes $ регулярна в симметричной относительно действительной оси области $ U $,
+    то $ (f(z^*))^* $ регулярна в той же области.
+\end{lemma}
+
+\begin{proof}
+    $ \frac{\partial (f(z^*))^*}{\partial z^*} = \left( \frac{\partial f(z^*)}{\partial z} \right)^* =
+    \left( \frac{\partial f(z)}{\partial z^*} \right)^* = 0^* = 0 $.
+\end{proof}
+
+
+\begin{corollary}
+    \label{corollary:regular_function_operator:sum_with_conjugated_is_constant}
+    Пусть $ f $~--- регулярная функция, удовлетворяющая условиям
+    леммы~\ref{lemma:regular_function_operator:complex_conjugate_regularity}.
+    Тогда $ f(z) - (f(z^*))^* = const $.
+\end{corollary}
+
+\begin{proof}
+    Согласно лемме~\ref{lemma:regular_function_operator:complex_conjugate_regularity},
+    $ g(z) \defeq f(z) - (f(z^*))^* $ регулярна в той же области, что и $ f(z) $.
+    При этом
+    \[
+        \frac{\partial g}{\partial z} = \frac{\partial f}{\partial z} - \frac{\partial (f(z^*))^*}{\partial z} =
+        \frac{\partial f}{\partial z} - \left( \frac{\partial f(z^*)}{\partial z^*} \right)^* =
+        \frac{\partial f}{\partial z} - \frac{\partial f}{\partial z} = 0
+    \]
+    Следовательно, $ g(z) = const $.
+\end{proof}
+
+
+\begin{corollary}
+    \label{corollary:regular_function_operator:sum_with_conjugated_is_zero}
+    Пусть $ f $~--- регулярная функция, удовлетворяющая условиям
+    леммы~\ref{lemma:regular_function_operator:complex_conjugate_regularity}
+    и $ f(\reals) \subseteq \reals $ ($ f $ переводит вещественные числа в вещественные).
+    Тогда $ f(z^*) = (f(z))^* $
+\end{corollary}
+
+\begin{proof}
+    Достаточно заметить, что $ f(x^*) = (f(x))^* $ для любого действительного числа $ x $
+    из области определения $ f(z) $, и воспользоваться
+    следствием~\ref{corollary:regular_function_operator:sum_with_conjugated_is_constant}.
+\end{proof}
+
+
+\begin{theorem}
+    \label{theorem:regular_function_operator:real_valued_matrix_function}
+    Пусть $ M \in \reals^{n \times n} $ и $ f \colon \complexes \to \complexes $
+    удовлетворяют определению~\ref{definition:regular_function_operator:regular_function_operator}.
+    Пусть также $ f(\reals) \subseteq \reals $.
+    Тогда $ f(M) \in \reals^{n \times n} $.
+\end{theorem}
+
+\begin{proof}
+    Поскольку матрица $ M $ вещественная,
+    характеристический многочлен имеет вещественные коэффициенты.
+    По теореме о корнях многочлена с вещественными коэффициентами
+    $ \sigma(A) $ симметричен относительно вещественной прямой.
+    Из условия тогда следует, что можно сузить $ f(z) $
+    на симметричную относительно действительной оси область,
+    содержащую $ \sigma(A) $.
+    Тогда, согласно следствию~\ref{corollary:regular_function_operator:sum_with_conjugated_is_zero}
+    получаем $ f(z^*) = (f(z))^* $.
+
+    Рассмотрим симметричный относительно вещественной прямой контур,
+    удовлетворяющий~\ref{definition:regular_function_operator:regular_function_operator}.
+    Разобъём его на три части: $ \Gamma = \Gamma^+ \sqcup \Gamma^- \sqcup \Gamma^0 $,
+    где $ \Gamma^+ \defeq \{ z \in \Gamma \mid \Im z > 0 \} $, $ \Gamma^0 = \Gamma \cap \reals $.
+    Тогда выражение~\eqref{eq:regular_function_operator:regular_function_operator} можно переписать в виде
+    \begin{align*}
+        f(A) &= \frac{1}{2 \pi i} \int\limits_{\Gamma^+} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi +
+                \frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi + \\
+             &= \frac{1}{2 \pi i} \int\limits_{\Gamma^0} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi,
+    \end{align*}
+    где последнее слагаемое даёт ноль
+    (гладкий симметричный относительно вещественной прямой контур не может иметь пересечение с $ \reals $ ненулевой длины).
+    Покажем, что оставшиеся слагаемые эрмитово сопряжены:
+    \begin{multline*}
+        \frac{1}{2 \pi i} \int\limits_{\Gamma^+} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi =
+        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi^*) \left( \xi^* \identity - A \right)^{-1} d \xi = \\
+        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} \left[ f(\xi) \left( \xi \identity - A \right)^{-1} \right]^* d \xi =
+        \left[ \frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi \right]^*,
+    \end{multline*}
+    где было использовано $ A^* = A $ и $ f(z^*) = (f(z))^* $.
+    Отсюда следует, что итоговая сумма является матрицей с вещественными элементами.
+\end{proof}
+
+
+
 \section{Линейная теория устойчивости}
 \label{section:theory:linear_stability_theory}
 
@@ -73,26 +205,12 @@
 Для линеаризованной задачи известно точное решение:
 \begin{equation}
     \label{eq:linear_stability_theory:linearized_solution}
-    \bvec{x}(t) = \bvec{x}_0 + (\exp(t F_0) - I) F_0^{-1} \cdot f_0
+    \bvec{x}(t) = \bvec{x}_0 + (\exp(t F_0) - \identity) F_0^{-1} \cdot f_0
 \end{equation}
 
 Несмотря на потенциальную вырожденность $ F_0 $,
 аппарат функционального анализа позволяет определить~\eqref{eq:linear_stability_theory:linearized_solution}
 для всех $ F_0 $.
-
-\begin{definition}[\cite{takesaki2001opalgebras1}, утверждение 2.7]
-    \label{definition:linear_stability_theory:regular_function_operator}
-    Пусть $ A $~--- линейный ограниченный оператор, действующий в банаховом пространстве $ \banachspace $ над $ \complexes $,
-    $ \sigma(A) $~--- спектр оператора $ A $, а
-    $ f $~--- регулярная в области $ U \supset \sigma(A) $ функция.
-    Тогда можно определить
-    \begin{equation}
-        \label{eq:linear_stability_theory:regular_function_operator}
-        f(A) = \frac{1}{2 \pi i} \int\limits_{\Gamma} f(\xi) \left( \xi I - A \right)^{-1} d \xi,
-    \end{equation}
-    где $ \Gamma $~--- произвольный гладкий контур в $ U $ такой,
-    что $ \sigma(A) $ целиком находится по левую сторону при положительном обходе $ \Gamma $.
-\end{definition}
 
 %\begin{remark}
 %    \label{rem:regular_function_diagonalizable_operator}
@@ -154,7 +272,7 @@
 где $ R(z) $~--- \emph{функция устойчивости}, а $ R(\Delta t \cdot F_0) $~--- \emph{матрица перехода}.
 Для большинства схем можно рассматривать $ R(z) $ как функцию комплексного переменного,
 естественным образом продолженную на матричный аргумент
-(см. \ref{definition:linear_stability_theory:regular_function_operator}).
+(см. \ref{definition:regular_function_operator:regular_function_operator}).
 Однако есть и исключения:
 например, у линейных схем с матричными (не скалярными) весами
 функция $ R(z) $ изначально может быть определена только для матричного аргумента.
@@ -175,7 +293,7 @@
     \label{eq:linear_stability_theory:weighted_two_point}
     \begin{aligned}
         \frac{\bvec{x}^{n+1} - \bvec{x}^n}{\Delta t} &= (1 - \Theta) f(\bvec{x}^n) + \Theta f(\bvec{x}^{n+1}) \\
-        R(z) &= (I - \Theta z)^{-1}(I + (I - \Theta) z)
+        R(z) &= (\identity - z \Theta)^{-1}(\identity + z (\identity - \Theta))
     \end{aligned}
 \end{equation}
 где $ \Theta $, вообще говоря, может быть произвольным обратимым линейным оператором
@@ -436,10 +554,10 @@
         set xtics 1
         set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
-             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 2 ps 2, \
-             f(x) t 'точное решение' lw 3 lc 'black'
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' ps 2, \
+             ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' ps 2, \
+             f(x) t 'точное решение' ls 200
     \end{gnuplot}
     \caption{Поведение простейших численных методов при решении одномерного уравнения Далквиста ($ \Delta t \cdot F_0 = -1.5 $).}
     \label{fig:asymptotic:linear_instability_example}
@@ -471,9 +589,9 @@
         set xtics 1
         set xzeroaxis lw 2
 
-        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
-             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
-             f(x) t 'точное решение' lw 3 lc 'black'
+        plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' ps 2, \
+             BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' ps 2, \
+             f(x) t 'точное решение' ls 200
     \end{gnuplot}
 
     \caption{Поведение простейших численных методов при решении одномерного уравнения Далквиста ($ \Delta t \cdot F_0 = -15 $).}
@@ -502,7 +620,7 @@
     Число
     \begin{equation}
         \label{eq:logarithmic_norm}
-        \lognorm{A} = \lim_{h \to +0} \frac{\| I + h \cdot A \| - 1}{h}
+        \lognorm{A} = \lim_{h \to +0} \frac{\| \identity + h \cdot A \| - 1}{h}
     \end{equation}
     называется \emph{логарифмической нормой} оператора $ A $.
 \end{definition}
@@ -519,7 +637,7 @@
         \item $ \lognorm{A} $ определена;
         \item $ \lognorm{A} \leqslant \| A \| $;
         \item $ \lognorm{\gamma \cdot A} = \gamma \cdot \lognorm{A} $ для любого $ \gamma > 0 $;
-        \item $ \lognorm{A + z \cdot I} = \lognorm{A} + \Re z $;
+        \item $ \lognorm{A + z \cdot \identity} = \lognorm{A} + \Re z $;
         \item $ \lognorm{A + B} \leqslant \lognorm{A} + \lognorm{B} $;
         \item $ s(A) \leqslant \lognorm{A} $; \label{item:non_asymptotic:logarithmic_norm_and_spectral_bound}
         \item $ \| \exp(t \cdot A) \| \leqslant e^{t \cdot \lognorm{A}} $ для любого $ t \geqslant 0 $. \label{item:non_asymptotic:logarithmic_norm_exponential_bound}
@@ -540,16 +658,16 @@
 \begin{equation}
     \label{eq:non_asymptotic:matrix_1}
     A =
-    \begin{bmatrix}
+    \begin{pmatrix}
         -1 & \alpha \\
         0 & -2
-    \end{bmatrix},
+    \end{pmatrix},
     \qquad
     \exp(t \cdot A) =
-    \begin{bmatrix}
+    \begin{pmatrix}
         e^{-t} & \alpha e^{-t} (1 - e^{-t}) \\
         0 & e^{-2 t}
-    \end{bmatrix}
+    \end{pmatrix}
 \end{equation}
 Нетрудно получить
 \[
@@ -575,16 +693,16 @@
 \begin{equation}
     \label{eq:non_asymptotic:matrix_2}
     A =
-    \begin{bmatrix}
+    \begin{pmatrix}
         -1 & \alpha \\
         0 & -1
-    \end{bmatrix},
+    \end{pmatrix},
     \qquad
     \exp(t \cdot A) =
-    \begin{bmatrix}
+    \begin{pmatrix}
         e^{-t} & \alpha \, t e^{-t} \\
         0 & e^{-t}
-    \end{bmatrix}
+    \end{pmatrix}
 \end{equation}
 \[
     s(A) = -1, \quad
@@ -617,9 +735,9 @@
             spectral_ub(x) = abs(alpha) * exp(spectral_bound * x)
             logarithmic_norm_ub(x) = exp(logarithmic_norm * x)
 
-            plot [0:3] logarithmic_norm_ub(x) lw 2 t "$ \\exp(t \\cdot \\lognorm{A}) $", \
-                       spectral_ub(x) lw 2 t "$ |\\alpha| \\exp(t \\cdot s(A)) $", \
-                       eonorm(x) lw 3 lc "black" t "$ \\| \\exp(t \\cdot A) \\|_1 $"
+            plot [0:3] logarithmic_norm_ub(x) t "$ \\exp(t \\cdot \\lognorm{A}) $", \
+                       spectral_ub(x) t "$ |\\alpha| \\exp(t \\cdot s(A)) $", \
+                       eonorm(x) ls 200 t "$ \\| \\exp(t \\cdot A) \\|_1 $"
         \end{gnuplot}
         \caption{Оператор из примера~\eqref{eq:non_asymptotic:matrix_1}.}
     \end{subfigure}%
@@ -640,9 +758,9 @@
             spectral_ub(x) = 3.0 * abs(alpha) * exp(spectral_bound * x)
             logarithmic_norm_ub(x) = exp(logarithmic_norm * x)
 
-            plot [0:3] logarithmic_norm_ub(x) lw 2 t "$ \\exp(t \\cdot \\lognorm{A}) $", \
-                       spectral_ub(x) lw 2 t "$ 3 |\\alpha| \\exp(t \\cdot s(A)) $", \
-                       eonorm(x) lw 3 lc "black" t "$ \\| \\exp(t \\cdot A) \\|_1 $"
+            plot [0:3] logarithmic_norm_ub(x) t "$ \\exp(t \\cdot \\lognorm{A}) $", \
+                       spectral_ub(x) t "$ 3 |\\alpha| \\exp(t \\cdot s(A)) $", \
+                       eonorm(x) ls 200 t "$ \\| \\exp(t \\cdot A) \\|_1 $"
         \end{gnuplot}
         \caption{Оператор из примера~\eqref{eq:non_asymptotic:matrix_2}.}
     \end{subfigure}
@@ -1005,8 +1123,8 @@
 Рассмотрим явный и неявный экспоненциальные методы Эйлера:
 %
 \begin{align}
-    %\text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \left( \exp(\Delta t \cdot F) - I \right) F^{-1} \cdot f(\bvec{x}^n) \label{eq:exponential_integrators:ETDRK1_explicit} \\
-    %\text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= \left( I - \exp(- \Delta t \cdot F) \right) F^{-1} \cdot f(\bvec{x}^{n+1}) \label{eq:exponential_integrators:ETDRK1_implicit}
+    %\text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \left( \exp(\Delta t \cdot F) - \identity \right) F^{-1} \cdot f(\bvec{x}^n) \label{eq:exponential_integrators:ETDRK1_explicit} \\
+    %\text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= \left( \identity - \exp(- \Delta t \cdot F) \right) F^{-1} \cdot f(\bvec{x}^{n+1}) \label{eq:exponential_integrators:ETDRK1_implicit}
     \text{\emph{Явный:}}   && \bvec{x}^{n+1} - \bvec{x}^n &= \varphi_1(\Delta t \cdot F) \cdot \Delta t \, f(\bvec{x}^n), \label{eq:exponential_integrators:ETDRK1_explicit} \\
     \text{\emph{Неявный:}} && \bvec{x}^{n+1} - \bvec{x}^n &= -\varphi_1(-\Delta t \cdot F) \cdot \Delta t \, f(\bvec{x}^{n+1}), \label{eq:exponential_integrators:ETDRK1_implicit}
 \end{align}
@@ -1103,10 +1221,10 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
         set ytics 1
         set xzeroaxis lw 2
 
-        plot './data/exponential_integrators/tests.csv' every ::1 using 1:2 t 'явный (+явный экспоненциальный) метод Эйлера' lw 2 ps 2, \
-             './data/exponential_integrators/tests.csv' every ::1 using 1:3 t 'неявный (+неявный экспоненциальный) метод Эйлера' lw 2 ps 2, \
-             './data/exponential_integrators/tests.csv' every ::1 using 1:4 t 'метод трапеций' lw 2 ps 2, \
-             true_solution(x) t 'точное решение' with lines lw 3 lc 'black'
+        plot './data/exponential_integrators/tests.csv' every ::1 using 1:2 t 'явный (+явный экспоненциальный) метод Эйлера' ps 2, \
+             './data/exponential_integrators/tests.csv' every ::1 using 1:3 t 'неявный (+неявный экспоненциальный) метод Эйлера' ps 2, \
+             './data/exponential_integrators/tests.csv' every ::1 using 1:4 t 'метод трапеций' ps 2, \
+             true_solution(x) t 'точное решение' with lines ls 200
     \end{gnuplot}
     \caption{Поведение простейших экспоненциальных интеграторов при решении уравнения~\eqref{eq:nonlinear_stiffness:cosine_system}}
     \label{fig:nonlinear_stiffness:nonlinear_instability_example}
@@ -1142,7 +1260,7 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
 \begin{equation}
     \label{eq:nonlinear_stiffness:theta-method_jacobian}
     \jac(t^{n+1}, \bvec{x}^{n+1}) = \frac{\partial \res}{\partial \bvec{x}}(t^{n+1}, \bvec{x}^{n+1}) =
-    I - \Delta t \cdot \theta F(t^{n+1}, \bvec{x}^{n+1})
+    \identity - \Delta t \cdot \theta F(t^{n+1}, \bvec{x}^{n+1})
 \end{equation}
 %
 В нашем случае $ f(x) $ и $ F(x) $ имеют целое семейство корней.
@@ -1158,8 +1276,6 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
     \begin{gnuplot}[terminal=tikz, terminaloptions={color size 16cm,6.0cm fontscale 0.9}]
         load './gnuplot/common.gp'
 
-        #set style increment default
-        set style data linespoints
         set xlabel  "$ x $"
         set xrange  [ -4 : 4 ] noreverse writeback
         set ylabel  "$ \\res(x) $" #rotate by 0
@@ -1181,12 +1297,12 @@ $ |\cos(\pi/2) - \pi/2| \approx 1.58 \approx 1.58 \cdot \max |f(x)| $.
         set yzeroaxis lw 2
 
         xPos = true_solution(delta_t)
-        set arrow 1 at xPos, graph 0 to xPos, graph 1 nohead lc "black" lw 3
+        set arrow 1 at xPos, graph 0 to xPos, graph 1 nohead ls 200
         set label 1 at xPos, graph 1 "$ x(\\Delta t) $" offset 0.5,-1.0
 
-        plot f_0(x)  t "$ \\theta = 0   $" with lines lw 2, \
-             f_05(x) t "$ \\theta = 1/2 $" with lines lw 2, \
-             f_1(x)  t "$ \\theta = 1   $" with lines lw 2
+        plot f_0(x)  t "$ \\theta = 0   $" with lines, \
+             f_05(x) t "$ \\theta = 1/2 $" with lines, \
+             f_1(x)  t "$ \\theta = 1   $" with lines
     \end{gnuplot}
     \caption{График невязки~\eqref{eq:nonlinear_stiffness:theta-method_residual}
         при численном интегрировании системы~\eqref{eq:nonlinear_stiffness:cosine_system} с шагом $ \Delta t = 2 $.}

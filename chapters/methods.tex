@@ -34,10 +34,10 @@
 Предполагаем, что для всех $ f \in \rhsfamily $ и $ \bvec{x}_0 \in \initialcond(f) $ решение соответствующей задачи Коши
 на отрезке $ [0; T] $ существует и единственно:
 \[
-    \exists! \bvec{x} \colon [0; T] \times \initialcond(f) \to \banachspace: \qquad
+    \forall f \in \rhsfamily \quad \exists! \bvec{x}_f \colon [0; T] \times \initialcond(f) \to \banachspace: \qquad
     \begin{dcases}
-        \frac{\partial \bvec{x}}{\partial t} = f(t, \bvec{x}) \\
-        \bvec{x}(0; \bvec{x}_0) = \bvec{x}_0
+        \frac{\partial \bvec{x}_f}{\partial t} = f(t, \bvec{x}_f) \\
+        \bvec{x}_f(0; \bvec{x}_0) = \bvec{x}_0
     \end{dcases}
 \]
 Далее рассмотрим семейство методов численного интегрирования $ \nmfamily $.%
@@ -55,20 +55,22 @@
 
 \begin{definition}
     \label{definition:adaptation_method:adapted_numerical_method}
-    \emph{Адаптацией} семейства схем $ \nmfamily $ под семейство систем $ \dot{\bvec{x}} = f(t, \bvec{x}) $,
-    $ f \in \rhsfamily $, $ \bvec{x}(0) \in \initialcond(f) $ на сетке $ \{ t_n \}_{n=0}^N $ с функционалом качества $ \Phi $
+    \emph{Адаптацией} семейства численных методов $ \nmfamily $ к семейству задач Коши
+    $ \{ \dot{\bvec{x}} = f(t, \bvec{x}), \; \bvec{x}(0) = \bvec{x}_0 \mid f \in \rhsfamily, \; \bvec{x}_0 \in \initialcond(f) \} $
+    на сетке $ \{ t_n \}_{n=0}^N $ с функционалом качества $ \Phi $
     назовём
     \begin{equation}
         \label{eq:adaptation_method:adapted_numerical_method}
-        M^* = \argmin_{M \in \nmfamily} \sup_{f \in \rhsfamily} \sup_{\bvec{x}_0 \in \initialcond(f)} \Phi(\{ \bvec{x}_M^n(\bvec{x}_0) \}_{n=0}^N, \bvec{x}(\blankarg; \bvec{x}_0) )
+        M^\optimal = \argmin_{M \in \nmfamily} \sup_{f \in \rhsfamily} \sup_{\bvec{x}_0 \in \initialcond(f)}
+        \Phi(\{ \bvec{x}_M^n(\bvec{x}_0) \}_{n=0}^N, \bvec{x}_f(\blankarg; \bvec{x}_0) )
     \end{equation}
 \end{definition}
 
 Предложенная процедура адаптации расширяет подход, рассмотренный в более ранних работах,
-где для семейства линейных систем $ \dot{\bvec{x}} = A \bvec{x} $, $ A \in \linopset(\banachspace) $
+где для семейства линейных систем $ \dot{\bvec{x}} = A \cdot \bvec{x} $, $ A \in \linopset(\banachspace) $
 производился поиск оптимального значения параметра $ \theta \in \reals $ тета-схемы
 как в случае фиксированного $ A $~\cite{liniger1970efficient_integration_methods, lambert1991methods, berzins1992adaptive_theta_method},
-так и в случае $ A \in \{ \lambda I \mid \lambda \in \reals \} $~\cite{liniger1969global_accuracy, johnson1988tunable_integration_method}.
+так и в случае $ A \in \{ \lambda \identity \mid \lambda \in \reals \} $~\cite{liniger1969global_accuracy, johnson1988tunable_integration_method}.
 Можно также показать, что общая процедура экспоненциальной подгонки, рассматриваемая,
 например, в~\cite{hollevoet2013exponential_fitting}, является частным случаем адаптации:
 требование точного воспроизведения полиномиальных и экспоненциальных решений
@@ -87,25 +89,25 @@
 Приведём несколько дополнительных замечаний, подробнее раскрывающих особенности описанного метода:
 \begin{enumerate}
     \item
-        Результат адаптации всё ещё лежит в исходном семействе схем: $ M^* \in \nmfamily $.
-        Следовательно, грамотный выбор $ \nmfamily $ гарантирует хорошее поведение $ M^* $
-        на широком классе задач, несмотря на адаптацию под конкретное семейство $ \rhsfamily $.
+        Результат адаптации всё ещё лежит в исходном семействе схем: $ M^\optimal \in \nmfamily $.
+        Следовательно, грамотный выбор $ \nmfamily $ гарантирует хорошее поведение $ M^\optimal $
+        на широком классе задач, несмотря на адаптацию к конкретному семейству задач Коши.
 
     \item
         Частным случаем является подбор численной схемы,
         дающей точное решение для выбранного множества задач:
         достаточно в качестве $ \Phi $ взять норму разности численного решения и проекции истинного решения на сетку.
         Тогда, если минимум достигается и равен нулю,
-        численные решения, получаемые при помощи $ M^* $, совпадают с точными на узлах выбранной сетки.
+        численные решения, получаемые при помощи $ M^\optimal $, совпадают с точными на узлах выбранной сетки.
+        Такие методы будем называть \emph{точно адаптированными}.
 
         Таким образом, предложенный подход обобщает идею, стоящую за экспоненциальными интеграторами
-        и экспоненциальной подгонкой~\cite{liniger1970efficient_integration_methods, lambert1991methods, hollevoet2013exponential_fitting}.
+        и экспоненциальной адаптацией~\cite{liniger1970efficient_integration_methods, lambert1991methods, hollevoet2013exponential_fitting}.
 
     \item
         Если схема одношаговая, можно ограничиться $ N = 1 $,
         то есть подбирать схему для оптимизации качества на одном шаге интегрирования.
-        Это упрощает анализ, а также полностью эквивалентно общему методу в случае,
-        если удаётся точно воспроизвести аналитическое решение.
+        В случае точной адаптации это полностью эквивалентно общему подходу.
 \end{enumerate}
 
 
@@ -153,9 +155,10 @@
 \[
     (e^{z} - 1) = \theta \cdot z (e^{z} - 1) + z
 \]
+%
 \begin{equation}
     \label{eq:one_dimensional_linear_system:optimal_theta}
-    \theta^*(z) = \frac{1}{z} - \frac{1}{e^{z} - 1}
+    \theta^\optimal(z) = \frac{1}{z} - \frac{1}{e^{z} - 1}
 \end{equation}
 %
 Видно, что~\eqref{eq:one_dimensional_linear_system:optimal_theta} не зависит от $ b $;
@@ -186,20 +189,24 @@
 \[
     \Phi(\{ x_M^n \}_{n=0}^1; x(\blankarg; x_0)) = |x^1_M - x(\Delta t; x_0)| / |x_0| = |R_M(a \Delta t) - e^{a \Delta t}|
 \]
+%
 \begin{equation}
     \label{eq:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
-    \theta^*(\underline{z}, \overline{z}) = \argmin_{\theta \in [0;1]}
+    \theta^\optimal(\underline{z}, \overline{z}) = \argmin_{\theta \in [0;1]}
     \max_{z \in [\underline{z}; \overline{z}]} |R_\theta(a \Delta t) - e^{a \Delta t}|
 \end{equation}
+%
 Максимум $ |R_\theta(z) - e^z| $ на отрезке $ [\underline{z}; \overline{z}] $ достигается либо в концах отрезка,
 либо в стационарных точках, либо в точке разрыва.
 
 Стационарные точки:
+%
 \begin{multline*}
     \frac{\partial}{\partial z} (R_\theta(z) - e^z) = \frac{1}{(\theta z - 1)^2} - e^z = 0 \quad \Longrightarrow \\
     \Longrightarrow \quad z_1 = 0, \;
     z_{2,3} = 2 W_n \left( \mp \frac{e^{-1 / (2 \theta)}}{2 \theta} \right) + \frac{1}{\theta},
 \end{multline*}
+%
 где $ W_n $~--- \emph{$ W $-функция Ламберта}, $ n \in \{ -1, 0 \} $.
 Точка разрыва второго рода (соответствует бесконечной ошибке численного решения): $ z_4 = 1/\theta $.
 
@@ -216,21 +223,21 @@ $ \theta = (1 \mp e^{-z/2}) / z $, где минус соответствует 
     |R_\theta(z_2) - e^{z_2}| = |1 + z_2 e^{z_2/2} - e^{z_2}| =
     \left|1 + \frac{z_2}{1 - \theta z_2} - \frac{1}{(1 - \theta z_2)^2} \right|
 \]
-Итоговое оптимальное значение $ \theta^*(\underline{z}, \overline{z}) $
+Итоговое оптимальное значение $ \theta^\optimal(\underline{z}, \overline{z}) $
 минимизирует максимальную из ошибок в $ \underline{z} $, $ \overline{z} $ и
 $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z}] $.
 В частности, если $ \overline{z} = 0 $ и $ \underline{z} \to -\infty $ (случай жёсткого спектра),
 \[
-    \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^*(-\infty, 0),
+    \argmin_\theta \max_{- \infty < z < 0} | e^z - R_\theta(z) | \approx 0.878 = \theta^\optimal(-\infty, 0),
 \]
 что совпадает со значением, полученным в работе~\cite{liniger1969global_accuracy}.
 
-Значения $ \theta^*(-\infty, \overline{z}) $ для различных $ \overline{z} $
+Значения $ \theta^\optimal(-\infty, \overline{z}) $ для различных $ \overline{z} $
 приведены на рис.~\ref{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}.
 Из данного графика видно, что оптимальные $ \theta $ для линейных систем с быстро убывающими решениями тяготеют к единице;
 в то же время, появление положительной части спектра почти сразу опускает оптимум ниже $ 1/2 $.
 Также интересно наличие небольшой <<полочки>> в районе нуля,
-на которой $ \theta^*(-\infty; \overline{z}) = \theta^*(-\infty; 0) $.
+на которой $ \theta^\optimal(-\infty; \overline{z}) = \theta^*(-\infty; 0) $.
 
 \begin{figure}[ht!]
     \centering
@@ -262,20 +269,18 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         \caption{$ z \in [-20; 20] $}
     \end{subfigure}
     \caption{Зависимость оптимального значения
-        $ \theta^*(\underline{z};\overline{z}) $~\eqref{eq:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
+        $ \theta^\optimal(\underline{z};\overline{z}) $~\eqref{eq:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
         от $ \overline{z} $ при $ \underline{z} \to -\infty $.
-        Для сравнения также приведён график $ \theta^*(z) $ из уравнения~\eqref{eq:one_dimensional_linear_system:optimal_theta}.}
+        Для сравнения также приведён график $ \theta^\optimal(z) $ из уравнения~\eqref{eq:one_dimensional_linear_system:optimal_theta}.}
     \label{fig:one_dimensional_linear_system:optimal_theta_for_stiff_systems}
 \end{figure}
 
-
 На рисунках~\ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
 и \ref{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
-показано поведение адаптированной к отрицательному спектру тета-схемы ($ \theta = \theta^*(-\infty; 0) $)
+показано поведение адаптированной к отрицательному спектру тета-схемы ($ \theta = \theta^\optimal(-\infty; 0) $)
 в случае одномерного уравнения Далквиста.
 Из графиком можно сделать вывод,
 что результат адаптации является компромиссом между осциллирующим методом трапеций и <<инертным>> неявным методом Эйлера.
-
 
 \begin{figure}[ht!]
     \centering
@@ -306,7 +311,7 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
              BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
              ForwardEuler using (times[$1]):(ForwardEuler[$1]) with linespoints t 'явный метод Эйлера' lw 2 ps 2, \
              f(x) t 'точное решение' lw 4 lc 'black', \
-             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 2 ps 2
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^\\optimal(-\\infty, 0) $" lc "red" pt 4 lw 2 ps 2
     \end{gnuplot}
     \caption{Поведение тета-схемы, адаптированной к отрицательному спектру, при решении одномерного уравнения Далквиста ($ z = -1.5 $).}
     \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_1}
@@ -340,7 +345,7 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
         plot Trapezoid using (times[$1]):(Trapezoid[$1]) with linespoints t 'метод трапеций' lw 2 ps 2, \
              BackwardEuler using (times[$1]):(BackwardEuler[$1]) with linespoints t 'неявный метод Эйлера' lw 2 ps 2, \
              f(x) t 'точное решение' lw 3 lc 'black', \
-             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^*_{(-\\infty; 0]} $" lc "red" pt 4 lw 2 ps 2
+             ThetaMethod using (times[$1]):(ThetaMethod[$1]) with linespoints t "тета-схема, $ \\theta^\\optimal(-\\infty, 0) $" lc "red" pt 4 lw 2 ps 2
     \end{gnuplot}
     \caption{Поведение тета-схемы, адаптированной к отрицательному спектру, при решении одномерного уравнения Далквиста ($ z = -15.0 $).}
     \label{fig:one_dimensional_linear_system:Dahlquist_optimal_theta_method_2}
@@ -361,8 +366,8 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 Данное уравнение моделирует геометрический рост в условиях ограниченных ресурсов,
 а потому часто возникает в качестве предельного или частного случая в химических,
 биологических, экологических и экономических моделях.
-Адаптация численного метода под логистическое уравнение потенциально может повысить точность интегрирования систем,
-в которых наблюдается как взрывной рост, так и насыщение.
+Адаптация численного метода к логистическому уравнению потенциально может повысить точность интегрирования систем,
+в которых наблюдается взрывной рост, сменяемый насыщением.
 
 Аналитическим решением~\eqref{eq:logistic_differential_equation:logistic_differential_equation}
 является логистическая функция, также известная как сигмоида:
@@ -371,8 +376,8 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
     x(t) = \frac{x_0 K e^{a t}}{K + x_0 (e^{a t} - 1)}
 \end{equation}
 
-
-Аналогично предыдущему разделу, адаптируем тета-схему под данную задачу для конкретных значении $ a $ и $ K $.
+Аналогично предыдущему разделу, точно адаптируем тета-метод~\eqref{eq:linear_stability_theory:weighted_two_point}
+к данной задаче для конкретных значении $ x_0 $, $ a $ и $ K $.
 %Без ограничения общности положим $ K = 1 $ (соответствует замене переменной $ x' = x / K $).
 Один шаг тета-метода:
 \[
@@ -395,7 +400,7 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 Тогда
 \begin{equation}
     \label{eq:logistic_differential_equation:optimal_theta}
-    \theta^*(z, \beta) = \frac{\beta (1 - e^{-z}) / z - 1}{\beta^2 e^{-z} - 1}, \qquad \beta(z, x_0/K) = \left[ e^{-z} + \frac{x_0}{K} (1 - e^{-z}) \right]^{-1}
+    \theta^\optimal(z, \beta) = \frac{\beta (1 - e^{-z}) / z - 1}{\beta^2 e^{-z} - 1}, \qquad \beta(z, x_0/K) = \left[ e^{-z} + \frac{x_0}{K} (1 - e^{-z}) \right]^{-1}
 \end{equation}
 
 На практике параметр $ K $ обычно не известен,
@@ -403,35 +408,12 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 на начальном (экспоненциальный рост) и на конечном (насыщение) этапе.
 Хорошим приближением $ \beta $ может являться отношение численного решения на новом шаге
 к решению на текущем: $ \beta = x^{n+1} / x^n $.
-Также отметим, что в предельном случае $ a \Delta t \to 0 $ зависимостью $ \theta^* $ от $ z $ можно пренебречь:
+Также отметим, что в предельном случае $ a \Delta t \to 0 $ зависимостью $ \theta^\optimal $ от $ z $ можно пренебречь:
 \[
-    \lim_{z \to 0} \theta^*(z, \beta) = \frac{\beta - 1}{\beta^2 - 1} = \frac{1}{\beta + 1} \approx \frac{x^n}{x^{n+1} + x^{n}}
+    \lim_{z \to 0} \theta^\optimal(z, \beta) = \frac{\beta - 1}{\beta^2 - 1} = \frac{1}{\beta + 1} \approx \frac{x^n}{x^{n+1} + x^{n}}
 \]
 Альтернативно, параметры $ a $ и $ K $ можно находить через подгонку логистической кривой
 под значения численного решения на прошлых итерациях.
-
-
-
-% Можно воспользоваться~\eqref{eq:logistic_differential_equation:logistic_function} для того,
-% чтобы явно выразить $ \beta $ через $ z $ и $ K $,
-% однако на практике $ K $ может быть не известно,
-% а $ x(\Delta t) / x_0 $ для полученной $ \theta^* $ является отношением новой точки численного решения к предыдущей,
-% что легко вычисляется на каждом шаге.
-% 
-% Поскольку $ a $ в общем случае также может быть неизвестно,
-% члены, содержащие $ z $, имеет смысл заменить через следующие отношения,
-% содержащие только точки решения и соответствующие значения правой части исходного дифференциального уравнения:
-% \[
-%     \beta^2 e^{-z} = \frac{a x(t) (1 - x(t) / K)}{a x_0 (1 - x_0 / K)} = \frac{f(x(\Delta t))}{f(x_0)},
-% \]
-% \[
-%     \beta (1 - e^{-z}) / z = \frac{(x(\Delta t) - x_0) / \Delta t}{a x_0 (1 - x_0 / K)} = \frac{x(\Delta t) - x_0}{\Delta t \cdot f(x_0)},
-% \]
-% где $ f(x) $~--- правая часть уравнения~\eqref{eq:logistic_differential_equation:logistic_differential_equation}.
-% В итоге имеем
-% \[
-%     \theta^* = \frac{f(x(\Delta t)) - f(x_0)}{\frac{x(\Delta t) - x_0}{\Delta t} - f(x_0)}
-% \]
 
 
 \subsection{Движение материальной точки по окружности}
@@ -439,16 +421,353 @@ $ z_2 $, если последняя лежит в $ [\underline{z}, \overline{z
 
 В задачах небесной механики конические сечения часто служат
 хорошей аппроксимацией траекторий движения небесных тел~\cite{landau2022mechanics}.
-Адаптация численных схем для точного воспроизведения эллиптических, параболических и гиперболических траекторий
+Адаптация численных методов для точного воспроизведения эллиптических, параболических и гиперболических траекторий
 может позволить существенно увеличить шаг интегрирования систем,
 точные решения которых слабо отклоняются от конических сечений.
+
+В данном разделе будет рассмотрена существенно упрощенная задача адаптации.
+Конкретно, общее семейство двухшаговых одностадийных схем,
+определённое в уравнении~\eqref{eq:linear_stability_theory:weighted_two_point},
+будет адаптировано под задачу движения материальной точки по окружности в поле центральной силы.
+
+Уравнение, задающее рассматриваемую систему:
+%
+\begin{equation}
+    \label{eq:circular_orbit:central_froce_field}
+    \begin{dcases}
+        \frac{d \vec{r}}{d t} &= \vec{v}, \\
+        \frac{d \vec{v}}{d t} &= \vec{a},
+    \end{dcases}
+    \qquad
+    \vec{a} = -a(r) \cdot \vec{r} / r,
+    \qquad
+    \frac{v(0)}{r^2(0)} = a(r(0)),
+\end{equation}
+%
+где $ r = |\vec{r}| $, $ v = |\vec{v}| $ и начальные условия выбраны так,
+чтобы движение происходило по окружности ($ r(t) = const $).
+Так как траектория является плоской кривой,
+без ограничения общности считаем задачу двумерной.
+Точное решение:
+%
+\begin{equation}
+    \label{eq:circular_orbit:central_froce_field_solution}
+    \vec{r}(t) = W(\omega t) \cdot \vec{r}(0), \qquad \vec{v}(t) = W(\omega t) \cdot \vec{v}(0), \qquad \omega = a(r) / v
+\end{equation}
+%
+\begin{equation}
+    \label{eq:circular_orbit:rotation_matrix}
+    W(\varphi) =
+    \begin{pmatrix}
+        \cos(\varphi) & -\sin(\varphi) \\
+        \sin(\varphi) & \cos(\varphi)
+    \end{pmatrix}
+    \quad
+    \textnormal{(матрица поворота на угол $ \varphi $)}
+\end{equation}
+%
+Рассмотрим сначала динамику $ \vec{v}(t) $.
+Приравнивая численное решение за один шаг к точному,
+получаем уравнение
+\begin{align}
+    (W(\omega \Delta t) - \identity) \cdot \vec{v}^{\, n} &= \Delta t \left[\Theta \cdot \vec{a}^{\, n+1} + (\identity - \Theta) \cdot  \vec{a}^{\, n} \right] \\
+                                            &= \Delta t \left[ \Theta W(\omega \Delta t) + (\identity - \Theta) \right] \cdot  \vec{a}^{\, n} \\
+                                            &= \Delta t \left[ \Theta (W(\omega \Delta t) - \identity) + \identity \right] \cdot \frac{a(r)}{v} W(\pi / 2) \cdot \vec{v}^{\, n},
+\end{align}
+где было использовано равенство $ \vec{v} / v = W(\pi / 2) \cdot \vec{a} / a(r) $.
+Обозначив $ \Delta \varphi = \Delta t \cdot a(r) / v $ и $ B = W(-\pi / 2) $, получаем
+\[
+    \Theta = \left[ \identity + (B \Delta \varphi)^{-1} (\identity - W(\Delta \varphi)) \right] (\identity - W(\Delta \varphi))^{-1} = (\identity - W(\Delta \varphi))^{-1} + (B \Delta \varphi)^{-1}
+\]
+Несложно заметить, что
+\[
+    B^{-1} = -B =
+    \begin{pmatrix}
+        0 & -1 \\
+        1 & \phantom{-}0
+    \end{pmatrix}
+\]
+\[
+    (\identity - W(\Delta \varphi))^{-1} =
+    \frac{1}{2}
+    \begin{pmatrix}
+        1 & \cot(\Delta \varphi / 2) \\
+        -\cot(\Delta \varphi / 2) & 1
+    \end{pmatrix}
+\]
+Тогда оптимальная весовая матрица задаётся уравнением
+\begin{equation}
+    \label{eq:circular_orbit:optimal_Theta}
+    \Theta^\optimal(\Delta \varphi) =
+    \begin{pmatrix}
+        \frac{1}{2} & \frac{1}{2} \cot(\frac{\Delta \varphi}{2}) - \frac{1}{\Delta \varphi} \\
+        \frac{1}{\Delta \varphi} - \frac{1}{2} \cot(\frac{\Delta \varphi}{2}) & \frac{1}{2}
+    \end{pmatrix}
+\end{equation}
+
+\begin{remark}
+    \label{remark:circular_orbit:weight_function_limit_at_zero}
+    Разрыв весовой функции в $ \Delta \varphi = 0 $ устраним,
+    причём пределом является матрица, соответствующая методу трапеций:
+    \[
+        \lim_{x \to 0} \frac{1}{2} \cot\left( \frac{x}{2} \right) - \frac{1}{x} = 0,
+        \qquad
+        \lim_{\Delta \varphi \to 0} \Theta^\optimal(\Delta \varphi) = \frac{1}{2} \identity
+    \]
+\end{remark}
+
+Несложно показать, что та же самая матрица является оптимальной для интегрирования $ \dot{\vec{r}} = \vec{v} $,
+так как $ \vec{r}(t) $ также вращается по окружности с угловой скоростью $ \omega = a(r) / v $.
 
 
 \section{Многомерная экспоненциальная адаптация}
 \label{section:methods:exponential_fitting}
 
+В предыдущем разделе рассматривались примеры адаптации семейства двухшаговых одностадийных схем
+к различным задачам малой размерности.
+В настоящем разделе будет исследована точная адаптация к линейной системе произвольной размерности,
+также называемая \emph{экспоненциальной адаптацией}~\cite{hollevoet2013exponential_fitting}.
+В первом подразделе будет описан общий алгоритм экспоненциальной адаптации семейств линейных схем.
+В последующих подразделах он будет применён к нескольким выбранным семействам методов Рунге-Кутты.
+
+
+\subsection{Общий алгоритм экспоненциальной адаптации}
+\label{subsection:exponential_fitting:general_exponential_fitting}
+
+Можно показать, что точная адаптация к системе $ \dot{\bvec{x}} = A \cdot \bvec{x} + \bvec{b} $
+эквивалентна точной адаптации к системе $ \dot{\bvec{x}} = A \cdot \bvec{x} $.
+В случае невырожденного $ A $ это доказывается заменой $ \bvec{x} := \bvec{x} + A^{-1} \cdot \bvec{b} $.
+Однако данный результат справедлив и в общем случае.
+
+\begin{theorem}
+    \label{theorem:general_exponential_fitting:exponential_fitting_equivalency}
+    Пусть $ \banachspace $~--- банахово, $ A \in \linopset(\banachspace) $.
+    Если линейный численный метод точно интегрирует систему $ \dot{\bvec{x}} = A \cdot \bvec{x} $
+    и семейство систем $ \dot{\bvec{x}} = \bvec{b} $ для любых $ \bvec{b} \in \banachspace $ и с любыми начальными условиями,
+    то он точно интегрирует неоднородную систему $ \dot{\bvec{x}} = A \cdot \bvec{x} + \bvec{b} $
+    с любыми начальными условиями.
+\end{theorem}
+
+\begin{proof}
+    Рассмотрим задачу Коши
+    \[
+        \begin{dcases}
+            \frac{d \bvec{x}}{d t} = A \cdot \bvec{x} + \bvec{b} \\
+            \bvec{x}(0) = \bvec{x}_0
+        \end{dcases}
+        %\quad \Longleftrightarrow \quad
+        %\bvec{x}(t) = \exp(t A) \cdot \bvec{x}_0 + \varphi_1(t A) \cdot t \bvec{b}
+    \]
+    Пусть $ \mathcal{X} = \range A $.
+    Разложим линейное пространство в прямую сумму: $ \banachspace = \mathcal{X} \oplus \mathcal{Y} $.
+    Пусть $ \bvec{x}(t) = \bvec{x}^x(t) + \bvec{x}^y(t) $ и $ \bvec{b} = \bvec{b}^x + \bvec{b}^y $,
+    где $ \bvec{x}^x(t), \; \bvec{b}^x \in \mathcal{X} $.
+    Тогда $ \dot{\bvec{x}}^x = 0 + \bvec{b}^x $,
+    что может быть точно проинтегрировано численным методом по условию.
+    %из чего следует $ \bvec{x}^x(t) = \bvec{x}_0^x + t \bvec{b}^x $.
+    %По предположению из условия теоремы,
+    %динамика $ \bvec{x}^x(t) $ будет проинтегрирована численным методом точно.
+    Рассмотрим произвольный вектор $ \bvec{a} $: $ A \cdot \bvec{a} = \bvec{b}^y $
+    (существует по определению $ \bvec{b}^y $).
+    Определим $ \bvec{y}(t) = \bvec{x}^y(t) + \bvec{a} $.
+    Тогда $ \dot{\bvec{y}}(t) = A \cdot \bvec{y} $,
+    что может быть точно проинтегрировано численным методом по условию.
+
+    Поскольку используется линейный численный метод,
+    и для разложения исходной задачи на две использовались только аффинные преобразования
+    (проекции на $ \mathcal{X} $, $ \mathcal{Y} $, замена переменных $ \bvec{y}(t) = \bvec{x}^y(t) + \bvec{a} $),
+    численное решение никак не изменится,
+    если интегрировать исходную задачу напрямую.
+    Отсюда следует, что рассматриваемая задача Коши будет проинтегрирована точно.
+\end{proof}
+
+Следует отметить, что требование точно интегрировать уравнение $ \dot{\bvec{x}} = const $
+является довольно слабым, и ему изначально удовлетворяет большинство численных методов.
+%Также важно понимать, что метод должен быть линейным для фиксированного $ A $ и шага интегрирования.
+
+Теорема~\ref{theorem:general_exponential_fitting:exponential_fitting_equivalency}
+позволяет проводить экспоненциальную адаптацию,
+используя только проверочное уравнение Далквиста.
+Как следствие, достаточным признаком точного интегрирования линейных неоднородных систем
+является попросту равенство экспоненте функции устойчивости
+и способность метода точно интегрировать константную правую часть.
+
+\begin{corollary}
+    \label{corollary:general_exponential_fitting:exponential_fitting_equivalency}
+    Численный метод с функцией устойчивости $ R(z) $ точно адаптирован к семейству задач Коши
+    $ \{ \dot{\bvec{x}} = A \cdot \bvec{x} + \bvec{b}, \; \bvec{x}(0) = \bvec{x}_0 \mid \bvec{x_0}, \bvec{b} \in \banachspace \} $
+    для фиксированного $ A \in \linopset(\banachspace) $ на сетке $ \{ 0, \Delta t \} $,
+    если он точно адаптирован к семейству задач Коши
+    $ \{ \dot{\bvec{x}} = \bvec{b}, \; \bvec{x}(0) = \bvec{x}_0 \mid \bvec{x_0}, \bvec{b} \in \banachspace \} $
+    на той же сетке и $ R(\Delta t \cdot A) = \exp(\Delta t \cdot A) $.
+\end{corollary}
+
+Следствие~\ref{corollary:general_exponential_fitting:exponential_fitting_equivalency}
+особенно удобно тем, что для большинства семейств численных методов функция устойчивости известна.
+В частности, для методов Рунге-Кутты, задаваемых таблицей Бутчера,
+%
+\begin{equation}
+    \label{eq:general_exponential_fitting:runge-kutta}
+    R(z) = 1 + z \mathrm{b}^T (\identity - z \mathrm{A})^{-1} \mathrm{e} =
+    \frac{\det (\identity - z \mathrm{A} + z \mathrm{e} \mathrm{b}^T)}{\det(\identity - z \mathrm{A})},
+\end{equation}
+%
+где $ \mathrm{A} $, $ \mathrm{b} $~--- соответствующие части таблицы Бутчера,
+а $ \mathrm{e} $~--- вектор, состоящий из единиц.
+
+
 \subsection{Взвешенный метод Эйлера}
-\label{subsection:methods:weighted_Euler}
+\label{subsection:exponential_fitting:weighted_Euler}
+
+Произведём экспоненциальную адаптацию двухшаговой одностадийной схемы~\eqref{eq:linear_stability_theory:weighted_two_point}.
+Нетрудно проверить, что схема точно интегрирует константную правую часть при любых $ \Theta $.
+Воспользуемся следствием~\ref{corollary:general_exponential_fitting:exponential_fitting_equivalency}.
+Для краткости обозначим $ \Delta t \cdot A = z $.
+\[
+    (\identity - z \Theta)^{-1} (\identity + z (\identity - \Theta)) = \exp(z)
+\]
+Поскольку в уравнении помимо $ \Theta $ фигурируют только регулярные функции от $ z $,
+его можно решать в комплексных переменных
+(см.~\ref{definition:regular_function_operator:regular_function_operator}).
+\[
+    (1 + z) - z \Theta = e^z (1 - z \Theta)
+\]
+%
+\begin{equation}
+    \label{eq:weighted_Euler:optimal_parameters}
+    \Theta^\optimal(z) = \frac{1}{z} - \frac{1}{e^z - 1},
+    %\quad
+    %z \in \complexes \setminus \{ 2 \pi i \cdot k \mid k \in \integers, k \neq 0 \}
+\end{equation}
+%
+Полученное выражение функционально совпадает с оптимальным значением $ \theta^\optimal(z) $
+из раздела~\ref{subsection:methods:one_dimensional_linear_system}
+(формула~\eqref{eq:one_dimensional_linear_system:optimal_theta}).
+Основное отличие: $ z $ теперь может быть матрицей.
+%Отметим следующие свойства $ \Theta^\optimal(z) $:
+
+\begin{remark}
+    \label{remark:weighted_Euler:optimal_parameters_properties}
+    Функция $ \Theta^\optimal(z) $, заданная уравнением~\eqref{eq:weighted_Euler:optimal_parameters}
+    обладает следующими свойствами:
+    \begin{enumerate}
+        \item $ \Theta^\optimal(z) $ регулярна в $ \complexes \setminus \{ 2 \pi i \cdot k \mid k \in \integers, k \neq 0 \} $;
+        \item $ \displaystyle \Theta^\optimal(z) = \frac{1}{2} - \frac{z}{12} + \frac{z^3}{720} + \Oclass(z^4) $
+            в окрестности $ z = 0 $;
+        \item $ \Theta^\optimal(\reals) \subseteq (0; 1) \subseteq \reals $.
+            Как следствие, $ \Theta^\optimal(\Delta t \cdot A) \in \reals^{n \times n} $ для $ A \in \reals^{n \times n} $
+            (теорема~\ref{theorem:regular_function_operator:real_valued_matrix_function}).
+    \end{enumerate}
+\end{remark}
+
+На практике в качестве $ z $ следует брать $ \Delta t \cdot F(x) $,
+где $ F $~--- матрица Якоби правой части интегрируемой системы или её аппроксимация.
+Для простоты вычислений $ \Theta^\optimal(z) $ также можно брать только диагональ матрицы Якоби
+или усредненный спектр (след матрицы, делённый на размерность).
+
 
 \subsection{Дважды взвешенный метод Эйлера}
-\label{subsection:methods:double_weighted_Euler}
+\label{subsection:exponential_fitting:double_weighted_Euler}
+
+Рассмотрим следующее семейство двухстадийных методов Рунге-Кутты,
+заданное таблицей Бутчера
+\[
+    \begin{array}{c|cc}
+        0 & 0 & 0 \\
+        1 & 1 - \alpha & \alpha \\
+        \hline
+         & 1 - \beta & \beta
+    \end{array}
+    \qquad
+    \alpha, \beta \in \reals
+\]
+Функция устойчивости:
+\[
+    R(z) = \frac{1 + (1 - \alpha) z - (\alpha - \beta) z^2}{1 - \alpha z}
+\]
+Поскольку параметра теперь два,
+можно осуществить двойную экспоненциальную адаптацию:
+$ R(z) = \exp(z) $, $ R(x) = \exp(x) $.
+Рассмотрим случай коммутирующих $ z $ и $ x $,
+позволяющий решить уравнение в комплексных переменных:
+%
+\begin{equation}
+    \label{eq:double_weighted_Euler:optimal_parameters}
+    \begin{aligned}
+        \alpha^\optimal(x,z) &= \frac{z^2 (e^x - 1 - x) - x^2 (e^z - 1 - z)}{x z( z (e^x - 1) - x (e^z - 1))} \\
+        \beta^\optimal(x,z)  &= \frac{(x-z)(e^z - 1 - z)(e^x - 1 - x)}{x z (z(e^x - 1) - x (e^z - 1))}
+    \end{aligned}
+\end{equation}
+%
+\begin{remark}
+    \label{remark:double_weighted_Euler:optimal_parameters_properties}
+    Функции $ \alpha^\optimal(x,z) $ и $ \beta^\optimal(x, z) $,
+    заданные уравнениями~\eqref{eq:double_weighted_Euler:optimal_parameters}
+    обладают следующими свойствами:
+    \begin{enumerate}
+        \item $ \displaystyle \alpha^\optimal(x,z) = \frac{1}{3} - \frac{x + z}{36} + \Oclass(|x|^2 + |z|^2) $
+            и $ \displaystyle \beta^\optimal(x,z)  = \frac{1}{2} + \frac{x + z}{6}  + \Oclass(|x|^2 + |z|^2) $
+            в окрестности $ x = 0 $, $ z = 0 $;
+        \item $ \displaystyle \lim_{x \to -\infty} \alpha^\optimal(x,z) =
+            \lim_{x \to -\infty} \beta^\optimal(x,z) = \Theta^\optimal_{\eqref{eq:weighted_Euler:optimal_parameters}}(z) $,
+            что делает схему, полученную в разделе~\ref{subsection:exponential_fitting:weighted_Euler},
+            частным случаем данного метода.
+    \end{enumerate}
+\end{remark}
+
+
+\subsection{Адаптированный двухстадийный SDIRK-метод}
+\label{subsection:exponential_fitting:two_stage_SDIRK}
+
+Рассмотрим следующее семейство двухстадийных SDIRK-методов Рунге-Кутты~\cite{franko1997SDIRK},
+заданное таблицей Бутчера
+\[
+    \begin{array}{c|cc}
+        \alpha & \alpha & 0 \\
+        1      & 1 - \alpha & \alpha \\
+        \hline
+         & 1 - \alpha & \alpha
+    \end{array}
+    \qquad
+    \alpha \in \reals
+\]
+Функция устойчивости:
+\[
+    R(z) = \frac{1 + (1 - 2 \alpha) z}{(1 - \alpha z)^2}
+\]
+Оптимальное значение параметра:
+%
+\begin{equation}
+    \label{eq:two_stage_SDIRK:optimal_parameters}
+    \alpha^\optimal(z) = \frac{1 - e^{-z}}{z} \pm e^{-z} \sqrt{\frac{1}{z^2} \left( e^z (z - 1) + 1 \right)}
+\end{equation}
+
+Полученная функция очень проблемная,
+так как требует вычисления матричного корня,
+в общем случае не определённого однозначно.
+Однако можно показать, что $ \alpha^\optimal(z) $ регулярна в окрестности нуля,
+и довольно точно аппроксимируется первыми двумя членами ряда Тейлора:
+\[
+    \alpha^\optimal(z) \approx 1 - \frac{\sqrt{2}}{2} + \left( \frac{\sqrt{2}}{3} - \frac{1}{2} \right) \cdot z
+\]
+Стоит отметить, что при $ \alpha = 1 - \sqrt{2} / 2 $ исходная численна схема является L"=устойчивой.
+
+
+\section{Модифицированный метод Ньютона}
+\label{section:methods:modified_Newton_iteration}
+
+Как уже было сказано, одним из преимуществ адаптивных методов является баланс между устойчивостью
+и простотой поиска корней невязки дискретизованного уравнения.
+В некоторых задачах, однако, требуется повышенная численная устойчивость,
+соответствующая наиболее неявным методам.
+Использование таких методов напрямую может быть затруднено из-за паразитических корней.
+
+Часто корни невязки дискретизованного уравнения $ \res(\bvec{x}) $ с матрицей Якоби $ \jac(\bvec{x}) $
+ищутся методом Ньютона:
+%
+\begin{equation}
+    \label{eq:modified_Newton_iteration:Newton_method}
+    \bvec{x}_{m+1}^{n+1} = \bvec{x}_m^{n+1} - \jac^{-1}(\bvec{x}_m^{n+1}) \cdot \res(\bvec{x}_m^{n+1}),
+\end{equation}
+%
+где $ m $~--- номер нелинейной итерации метода.

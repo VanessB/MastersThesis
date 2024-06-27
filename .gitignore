@@ -13,6 +13,8 @@
 *.bcf
 *.gnuploterrors
 *.pdf
+*.nav
+*.snm
 
 drafts
 gnuplottex

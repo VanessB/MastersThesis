@@ -25,27 +25,13 @@
 %\usepackage{mathptmx}
 %\usepackage{newtxtext,newtxmath}
 
-%% Поля (геометрия страницы).
-\usepackage[left=3cm, right=1.5cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry}
-%headheight=28pt
-
-%% Русские списки.
-\usepackage{enumitem}
-\makeatletter
-\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
-\makeatother
-
 %% Работа с картинками.
 \usepackage{caption}           % Пакет для подписей к рисункам, в частности, для работы caption*.
 \usepackage{subcaption}        % Подкартинки.
+\usepackage{graphicx}          % Для вставки рисунков.
+\usepackage{wrapfig}           % Обтекание рисунков и таблиц текстом.
 
-\captionsetup{justification=centering} % Центрирование подписей к картинкам.
-\captionsetup[figure]{name=Рисунок}    % Полное наименование рисунка.
-\usepackage{graphicx}                  % Для вставки рисунков.
-\graphicspath{{images/}{images2/}}     % Папки с картинками.
-\setlength\fboxsep{3pt}                % Отступ рамки \fbox{} от рисунка.
-\setlength\fboxrule{1pt}               % Толщина линий рамки \fbox{}.
-\usepackage{wrapfig}                   % Обтекание рисунков и таблиц текстом.
+\graphicspath{{images/}}       % Папки с картинками.
 
 %% Работа с таблицами.
 %\usepackage{array,tabularx,tabulary,booktabs} % Дополнительная работа с таблицами.
@@ -55,13 +41,7 @@
 % Ячейки на несколько строк.
 \usepackage{multirow}
 \usepackage{makecell}
-
 \usepackage{tabularx} % Таблица с регулируемой шириной столбцов и работающими сносками.
-
-%% Интервалы.
-\linespread{1.5}              % Междустрочный интервал.
-\setlength\parindent{1.25cm}  % Абзацный отступ.
-\usepackage{indentfirst}      % Отступ в первом абзаце.
 
 %% TikZ.
 \usepackage{tikz}
@@ -70,11 +50,6 @@
 %% Графики gnuplot.
 \usepackage[shell, subfolder, cleanup]{gnuplottex}
 \usepackage{gnuplot-lua-tikz}
-
-%% Верхний колонтитул.
-\usepackage{fancyhdr}
-%\pagestyle{fancy}
-%\setlength{\headheight}{23pt}
 
 %% Перенос знаков в формулах (по Львовскому).
 \newcommand*{\hm}[1]{#1\nobreak\discretionary{}{\hbox{$\mathsurround=0pt #1$}}{}}
@@ -99,18 +74,3 @@
 %% Список литературы.
 \usepackage[doi=false, isbn=false, url=false, eprint=false, backend=biber, style=gost-numeric]{biblatex}
 \usepackage{csquotes}
-
-%% Стили заголовков.
-\usepackage{titlesec}
-% Глава.
-%\titleformat{\chapter}{\centering\normalfont\fontsize{14}{15}\bfseries}{\chaptertitlename\ \thechapter:}{1em}{}
-\titleformat{\chapter}{\centering\normalfont\fontsize{14}{15}\bfseries\MakeUppercase}{\thechapter}{1em}{}
-\titlespacing*{\chapter}{0pt}{0pt}{10pt}
-% Секция.
-\titleformat{\section}{\centering\normalfont\fontsize{14}{15}\bfseries}{\thesection}{1em}{}
-% Подсекция.
-\titleformat{\subsection}{\centering\normalfont\fontsize{14}{15}\bfseries\itshape}{\thesubsection}{1em}{}
-
-% Глава без номера.
-\newcommand{\uchapter}[1]{\chapter*{#1}
-\addcontentsline{toc}{chapter}{\protect\numberline{}#1}}

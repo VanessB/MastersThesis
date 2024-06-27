@@ -1,0 +1,42 @@
+%% Поля (геометрия страницы).
+\usepackage[left=3cm, right=1.5cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry}
+%headheight=28pt
+
+%% Работа с картинками.
+\captionsetup{justification=centering} % Центрирование подписей к картинкам.
+\captionsetup[figure]{name=Рисунок}    % Полное наименование рисунка.
+\setlength\fboxsep{3pt}                % Отступ рамки \fbox{} от рисунка.
+\setlength\fboxrule{1pt}               % Толщина линий рамки \fbox{}.
+
+%% Интервалы.
+\linespread{1.5}              % Междустрочный интервал.
+\setlength\parindent{1.25cm}  % Абзацный отступ.
+\usepackage{indentfirst}      % Отступ в первом абзаце.
+
+%% Русские списки.
+\usepackage{enumitem}
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+\makeatother
+
+%% Верхний колонтитул.
+\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\setlength{\headheight}{23pt}
+
+
+
+%% Стили заголовков.
+\usepackage{titlesec}
+% Глава.
+%\titleformat{\chapter}{\centering\normalfont\fontsize{14}{15}\bfseries}{\chaptertitlename\ \thechapter:}{1em}{}
+\titleformat{\chapter}{\centering\normalfont\fontsize{14}{15}\bfseries\MakeUppercase}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{10pt}
+% Секция.
+\titleformat{\section}{\centering\normalfont\fontsize{14}{15}\bfseries}{\thesection}{1em}{}
+% Подсекция.
+\titleformat{\subsection}{\centering\normalfont\fontsize{14}{15}\bfseries\itshape}{\thesubsection}{1em}{}
+
+% Глава без номера.
+\newcommand{\uchapter}[1]{\chapter*{#1}
+\addcontentsline{toc}{chapter}{\protect\numberline{}#1}}

@@ -1,0 +1,581 @@
+% !TeX TS-program = lualatex
+
+\PassOptionsToPackage{unicode=true}{hyperref}
+\documentclass[
+    14pt,
+    xcolor=dvipsnames,
+    aspectratio=169
+]{beamer}
+
+%\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
+%\usepackage{txfonts}
+\usepackage{fontspec}
+\setsansfont{Lato}
+\usefonttheme{professionalfonts}
+%\usefonttheme[onlymath]{serif}
+
+%% Преамбула.
+\usepackage{ragged2e}
+\usepackage{color}
+\usepackage{epstopdf}
+
+% Ссылки.
+%\usepackage[unicode=true]{hyperref}
+
+% Улучшенные сноски.
+\usepackage{footmisc}
+
+% Продвинутые формулы.
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+
+% Продвинутые математические символы.
+\usepackage{amssymb}
+
+% Кастомизируемые теоремы.
+\usepackage{amsthm}
+%\usepackage{thmtools}
+
+% Русский язык.
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+% Нижнее подчёркивание с переносами.
+\usepackage[normalem]{ulem}
+
+% Графики gnuplot.
+\usepackage[shell, subfolder, cleanup]{gnuplottex}
+
+% Работа с плавающими объектами.
+\usepackage[section]{placeins}
+
+% Обтекаемые изображения
+\usepackage{wrapfig}
+
+% Ячейки на несколько строк.
+\usepackage{multirow}
+\usepackage{makecell}
+
+% Таблица с регулируемой шириной столбцов и работающими сносками.
+\usepackage{tabularx}
+
+% Графика TikZ
+\usepackage{tikz}
+\usepackage{gnuplot-lua-tikz}
+
+
+\usepackage[doi=false, isbn=false, url=false, eprint=false, backend=biber, style=gost-numeric]{biblatex}
+\usepackage{csquotes}
+
+\addbibresource{references.bib}
+
+%% Определения команд.
+\input{include/defines.tex}
+
+%% Теория вероятностей.
+\input{include/probability.tex}
+
+%% Численные методы.
+\input{include/numerical.tex}
+
+%% Определение сред.
+%\input{include/environments.tex}
+
+%% Список литературы.
+\addbibresource{references.bib}
+
+\setlength{\parskip}{0.25\baselineskip}
+\setbeamerfont{footnote}{size=\tiny}
+\justifying
+
+\mode<presentation>
+{
+    %\usetheme{Madrid}
+    \usetheme{Warsaw}
+    %\usecolortheme{lily}
+    %\usecolortheme{structure}
+    \useoutertheme[subsection=false]{smoothbars}
+    \useinnertheme{rounded}
+    \setbeamertemplate{navigation symbols}{}
+    \setbeamertemplate{headline}{}
+    \setbeamertemplate{footline}
+    {
+        \leavevmode%
+        \hbox{%
+        \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+            \usebeamerfont{author in head/foot}\insertshortauthor
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+            \usebeamerfont{title in head/foot}\insertshorttitle
+        \end{beamercolorbox}}%
+        \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+            \insertframenumber{} / \inserttotalframenumber
+        \end{beamercolorbox}
+    }%
+    \vskip0pt%
+}
+
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{enumerate items}[square]
+
+\setbeamerfont{title}{size=\large,parent=structure}
+
+\title[Выпускная квалификационная работа магистра]{Разработка математических моделей и численных методов для решения задач моделирования свёртывания кровиa}
+
+
+\author[Иван Бутаков, М05-201а]{
+    Бутаков Иван Дмитриевич\\
+    {\scriptsize \tt \href{mailto:butakov.id@phystech.edu}{butakov.id@phystech.edu}}\\
+    \vspace{\baselineskip}
+    {\small Научный руководитель: Терехов Кирилл Михайлович, к.ф.-м.н.}%
+}
+
+\institute[ИВМ РАН]{
+    \vfill
+    %\insertlogo\\
+    Институт вычислительной математики имени Г.\,И.\,Марчука Российской академии наук%
+}
+
+\date{{\scriptsize 25.06.2024}}
+
+
+\AtBeginSection[]
+{
+    \begin{frame}[noframenumbering]
+        \frametitle{Содержание}
+        \tableofcontents[currentsection,hideothersubsections]
+    \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+%\begin{frame}
+%    \frametitle{Содержание}
+%    \tableofcontents[hideallsubsections]
+%\end{frame}
+
+\section{Актуальность и постановка задачи}
+
+\begin{frame}{Акутальность}
+    \begin{columns}[T]
+        %\Large
+        \begin{column}{0.5\textwidth}
+            \only<1>{
+                \begin{itemize}
+                    \item Значительная доля всех смертей вызвана тромбами (инсульт — 2ое место в мире).%
+                        \footnote{\textcite{geoffrey2008stroke, who2020global_health_estimates}}
+                    \item Вредно давать большие дозы антикоагулянтов, но рисковать нельзя.
+                \end{itemize}
+            }
+            \only<2>{
+                Требуется уметь
+                \begin{itemize}
+                    \item выявлять людей в группе риска;
+                    \item рассчитывать минимально эффективную дозу антикоагулянтов.
+                \end{itemize}
+            }
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{./images/slides/death_chart.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Цель}
+    Разработать \textbf{математическую модель}, описывающую два основных механизма образования тромба:
+    \begin{itemize}
+        \item повреждения тканей (\textbf{<<красный тромб>>});
+        \item особенности потока крови (\textbf{<<белый тромб>>}).
+    \end{itemize}
+
+    Разработать \textbf{метод численного интегрирования} полученной модели.
+\end{frame}
+
+\begin{frame}{Постановка задачи}
+    Особенности модели:
+    \begin{itemize}
+        \item персонификация;
+        \item инициация тромбообразования вследствие особых характеристик потока;
+        \item учёт антикоагулянтов.
+    \end{itemize}
+
+    Особенности численного метода:
+    \begin{itemize}
+        \item устойчивость;
+        \item надёжность в случае нелинейно жёстких систем.
+    \end{itemize}
+\end{frame}
+
+\section{Модель фибринового тромба}
+
+\begin{frame}{\secname}
+    Основа~--- уравнение \textbf{переноса"=диффузии"-реакции}:
+    \[
+        \frac{\partial \bvec{x}}{\partial t} = \mathrm{div} (D \nabla \bvec{x}) - \mathrm{div} (\vec{v} \bvec{x}) + R
+    \]
+\end{frame}
+
+\begin{frame}{\secname}
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+           \begin{itemize}
+               \item 9 компонент против 40+ в реальной жизни
+               \item моделирует только <<красный тромб>>
+           \end{itemize}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=1.0\textwidth]{./images/slides/model.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{\secname}
+    Ограничения:
+    \begin{itemize}
+        \item не воспроизводит тромбоцитарный тромб;
+        \item не учитывает механизмы формирования тромбоцитарного тромба;
+        \item тромб полагается стационарным.
+    \end{itemize}
+\end{frame}
+
+
+\section{Модель тромбоцитарного тромба}
+
+\begin{frame}{\secname}
+    \begin{itemize}
+        \item Решающий фактор инициации тромбообразования~--- сдвиговые напряжения и другие особые характеристики потока.
+        \item Решающий фактор роста тромба — слипание тромбоцитов.
+        \item На этапе формирования тромб вязкий, подвижный.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\secname}
+    Некоторые существующие модели:
+    \begin{itemize}
+        \item \fullcite{sorensen1999platelets_deposition_model}
+        \item \fullcite{goodman2005thrombosis_model}
+        \item \fullcite{wu2017deposition_model}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\secname}
+    \centering
+    \begin{figure}[ht!]
+        \includegraphics[width=1.0\textwidth]{./images/slides/wu_model.png}
+        \caption{Иллюстрация к модели из работы \textcite{wu2017deposition_model}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\secname}
+    Разработка новой модели мотивирована
+    \only<1>{
+        \begin{itemize}
+            \item необходимостью интеграции существующей модели образования фибринового тромба;
+            \item желанием использовать меньше компонент для описания выпадения и слипания тромбоцитов;
+        \end{itemize}
+    }
+    \only<2>{
+        \begin{itemize}
+            \item желанием описывать слипание тромбоцитов посредством меняющейся проницаемости или вязкости;
+            \item желанием учесть новые модели разворачивания фактора фон Виллебранда.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}{\secname}
+    Механизмы разворачивания фактора фон Виллебранда:
+    \begin{itemize}
+        \item Действие сдвигового напряжения.
+        \item<1-> <<Сильное разворачивание>> в определённых потоках при большом числе Вайсенберга.
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{./images/slides/vWF_unfolding.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{\secname}
+    Тромбоцитарный тромб является
+    \begin{itemize}
+        \item подвижным~\cite{savage1996platelet_adhesion,jamiolkowski2016visualization};
+        \item пластичным~\cite{jamiolkowski2016visualization};
+        \item пористым~\cite{wufsus2013clot_permeability}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\secname}
+    \begin{figure}[ht!]
+        \includegraphics[width=0.9\textwidth]{./images/slides/yang_experiment.png}
+        \caption{Рост тромба в трубке со ступенькой из работы \textcite{yang2021thrombosis_imaging}.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\secname}
+    Добавим отдельную компоненту для описания не слипшихся тромбоцитов, к которым прикреплён развёрнутый vWF.
+
+    Разворачивание vWF происходит при больших сдвиговых напряжениях, слипание~--- при малых.
+    \[
+        \begin{cases}
+            \frac{\partial}{\partial t} \phi_\text{f} = - k_{s,1} \phi_\text{f} - (1 - k_{s,2}) \alpha \phi_\text{a} \phi_\text{f} \\
+            \frac{\partial}{\partial t} \phi_\text{a} = k_{s,1} \phi_\text{f} - (1 - k_{s,2}) \alpha \phi_\text{a} (\phi_\text{f} + 2 \phi_\text{a} + \phi_\text{d}) \\
+            \frac{\partial}{\partial t} \phi_\text{d} = (1 - k_{s,2}) \alpha \phi_\text{a} (2\phi_\text{f} + 2 \phi_\text{a} + \phi_\text{d}) \\
+        \end{cases}
+    \]
+\end{frame}
+
+\begin{frame}{\secname}
+    Стоит учесть, что связи образуются только на определённом характерном расстоянии между тромбоцитами.
+
+    Из предположения о равномерном распределении тромбоцитов в объёме при маленькой концентрации
+    можно получить <<функцию активации>> связей.
+
+    Для этого решается задача о расстоянии $ r_k $ до $ k $-ого ближайшего соседа.
+    \[
+        \mathbb{P} \{r_k < x\} = \mathbb{P} \left\{\textnormal{в $ V = V_{\text{ball}}(x) $ находится $ \geqslant k $ частиц} \right\}
+    \]
+\end{frame}
+
+\begin{frame}{\secname}
+    Функция распределения и функция плотности находятся из распределения Пуассона варьированием радиуса шара,
+    в котором рассматривается число частиц
+    \begin{align*}
+        F_{r_k}(x) &= 1 - e^{- V(x) n} \sum_{m = 0}^{k-1} \frac{(V(x) n)^m}{m!} \\
+        \rho_{r_k}(x)  &= S(x) n \cdot e^{-V(x) n} \frac{(V(x) n)^{k-1}}{(k-1)!}
+    \end{align*}
+    где $ V(x) $, $ S(x) $~--- функции объёма и площади поверхности шара радиуса $ x $.
+\end{frame}
+
+\begin{frame}{\secname}
+    Функция распределения ведёт себя как гладкая ступенька.
+
+    Считая, что тромб становится вязким в момент,
+    когда характерное расстояния до нескольких ближайших соседей становится сравнимо с длиной фактора фон Виллебранда,
+    получаем модификацию модели вязкости.
+    \[
+        \nu = \nu_{\text{blood}} \cdot (1 + F_{r_k}(L_{\text{vWF}}; n=\phi_{\text{d}}) \cdot \phi_{\text{d}} K (\dot \gamma)^{n-1})
+    \]
+\end{frame}
+
+\begin{frame}
+    \begin{columns}[T]
+        \begin{column}{0.3\textwidth}
+            \centering
+            \includegraphics[width=1.0\textwidth]{./images/slides/blood_step_1.png}
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \centering
+            \includegraphics[width=1.0\textwidth]{./images/slides/blood_step_2.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\section{Метод адаптации численной схемы}
+
+\begin{frame}{Каскад реакций~--- жёсткая система}
+    При численном интегрировании модели каскада свёртывания крови
+    неявные методы могут давать нефизичные решения (отрицательные концентрации).\footnote{\textcite{vassilevski2020parallel, butakov2022two_methods}}
+\end{frame}
+
+\begin{frame}{Существующие подходы}
+    \begin{itemize}
+        \item<1-> <<Классическая>> жёсткость устраняется устойчивыми неявными численными схемами.
+        \item Экспоненциальные интеграторы позволяют точно интегрировать линейную часть системы.
+    \end{itemize}
+    \onslide<2->{
+        Проблемы:
+        \begin{itemize}
+            \item Неявные схемы <<транслируют>> нелинейность правой части СОДУ на дискретизованное уравнение.
+            \item Экспоненциальные интеграторы плохо справляются с нелинейной реакцией системы на малые возмущения.
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}{Существующие подходы}
+    Можно ли совместить экспоненциальные интеграторы и неявные схемы?
+    \begin{itemize}
+        \item Методы Лоусона: замена переменных + стандартная численная схема.
+            \[
+                \bvec{v}(t) = \exp\left((t_{n-1} - t) \cdot \frac{\partial f}{\partial \bvec{x}}\right) \bvec{x}(t)
+            \]
+        \item Методы групп Ли.
+        \item Некоторые существующие экспоненциальные интеграторы.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\secname}
+    Предлагается динамически адаптировать существующие семейства численных методов для достижения
+    \textbf{баланса между устойчивостью схемы и простотой поиска корней невязки}.
+\end{frame}
+
+\subsection{Методы Рунге-Кутты}
+
+\begin{frame}{\subsecname}
+    Полностью задаются матрицей $ \mathrm{A} $ и вектором $ \mathrm{b} $:
+    \begin{align*}
+        \mathbf{x}^{n+1} &= \mathbf{x}^n + \Delta t \sum_{m=1}^s b_m \mathbf{k}_m \\
+        \mathbf{k}_m &= f \left( \mathbf{x}^n + \Delta t \sum_{j = 1}^s a_{ij} \mathbf{k}_j \right)
+    \end{align*}
+\end{frame}
+
+\begin{frame}{\subsecname}
+    Если правая часть линейна по $ \bvec{x} $, численное решение можно представить в виде
+    \[
+        \mathbf{x}^{n+1} = R \left( \Delta t \frac{\partial f}{\partial \mathbf{x}} \right) \mathbf{x}^n
+        \qquad
+        R(z) = \frac{\det \left(I - z \mathrm{A} + z e \mathrm{b}^T \right)}{\det \left(I - z \mathrm{A} \right)}
+    \]
+    Подберём $ \mathrm{A} $, $ \mathrm{b} $ так, чтобы воспроизводилось точное решение:
+\end{frame}
+
+\begin{frame}{Взвешенный метод Эйлера}
+    Рассмотрим тета-схему:
+    \[
+        \begin{array}{c|cc}
+            0 & 0 & 0 \\
+            1 & 1 - \Theta & \Theta \\
+            \hline
+             & 1 - \Theta & \Theta
+        \end{array}
+    \]
+    Воспользовавшись предложенным методом, получаем
+    \[
+        \Theta^\optimal(z) = \frac{1}{z} - \frac{1}{e^z - 1} = \frac{1}{2} - \frac{z}{12} + \frac{z^3}{720} + \Oclass(z^4)
+    \]
+\end{frame}
+
+\begin{frame}{Система ван дер Поля (первая компонента)}
+    \begin{center}
+        \includegraphics[width=0.85\textwidth]{./images/slides/van_der_Pol.png}
+
+        \vspace{-1.0\baselineskip}
+        {\tiny $ t $, у.е.}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Система ван дер Поля (первая компонента)}
+    \begin{center}
+        \includegraphics[width=0.48\textwidth]{./images/slides/van_der_Pol_1.png}
+        \hfill
+        \includegraphics[width=0.48\textwidth]{./images/slides/van_der_Pol_2.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[c]{Каскад свёртывания крови (тромбин)}
+    \begin{center}
+        \includegraphics[width=0.91\textwidth]{./images/slides/thrombin.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Дважды взвешенный метод Эйлера}
+    Рассмотрим следующее семейство двухстадийных методов Рунге-Кутты,
+    заданное таблицей Бутчера
+    \[
+        \begin{array}{c|cc}
+            0 & 0 & 0 \\
+            1 & 1 - \alpha & \alpha \\
+            \hline
+             & 1 - \beta & \beta
+        \end{array}
+        \qquad
+        \alpha, \beta \in \reals
+    \]
+    Поскольку параметра два, можно произвести подгонку под две экспоненты:
+    \[
+        R(z) = \exp(z), \quad R(x) = \exp(x), \quad x \neq z
+    \]
+\end{frame}
+
+\begin{frame}{Дважды взвешенный метод Эйлера}
+    \[
+        \begin{aligned}
+            \alpha^\optimal(x,z) &= \frac{z^2 (e^x - 1 - x) - x^2 (e^z - 1 - z)}{x z( z (e^x - 1) - x (e^z - 1))} \approx \frac{1}{3} - \frac{x + z}{36} \\
+            \beta^\optimal(x,z)  &= \frac{(x-z)(e^z - 1 - z)(e^x - 1 - x)}{x z (z(e^x - 1) - x (e^z - 1))} \approx \frac{1}{2} + \frac{x + z}{6}
+        \end{aligned}
+    \]
+    В пределе сильно диссипативной системы имеем взвешенный метод Эйлера:
+    \[
+        \lim_{x \to -\infty} \alpha^\optimal(x,z) = \lim_{x \to -\infty} \beta^\optimal(x,z) = \Theta^\optimal(z)
+    \]
+\end{frame}
+
+\begin{frame}{Дважды взвешенный метод Эйлера}
+    \textbf{Проблема:} $ x $ и $ z $ могут не коммутировать.\newline
+    \textbf{Решение:} $ x \approx \identity \cdot (\trace x / d) $.
+
+    \textbf{Проблема:} $ x $ и $ z $ могут быть близки к нулю.\newline
+    \textbf{Решение:} разложение в ряд Тейлора.
+
+    \textbf{Проблема:} $ x $ и $ z $ могут быть близки друг к другу.\newline
+    \textbf{Решение:} $ x = z + \delta $ и разложение в ряд Тейлора.
+\end{frame}
+
+\begin{frame}{Система ван дер Поля (первая компонента)}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{./images/slides/van_der_Pol_double.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Адаптированный двухстадийный SDIRK-метод}
+    Рассмотрим следующее семейство двухстадийных SDIRK-методов Рунге-Кутты~\cite{franko1997SDIRK},
+    заданное таблицей Бутчера
+    \[
+        \begin{array}{c|cc}
+            \alpha & \alpha & 0 \\
+            1      & 1 - \alpha & \alpha \\
+            \hline
+            & 1 - \alpha & \alpha
+        \end{array}
+        \qquad
+        \alpha \in \reals
+    \]
+    Воспользовавшись предложенным методом, получаем
+    \[
+        \alpha^\optimal(z) = \frac{1 - e^{-z}}{z} \pm e^{-z} \sqrt{\frac{1}{z^2} \left( e^z (z - 1) + 1 \right)}
+    \]
+\end{frame}
+
+\begin{frame}{Ограничения и дополнительные результаты}
+    Ограничения:
+    \begin{itemize}
+        \item
+            Требуется считать функцию от матрицы.
+            Возможное решение~--- применять функцию к усреднённому спектру ($ \trace A / d $).
+        \item
+            Неоднозначность выбора точки, в которой производится линеаризация.
+    \end{itemize}
+
+    Дополнителльные результаты:
+    \begin{itemize}
+        \item
+            В работе метод был опробован и на других задачах,
+            имеющих аналитическое решение (логистический рост, задача двух тел)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Заключение}
+    Сделаны первые шаги к построению новой модели белого тромба;
+    модель воспроизводит начальную стадию образования тромба в тесте со <<ступенькой>>.
+    Основное ограничение~--- все компоненты моделируются пассивной примесью.
+
+    Также разраюатывается вариант модели с неподвижными налипшими тромбоцитами.
+
+    Развит ранее предложенный и разработан новый метод вариации коэффициентов численной схемы
+    с целью получения точных интеграторов.
+    Приведены примеры, соответствующий анализ и эксперименты.
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+    \printbibliography
+\end{frame}
+
+
+\end{document}

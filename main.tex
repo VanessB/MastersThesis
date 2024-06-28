@@ -24,17 +24,20 @@
 \addbibresource{references.bib}
 
 \begin{document}
-    % Стиль доказательства.
-    \let\oldproofname=\proofname \renewcommand{\proofname}{\rm\bf{\oldproofname}}
+    \title{Исследование процессов тромбообразования при помощи математических моделей}
+    \author{Бутаков Иван Дмитриевич}
+    \date{2024 г.}
 
     %% Титульный лист.
-    %\input{include/title.tex}
+    \include{include/title.tex}
 
     %% Аннотоция.
-    \input{chapters/annotation.tex}
+    %\include{chapters/annotation.tex}
+
+    \fancyfoot[C]{\thepage}
 
     %% Содержание.
-    \tableofcontents{} \setcounter{page}{2} % Начать со второй страницы. \newpage
+    \tableofcontents{} %\setcounter{page}{2} % Начать со второй страницы. \newpage
 
     \include{chapters/definitions.tex}  %% Сокращения, обозначения, термины, определения.
     \include{chapters/introduction.tex} %% Введение.
@@ -45,5 +48,5 @@
     \include{chapters/summary.tex}      %% Заключение.
 
     %\nocite{*} \bibliography{references}
-    \printbibliography[heading=bibintoc]
+    \printbibliography[heading=bibintoc, title={Список использованных источников}]
 \end{document}

@@ -1,68 +1,77 @@
-\fontsize{10}{12}\selectfont
+\begin{spacing}{1.0}
+\fontsize{12}{14.5}\selectfont
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newlength{\signatureskip}
+\setlength{\signatureskip}{0.25\normalbaselineskip}
+
+\newcommand{\signatureblock}[2]{%
+    #1 \newline%
+    \uline{\strut\hfill #2}%
+    \vspace{-\signatureskip} \newline \vspace{-\signatureskip}%
+    \strut\qquad \textit{\scriptsize \quad (подпись)} \newline%
+    <<\uline{\qquad}>>\uline{\qquad\qquad\qquad\qquad} {\the\year} г.%
+}
 
 \begin{center}
     %% *название института*
-    \large\textbf{Министерство образования и науки Российской Федерации \\
-    <<Московский физико-технический институт (государственный
-    университет)>>} \\
-    \vspace{1cm}
+    Автономная некоммерческая образовательная организация \\ высшего образования \\
+    \textbf{<<НАУЧНО-ТЕХНОЛОГИЧЕСКИЙ УНИВЕРСИТЕТ <<СИРИУС>>} \\
+    \vspace{0.66\baselineskip}
+    Научный центр информационных технологий и искусственного интеллекта \\
+    \vspace{0.66\baselineskip}
+    направление <<Математическое моделирование в биомедицине и геофизике>> \\
 
-    %% *факультет/физтех-школа*
-    Физтех-школа Прикладной Математики и Информатики (ФПМИ) \\
+    \vspace{1.5\baselineskip}
 
-    %% *название базовой кафедры и лаборатории*
-    %% в случае ненадобности можно удалить
-    Кафедра вычислительных технологий и моделирования в геофизике и биоматематике \\
-    %Лаборатория (laboratory name)\\
+    \begin{tabularx}{\textwidth}{>{\hsize=.48\hsize}Y>{\hsize=.04\hsize}X>{\hsize=.48\hsize}Y}
+        & & \signatureblock{
+            \MakeUppercase{К защите допустить} \vspace{0.5\baselineskip} \newline
+                Научный руководитель направления <<Математическое моделирование в биомедицине и нефтегазовом инжиниринге>> \newline
+                д-р. физ.-мат. наук, профессор, член корреспондент РАН
+            }
+            {Ю.\,В.\,Василевский}
+    \end{tabularx}
 
-    \vspace{3em}
-
-    Выпускная квалификационная работа магистра
-\end{center}
-
-\begin{center}
+    %\vspace{\baselineskip}
     \vspace{\fill}
+
     %% *название вашей работы*
-    \LARGE{Разработка математических моделей и численных методов для решения задач моделирования свёртывания крови}
+    {\large\MakeUppercase{\thetitle}} \\
+
+    \vspace{0.5\baselineskip}
+
+    Магистерская диссертация \\
+    по направлению подготовки 01.04.02 Прикладная математика и информатика \\
+    (направленность (профиль) <<Математическое моделирование в биомедицине и нефтегазовом инжиниринге>>) \\
+
+    %\vspace{\baselineskip}
+    \vspace{\fill}
+
+    \begin{tabularx}{\textwidth}{>{\hsize=.48\hsize}Y>{\hsize=.04\hsize}X>{\hsize=.48\hsize}Y}
+        & & \signatureblock{Студент гр. М01ММ-22}
+            {И.\,Д.\,Бутаков}
+    \end{tabularx}
+
+    \vspace{\baselineskip}
+
+    \begin{tabularx}{\textwidth}{>{\hsize=.48\hsize}Y>{\hsize=.04\hsize}X>{\hsize=.48\hsize}Y}
+        & & \signatureblock{
+                Научный руководитель магистерской диссертации \newline
+                к.ф.-м.н., снс ИВМ РАН
+            }
+            {К.\,М.\,Терехов}
+    \end{tabularx}
 
     \vspace{\fill}
-\end{center}
 
-
-\begin{flushright}
-    \textbf{Автор:} \\
-    Студент 201а группы \\
-    Бутаков Иван Дмитриевич \\
-    \vspace{2em}
-    \textbf{Научный руководитель:} \\
-    к.ф.-м.н. \\
-    Терехов Кирилл Михайлович \\
-    %\vspace{2em}
-    %\textbf{Научный консультант:} \\
-    %*научная степень* \\
-    %Сергеев Сергей Сергеевич \\
-\end{flushright}
-
-\vspace{\fill}
-
-\begin{center}
     %% *лого*
-    \includegraphics[width=100 pt]{MIPT_logo.jpg}\\
-    Москва \the\year{}
+    %\includegraphics[width=100 pt]{MIPT_logo.jpg}\\
+    Федеральная территория «Сириус», \the\year{}
 \end{center}
 
 % выключаем отображение номера для этой страницы (титульник)
 \thispagestyle{empty}
 
-\newpage
-%\setcounter{page}{2}
-\fancyfoot[C]{\thepage}
-%\fancyhead[C]{\thepage}
-%% *надпись над верхним колонтинулом*
-%% в случае ненадобности можно удалить
-%\fancyhead[L]{Решение жестких систем реакций свертывания крови и моделирование образования тромба в придатке левого желудочка}
-%\fancyhead[R]{}
-\fancyhead[L]{}
-\fancyhead[R]{}
-
 \normalsize
+\end{spacing}

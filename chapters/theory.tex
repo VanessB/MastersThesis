@@ -137,14 +137,14 @@
     \end{align*}
     где последнее слагаемое даёт ноль
     (гладкий симметричный относительно вещественной прямой контур не может иметь пересечение с $ \reals $ ненулевой длины).
-    Покажем, что оставшиеся слагаемые эрмитово сопряжены:
+    Покажем, что оставшиеся слагаемые комплексно сопряжены:
     \begin{multline*}
         \frac{1}{2 \pi i} \int\limits_{\Gamma^+} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi =
-        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi^*) \left( \xi^* \identity - A \right)^{-1} d \xi = \\
-        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} \left[ f(\xi) \left( \xi \identity - A \right)^{-1} \right]^* d \xi =
-        \left[ \frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi \right]^*,
+        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi^*) \left( \xi^* \identity - A \right)^{-1} d \xi = \\ =
+        -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} \left[ f(\xi) \left( \xi \identity - A \right)^{-1} \right]^{*T} d \xi =
+        \left[ \frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi \right]^{*T},
     \end{multline*}
-    где было использовано $ A^* = A $ и $ f(z^*) = (f(z))^* $.
+    где было использовано $ A^{*T} \defeq (A^*)^T = A $ и $ f(z^*) = (f(z))^* $.
     Отсюда следует, что итоговая сумма является матрицей с вещественными элементами.
 \end{proof}
 

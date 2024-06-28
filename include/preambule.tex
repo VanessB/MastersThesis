@@ -26,10 +26,10 @@
 %\usepackage{newtxtext,newtxmath}
 
 %% Работа с картинками.
-\usepackage{caption}           % Пакет для подписей к рисункам, в частности, для работы caption*.
-\usepackage{subcaption}        % Подкартинки.
-\usepackage{graphicx}          % Для вставки рисунков.
-\usepackage{wrapfig}           % Обтекание рисунков и таблиц текстом.
+\usepackage[labelsep=endash]{caption} % Пакет для подписей к рисункам, в частности, для работы caption*.
+\usepackage{subcaption}               % Подкартинки.
+\usepackage{graphicx}                 % Для вставки рисунков.
+\usepackage{wrapfig}                  % Обтекание рисунков и таблиц текстом.
 
 \graphicspath{{images/}}       % Папки с картинками.
 
@@ -74,3 +74,13 @@
 %% Список литературы.
 \usepackage[doi=false, isbn=false, url=false, eprint=false, backend=biber, style=gost-numeric]{biblatex}
 \usepackage{csquotes}
+
+%% Удобная работа с названием работы.
+\usepackage{titling}
+
+%% Удобная работа с интервалами.
+\usepackage{setspace}
+
+%% Подчёркивание с переносом.
+\usepackage{ulem}
+\normalem

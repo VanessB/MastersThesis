@@ -448,6 +448,10 @@
 \begin{sidewaystable}[p!]
 	%\footnotesize
 	\centering
+
+    \caption{Начальные условия и параметры модели (каскад свёртывания крови).}
+	\label{tab:blood_coagulation_cascade}
+
 	\begin{tabular}{cccccccc}
 		\hline
 		$ P $ & $ T $ & $ B_{\alpha} $ & $ A $ & $ F_g $ & $ F $ & $ F_p $ & $ \phi_c $  \\
@@ -463,8 +467,6 @@
 		 $ 5.2173 \cdot 10^{-5} $  & $ 2.223 \cdot 10^{-9} $ & $ 0.005 $ & $ 3160 $ & $ 0.1 $ & $ 0.002 $ & $ 4 \cdot 10^{-9} $ & $ 200 $ \\
 		\hline
 	\end{tabular}
-    \caption{Начальные условия и параметры модели (каскад свёртывания крови).}
-	\label{tab:blood_coagulation_cascade}
 \end{sidewaystable}
 
 Результаты численного эксперимента можно найти в таблице \ref{tab:blood_coagulation_cascade_results}.
@@ -489,6 +491,10 @@
 \begin{table}[ht!]
 	\small
 	\centering
+
+    \caption{Результаты для модели каскада свёртывания крови.}
+	\label{tab:blood_coagulation_cascade_results}
+
     \begin{tabular}{c|c|cccc|c|c}
         \hline
         Метод & $\Delta t$ &  $ \niter^{\text{общ}} $ & $ \niter^{\text{сред}} $ & $ \niter^{\text{мин}} $ & $ \niter^{\text{макс}} $ & $ \mathcal{E} $ &  $ \niter^{\text{отриц}} $ \\
@@ -511,8 +517,6 @@
         Взвешенный Эйлера & $ 10^{-1} $ & $ 2052 $  & $ 2.052 $  & $ 2 $ & $ 7 $ & $ 3.3 \cdot 10^{-2} $ & $ 0 $ \\
         Взвешенный Эйлера & $ 2.5 \cdot 10^{-1} $ & $ 861 $  & $ 2.1525 $    & $ 2 $ & $ 15 $ & $ 8.2 \cdot 10^{-2} $ & $ 3 $ \\
     \end{tabular}
-    \caption{Результаты для модели каскада свёртывания крови.}
-	\label{tab:blood_coagulation_cascade_results}
 \end{table}
 
 Применение неявного метода Эйлера напрямую ведёт к нефизичному отрицательному решению для $ \Delta t \geqslant 2 $ (рис. \ref{fig:blood_coagulation}).

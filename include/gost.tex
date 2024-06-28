@@ -8,22 +8,26 @@
 \setlength\fboxsep{3pt}                % Отступ рамки \fbox{} от рисунка.
 \setlength\fboxrule{1pt}               % Толщина линий рамки \fbox{}.
 
+%% Русские списки.
+\usepackage[shortlabels]{enumitem}
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
+\makeatother
+
 %% Интервалы.
 \linespread{1.5}              % Междустрочный интервал.
 \setlength\parindent{1.25cm}  % Абзацный отступ.
 \usepackage{indentfirst}      % Отступ в первом абзаце.
-
-%% Русские списки.
-\usepackage{enumitem}
-\makeatletter
-\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
-\makeatother
+%\setlist[enumerate,1]{leftmargin=1.25cm} % Отступ в списках.
+%\setlist[itemize,1]{leftmargin=1.25cm}
 
 %% Верхний колонтитул.
 \usepackage{fancyhdr}
 %\pagestyle{fancy}
 %\setlength{\headheight}{23pt}
 
+%% Стиль доказательства.
+\let\oldproofname=\proofname \renewcommand{\proofname}{\rm\bf{\oldproofname}}
 
 
 %% Стили заголовков.

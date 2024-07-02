@@ -20,6 +20,9 @@
 %% Определение сред.
 \input{include/environments.tex}
 
+%% Для титульного листа и технического задания.
+\input{include/forms.tex}
+
 %% Список литературы.
 \addbibresource{references.bib}
 
@@ -29,7 +32,10 @@
     \date{2024 г.}
 
     %% Титульный лист.
-    \include{include/title.tex}
+    \include{chapters/title.tex}
+
+    %% Техническое задание.
+    \include{chapters/specification.tex}
 
     %% Аннотоция.
     %\include{chapters/annotation.tex}
@@ -41,10 +47,10 @@
 
     \include{chapters/definitions.tex}  %% Сокращения, обозначения, термины, определения.
     \include{chapters/introduction.tex} %% Введение.
+    \include{chapters/blood.tex}        %% Модель крови.
     \include{chapters/theory.tex}       %% Теоретические сведения.
     \include{chapters/methods.tex}      %% Разработка численных методов.
     \include{chapters/experiments.tex}  %% Эксперименты.
-    \include{chapters/blood.tex}        %% Модель крови.
     \include{chapters/summary.tex}      %% Заключение.
 
     %\nocite{*} \bibliography{references}

@@ -138,12 +138,14 @@
     где последнее слагаемое даёт ноль
     (гладкий симметричный относительно вещественной прямой контур не может иметь пересечение с $ \reals $ ненулевой длины).
     Покажем, что оставшиеся слагаемые комплексно сопряжены:
+    %
     \begin{multline*}
         \frac{1}{2 \pi i} \int\limits_{\Gamma^+} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi =
         -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi^*) \left( \xi^* \identity - A \right)^{-1} d \xi = \\ =
         -\frac{1}{2 \pi i} \int\limits_{\Gamma^-} \left[ f(\xi) \left( \xi \identity - A \right)^{-1} \right]^{*T} d \xi =
         \left[ \frac{1}{2 \pi i} \int\limits_{\Gamma^-} f(\xi) \left( \xi \identity - A \right)^{-1} d \xi \right]^{*T},
     \end{multline*}
+    %
     где было использовано $ A^{*T} \defeq (A^*)^T = A $ и $ f(z^*) = (f(z))^* $.
     Отсюда следует, что итоговая сумма является матрицей с вещественными элементами.
 \end{proof}
@@ -282,11 +284,13 @@
 Эти примеры понадобятся при дальнейшем анализе,
 а также будут периодически фигурировать в различных сравнениях.
 %
+{\allowdisplaybreaks
 \begin{align}
     \text{\emph{Явный метод Эйлера:}}   && \frac{\bvec{x}^{n+1} - \bvec{x}^n}{\Delta t} &= f(\bvec{x}^n) & R(z) &= 1 + z & \label{eq:forward_Euler} \\
     \text{\emph{Неявный метод Эйлера:}} && \frac{\bvec{x}^{n+1} - \bvec{x}^n}{\Delta t} &= f(\bvec{x}^{n+1}) & R(z) &= \frac{1}{1 - z} & \label{eq:backward_Euler} \\
     \text{\emph{Метод трапеций:}}       && \frac{\bvec{x}^{n+1} - \bvec{x}^n}{\Delta t} &= \frac{1}{2} f(\bvec{x}^n) + \frac{1}{2} f(\bvec{x}^{n+1}) & R(z) &= \frac{2 + z}{2 - z} & \label{eq:trapezoid}
 \end{align}
+}
 %
 Общий случай двухшаговой одностадийной схемы:
 \begin{equation}

@@ -7,12 +7,19 @@
 \captionsetup[figure]{name=Рисунок}    % Полное наименование рисунка.
 \setlength\fboxsep{3pt}                % Отступ рамки \fbox{} от рисунка.
 \setlength\fboxrule{1pt}               % Толщина линий рамки \fbox{}.
+\renewcommand\thesubfigure{\asbuk{subfigure}} % Русская нумерация подрисунков.
 
-%% Русские списки.
+%% Списки.
 \usepackage[shortlabels]{enumitem}
+
+% Русские буквы.
 \makeatletter
 \AddEnumerateCounter{\asbuk}{\russian@alph}{щ}
 \makeatother
+
+% Отступы.
+\setlist[enumerate]{wide=\parindent}
+\setlist[itemize]{wide=\parindent}
 
 %% Интервалы.
 \linespread{1.5}              % Междустрочный интервал.

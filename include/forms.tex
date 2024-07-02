@@ -1,0 +1,20 @@
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newlength{\signatureskip}
+\setlength{\signatureskip}{0.25\normalbaselineskip}
+
+\newcommand{\dateblock}{%
+    <<\uline{\qquad}>>\uline{\qquad\qquad\qquad\qquad} {\the\year} г.%
+}
+
+\newcommand{\vardateblock}{%
+    <<\uline{\qquad}>>\uline{\hfill} {\the\year} г.%
+}
+
+\newcommand{\signatureblock}[2]{%
+    #1 \newline%
+    \uline{\strut\hfill #2}%
+    \vspace{-\signatureskip} \newline \vspace{-\signatureskip}%
+    \strut\qquad \textit{\scriptsize \quad (подпись)} \newline%
+    \dateblock%
+}

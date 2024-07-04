@@ -4,26 +4,16 @@
 \usepackage{nicematrix} % Красивые матрицы.
 
 %% Работа с русским языком.
-\usepackage{cmap}            % поиск в PDF
-%\usepackage{mathtext}       % русские буквы в формулах
-\usepackage[T2A]{fontenc}    % кодировка
-\usepackage[utf8]{inputenc}  % кодировка исходного текста
-\usepackage[russian]{babel}  % локализация и переносы
+\usepackage{cmap}            % Поиск в PDF
+\usepackage{fontspec}        % Шрифт
+\usepackage[russian]{babel}  % Локализация и переносы
+
+%% Оглавление
+\usepackage[titles]{tocloft}
 
 %% Номера формул.
 \mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
 %\usepackage{leqno}               % Немуреация формул слева
-
-%% Шрифты.
-%\usepackage{euscript}	 % Шрифт Евклид
-%\usepackage{mathrsfs}   % Красивый матшрифт
-
-%\usepackage{fontspec}
-%\defaultfontfeatures{Ligatures={TeX},Renderer=Basic} 
-%\setmainfont[Ligatures={TeX,Historic}]{Times New Roman}
-
-%\usepackage{mathptmx}
-%\usepackage{newtxtext,newtxmath}
 
 %% Работа с картинками.
 \usepackage[labelsep=endash]{caption} % Пакет для подписей к рисункам, в частности, для работы caption*.

@@ -15,6 +15,7 @@
 *.pdf
 *.nav
 *.snm
+*.vrb
 
 drafts
 gnuplottex

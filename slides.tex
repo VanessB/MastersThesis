@@ -1,5 +1,3 @@
-% !TeX TS-program = lualatex
-
 \PassOptionsToPackage{unicode=true}{hyperref}
 \documentclass[
     14pt,
@@ -7,12 +5,9 @@
     aspectratio=169
 ]{beamer}
 
-%\DeclareFontShape{OT1}{cmss}{b}{n}{<->ssub * cmss/bx/n}{}
-%\usepackage{txfonts}
 \usepackage{fontspec}
 \setsansfont{Lato}
 \usefonttheme{professionalfonts}
-%\usefonttheme[onlymath]{serif}
 
 %% Преамбула.
 \usepackage{ragged2e}
@@ -39,8 +34,6 @@
 
 % Русский язык.
 \usepackage{cmap}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
 \usepackage[english, russian]{babel}
 
 % Нижнее подчёркивание с переносами.
@@ -94,11 +87,12 @@
 \mode<presentation>
 {
     %\usetheme{Madrid}
-    \usetheme{Warsaw}
+    %\usetheme{Warsaw}
     %\usecolortheme{lily}
     %\usecolortheme{structure}
-    \useoutertheme[subsection=false]{smoothbars}
-    \useinnertheme{rounded}
+
+    %\useoutertheme[subsection=false]{smoothbars}
+    %\useinnertheme{rounded}
     \setbeamertemplate{navigation symbols}{}
     \setbeamertemplate{headline}{}
     \setbeamertemplate{footline}
@@ -120,26 +114,32 @@
 
 \setbeamertemplate{itemize items}[triangle]
 \setbeamertemplate{enumerate items}[square]
+\setbeamertemplate{caption}[numbered]
 
 \setbeamerfont{title}{size=\large,parent=structure}
 
-\title[Выпускная квалификационная работа магистра]{Разработка математических моделей и численных методов для решения задач моделирования свёртывания кровиa}
+\definecolor{Sirius}{rgb}{0.004, 0.616, 0.631}
+\usecolortheme[named=Sirius]{structure}
+
+\title[Выпускная квалификационная работа магистра]{Исследование процессов тромбообразования при помощи математических моделей}
 
 
-\author[Иван Бутаков, М05-201а]{
+\author[Иван Бутаков, М01ММ-22]{
     Бутаков Иван Дмитриевич\\
     {\scriptsize \tt \href{mailto:butakov.id@phystech.edu}{butakov.id@phystech.edu}}\\
     \vspace{\baselineskip}
     {\small Научный руководитель: Терехов Кирилл Михайлович, к.ф.-м.н.}%
 }
 
-\institute[ИВМ РАН]{
+\institute[НТУ <<Сириус>>]{
     \vfill
     %\insertlogo\\
-    Институт вычислительной математики имени Г.\,И.\,Марчука Российской академии наук%
+    НТУ <<Сириус>>\\ Математическое моделирование в биомедицине и геофизике%
 }
 
-\date{{\scriptsize 25.06.2024}}
+\date{{\scriptsize 06.07.2024}}
+
+%\logo{\includegraphics[width=1.5cm]{images/Sirius-logo.png}}
 
 
 \AtBeginSection[]
@@ -149,6 +149,10 @@
         \tableofcontents[currentsection,hideothersubsections]
     \end{frame}
 }
+
+%\usepackage{caption}
+%\captionsetup{font=scriptsize,labelfont=scriptsize}
+\setbeamerfont{caption}{size=\small}
 
 \begin{document}
 
@@ -190,7 +194,7 @@
 \end{frame}
 
 \begin{frame}{Цель}
-    Разработать \textbf{математическую модель}, описывающую два основных механизма образования тромба:
+    Разработать \textbf{математическую модель} (СОДУ), описывающую два основных механизма образования тромба:
     \begin{itemize}
         \item повреждения тканей (\textbf{<<красный тромб>>});
         \item особенности потока крови (\textbf{<<белый тромб>>}).
@@ -217,9 +221,9 @@
 \section{Модель фибринового тромба}
 
 \begin{frame}{\secname}
-    Основа~--- уравнение \textbf{переноса"=диффузии"-реакции}:
+    Основа~--- уравнение \textbf{переноса"=диффузии"=реакции}:
     \[
-        \frac{\partial \bvec{x}}{\partial t} = \mathrm{div} (D \nabla \bvec{x}) - \mathrm{div} (\vec{v} \bvec{x}) + R
+        \frac{\partial \bvec{x}_i}{\partial t} = \mathrm{div} (D \nabla \bvec{x}_i) - \mathrm{div} (\vec{v} \bvec{x}_i) + \bvec{R}_i
     \]
 \end{frame}
 
@@ -250,15 +254,58 @@
 
 \section{Модель тромбоцитарного тромба}
 
-\begin{frame}{\secname}
+\subsection{Обзор актуальных проблем и задач}
+
+\begin{frame}{\subsecname}
     \begin{itemize}
-        \item Решающий фактор инициации тромбообразования~--- сдвиговые напряжения и другие особые характеристики потока.
-        \item Решающий фактор роста тромба — слипание тромбоцитов.
-        \item На этапе формирования тромб вязкий, подвижный.
+        \item Решающий фактор инициации тромбообразования~---
+            сдвиговые напряжения и другие особые характеристики потока~\cite{lauren2015high_shear_rate_thrombosis, avtaeva2022vWF}.
+        \item Решающий фактор роста тромба~--- слипание тромбоцитов~\cite{rasche2001haemostasis_overview, lauren2015high_shear_rate_thrombosis, mereuta2021white_clots}.
+        \item На этапе формирования тромб подвижный~\cite{savage1996platelet_adhesion,jamiolkowski2016visualization},
+            вязкий~\cite{jamiolkowski2016visualization},
+            пластичный~\cite{jamiolkowski2016visualization}.
+        \item Тромб пористый~\cite{wufsus2013clot_permeability}.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
+    Механизмы разворачивания фактора фон Виллебранда:
+    \begin{itemize}
+        \item Действие сдвигового напряжения~\cite{lippok2016vWF_unfolding, schneider2007vWF_unfolding, zlobina2016vWF_unfolding, pushin2020vWF_unfolding}.
+        \item<1-> <<Сильное разворачивание>> в определённых потоках при большом числе Вайсенберга~\cite{zhussupbekov2021vWF_unfolding}.
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{./images/slides/vWF_unfolding.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{\subsecname}
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+            Слипание тромбоцитов, однако, наблюдается при сдвиговых напряжениях,
+            недостаточных для существенного разворачивания фактора~\cite{savage1996platelet_adhesion, rahman2019platelet_adhesion}.
+        \end{column}
+
+        \begin{column}{0.6\textwidth}
+            \begin{figure}[ht!]
+                \centering
+                \includegraphics[width=0.8\textwidth]{./images/slides/Savage_platelets.png}
+                \caption{Число налипших тромбоцитов из работы \textcite{savage1996platelet_adhesion}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% \begin{frame}{\subsecname}
+%     Тромбоцитарный тромб является
+%     \begin{itemize}
+%         \item подвижным~\cite{savage1996platelet_adhesion,jamiolkowski2016visualization};
+%         \item пластичным~\cite{jamiolkowski2016visualization};
+%         \item пористым~\cite{wufsus2013clot_permeability}.
+%     \end{itemize}
+% \end{frame}
+
+\begin{frame}{\subsecname}
     Некоторые существующие модели:
     \begin{itemize}
         \item \fullcite{sorensen1999platelets_deposition_model}
@@ -267,7 +314,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
     \centering
     \begin{figure}[ht!]
         \includegraphics[width=1.0\textwidth]{./images/slides/wu_model.png}
@@ -275,7 +322,7 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
     Разработка новой модели мотивирована
     \only<1>{
         \begin{itemize}
@@ -291,47 +338,107 @@
     }
 \end{frame}
 
-\begin{frame}{\secname}
-    Механизмы разворачивания фактора фон Виллебранда:
-    \begin{itemize}
-        \item Действие сдвигового напряжения.
-        \item<1-> <<Сильное разворачивание>> в определённых потоках при большом числе Вайсенберга.
-    \end{itemize}
-    \begin{center}
-        \includegraphics[width=0.6\textwidth]{./images/slides/vWF_unfolding.png}
-    \end{center}
-\end{frame}
+\subsection{Модель тромбоцитарного тромба}
 
-\begin{frame}{\secname}
-    Тромбоцитарный тромб является
-    \begin{itemize}
-        \item подвижным~\cite{savage1996platelet_adhesion,jamiolkowski2016visualization};
-        \item пластичным~\cite{jamiolkowski2016visualization};
-        \item пористым~\cite{wufsus2013clot_permeability}.
-    \end{itemize}
-\end{frame}
+\begin{frame}{\subsecname}
+    Добавим компартменты $ \phi_a $, $ \phi_d $~--- липкие и слипшиеся тромбоциты,
+    соответственно. Липкие тромбоциты моделируются пассивной примесью, слипшиеся~--- неподвижны.
 
-\begin{frame}{\secname}
-    \begin{figure}[ht!]
-        \includegraphics[width=0.9\textwidth]{./images/slides/yang_experiment.png}
-        \caption{Рост тромба в трубке со ступенькой из работы \textcite{yang2021thrombosis_imaging}.}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{\secname}
-    Добавим отдельную компоненту для описания не слипшихся тромбоцитов, к которым прикреплён развёрнутый vWF.
-
-    Разворачивание vWF происходит при больших сдвиговых напряжениях, слипание~--- при малых.
+    Липкие налипают на стенку или на слипшиеся тромбоциты.
+    Под действием сдвигового напряжения может происходить расцепление тромбоцитов.
     \[
         \begin{cases}
-            \frac{\partial}{\partial t} \phi_\text{f} = - k_{s,1} \phi_\text{f} - (1 - k_{s,2}) \alpha \phi_\text{a} \phi_\text{f} \\
-            \frac{\partial}{\partial t} \phi_\text{a} = k_{s,1} \phi_\text{f} - (1 - k_{s,2}) \alpha \phi_\text{a} (\phi_\text{f} + 2 \phi_\text{a} + \phi_\text{d}) \\
-            \frac{\partial}{\partial t} \phi_\text{d} = (1 - k_{s,2}) \alpha \phi_\text{a} (2\phi_\text{f} + 2 \phi_\text{a} + \phi_\text{d}) \\
+            \frac{\partial \phi_f}{\partial t} &= -k_{f \to a} \cdot \phi_f + k_{\mathrm{da}} \cdot \phi_a \\
+            \frac{\partial \phi_a}{\partial t} &=  k_{f \to a} \cdot \phi_f - k_{a \to d} \cdot \phi_a + k_{\mathrm{da}} \cdot (\phi_d - \phi_a) \\
+            \frac{\partial \phi_d}{\partial t} &=  k_{a \to d} \cdot \phi_a - k_{\mathrm{da}} \cdot \phi_d \\
         \end{cases}
     \]
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
+    Предполагая объёмную концентрацию $ \phi_a $ постоянной (равновесной),
+    можно аналитически решить уравнения реакции для зависимости $ \phi_d $ от времени:
+
+    \begin{multline*}
+        \frac{\partial \phi_d}{\partial t} = k_{a \to d} \cdot \phi_a - k_{\mathrm{da}} \cdot \phi_d
+        \quad \Longrightarrow \\ \Longrightarrow \quad \phi_d(t) = \phi_a \frac{k_{a \to d}}{k_\mathrm{da}} - e^{-k_{\mathrm{da}}} \left( \phi_a \frac{k_{a \to d}}{k_\mathrm{da}} - \phi_d(0) \right)
+    \end{multline*}
+\end{frame}
+
+\begin{frame}[fragile]
+    \begin{figure}[ht!]
+        \centering
+        \small
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 14.0cm,6.7cm fontscale 0.7}]
+            load './gnuplot/common.gp'
+
+            set datafile separator ' '
+            set key vertical maxrows 6 spacing 1.4
+
+            set style increment default
+            set style data lines
+            set xlabel  "$ t, \\; \\textnormal{мин} $"
+            set xrange  [ 0 : 5 ] noreverse writeback
+            set ylabel  "$ N_{\\textnormal{тромбоцитов}}, \\; \\textnormal{шт.} $" offset -1 #rotate by 0
+            set yrange  [ 0 : 1600 ] noreverse writeback
+
+            # Модель
+            f(a, k, x) = a * (1.0 - exp(-k * x))
+
+            set xtics 1
+            #set xzeroaxis lw 2
+
+            plot "./data/platelets/Savage_fibrinogen_50_time_data.csv"   using 1:2 with points ps 3 t "Фибриноген, $ 50 \\; \\textnormal{с}^{-1} $", \
+                "./data/platelets/Savage_fibrinogen_630_time_data.csv"  using 1:2 with points ps 3 t "Фибриноген, $ 630 \\; \\textnormal{с}^{-1} $", \
+                "./data/platelets/Savage_fibrinogen_1500_time_data.csv" using 1:2 with points ps 3 t "Фибриноген, $ 1500 \\; \\textnormal{с}^{-1} $", \
+                "./data/platelets/Savage_vWF_50_time_data.csv"          using 1:2 with points ps 3 t "vWF, $ 50 \\; \\textnormal{с}^{-1} $", \
+                "./data/platelets/Savage_vWF_630_time_data.csv"         using 1:2 with points ps 3 t "vWF, $ 630 \\; \\textnormal{с}^{-1} $", \
+                "./data/platelets/Savage_vWF_1500_time_data.csv"        using 1:2 with points ps 3 t "vWF, $ 1500 \\; \\textnormal{с}^{-1} $", \
+                f(556.11,  0.4353, x) with lines lc 1 lw 2 t "$ k_\\mathrm{da} = 7.25 \\cdot 10^{-3} \\; \\textnormal{с}^{-1} $", \
+                f(2013.02, 0.0296, x) with lines lc 2 lw 2 t "$ k_\\mathrm{da} = 4.92 \\cdot 10^{-4} \\; \\textnormal{с}^{-1} $", \
+                f(44.27,   2.2744, x) with lines lc 3 lw 2 t "$ k_\\mathrm{da} = 3.71 \\cdot 10^{-2} \\; \\textnormal{с}^{-1} $", \
+                f(460.91,  2.1932, x) with lines lc 4 lw 2 t "$ k_\\mathrm{da} = 3.65 \\cdot 10^{-2} \\; \\textnormal{с}^{-1} $", \
+                f(799.96,  1.6614, x) with lines lc 5 lw 2 t "$ k_\\mathrm{da} = 2.76 \\cdot 10^{-2} \\; \\textnormal{с}^{-1} $", \
+                f(980.54,  2.4312, x) with lines lc 6 lw 2 t "$ k_\\mathrm{da} = 4.05 \\cdot 10^{-2} \\; \\textnormal{с}^{-1} $"
+        \end{gnuplot}
+        \vspace{-1.5\baselineskip}
+        \caption{Зависимость числа налипших тромбоцитов от времени при разной сдвиговой скорости в потоке у стенки~\cite{savage1996platelet_adhesion}.}
+        \label{fig:reactions:vWF_platelets_count_time}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+    \begin{figure}[ht!]
+        \centering
+        \small
+        \begin{gnuplot}[terminal=tikz, terminaloptions={color size 14.0cm,6.7cm fontscale 0.7}]
+            load './gnuplot/common.gp'
+
+            set datafile separator ' '
+
+            set style increment default
+            set style data lines
+            set xlabel  "$ \\dot \\gamma, \\; \\textnormal{с}^{-1} $"
+            set xrange  [ 0 : 1600 ] noreverse writeback
+            set ylabel  "$ N_{\\textnormal{тромбоцитов}}, \\; \\textnormal{шт.} $" offset -1 #rotate by 0
+            set yrange  [ 0 : 1000 ] noreverse writeback
+
+            # Модель
+            f(x) = 805.7 * (1.0 - 0.759 * exp(-2.845e-3 * x))
+
+            set xtics 200
+            #set xzeroaxis lw 2
+
+            plot "./data/platelets/Savage_data.csv" using 1:3 with points ps 3 t "экспериментальные данные \\cite{savage1996platelet_adhesion}", \
+                f(x) with lines lw 3 t "экспоненциальная модель"
+        \end{gnuplot}
+        \vspace{-1.5\baselineskip}
+        \caption{Зависимость числа налипших тромбоцитов от сдвиговой скорости в потоке у стенки~\cite{savage1996platelet_adhesion}.}
+        \label{fig:reactions:vWF_platelets_count}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{\subsecname}
     Стоит учесть, что связи образуются только на определённом характерном расстоянии между тромбоцитами.
 
     Из предположения о равномерном распределении тромбоцитов в объёме при маленькой концентрации
@@ -343,7 +450,7 @@
     \]
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
     Функция распределения и функция плотности находятся из распределения Пуассона варьированием радиуса шара,
     в котором рассматривается число частиц
     \begin{align*}
@@ -353,7 +460,7 @@
     где $ V(x) $, $ S(x) $~--- функции объёма и площади поверхности шара радиуса $ x $.
 \end{frame}
 
-\begin{frame}{\secname}
+\begin{frame}{\subsecname}
     Функция распределения ведёт себя как гладкая ступенька.
 
     Считая, что тромб становится вязким в момент,
@@ -362,6 +469,16 @@
     \[
         \nu = \nu_{\text{blood}} \cdot (1 + F_{r_k}(L_{\text{vWF}}; n=\phi_{\text{d}}) \cdot \phi_{\text{d}} K (\dot \gamma)^{n-1})
     \]
+\end{frame}
+
+
+\subsection{Численные эксперименты}
+
+\begin{frame}{\subsecname}
+    \begin{figure}[ht!]
+        \includegraphics[width=0.9\textwidth]{./images/slides/yang_experiment.png}
+        \caption{Рост тромба в трубке со ступенькой из работы \textcite{yang2021thrombosis_imaging}.}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
@@ -475,91 +592,91 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{Дважды взвешенный метод Эйлера}
-    Рассмотрим следующее семейство двухстадийных методов Рунге-Кутты,
-    заданное таблицей Бутчера
-    \[
-        \begin{array}{c|cc}
-            0 & 0 & 0 \\
-            1 & 1 - \alpha & \alpha \\
-            \hline
-             & 1 - \beta & \beta
-        \end{array}
-        \qquad
-        \alpha, \beta \in \reals
-    \]
-    Поскольку параметра два, можно произвести подгонку под две экспоненты:
-    \[
-        R(z) = \exp(z), \quad R(x) = \exp(x), \quad x \neq z
-    \]
-\end{frame}
-
-\begin{frame}{Дважды взвешенный метод Эйлера}
-    \[
-        \begin{aligned}
-            \alpha^\optimal(x,z) &= \frac{z^2 (e^x - 1 - x) - x^2 (e^z - 1 - z)}{x z( z (e^x - 1) - x (e^z - 1))} \approx \frac{1}{3} - \frac{x + z}{36} \\
-            \beta^\optimal(x,z)  &= \frac{(x-z)(e^z - 1 - z)(e^x - 1 - x)}{x z (z(e^x - 1) - x (e^z - 1))} \approx \frac{1}{2} + \frac{x + z}{6}
-        \end{aligned}
-    \]
-    В пределе сильно диссипативной системы имеем взвешенный метод Эйлера:
-    \[
-        \lim_{x \to -\infty} \alpha^\optimal(x,z) = \lim_{x \to -\infty} \beta^\optimal(x,z) = \Theta^\optimal(z)
-    \]
-\end{frame}
-
-\begin{frame}{Дважды взвешенный метод Эйлера}
-    \textbf{Проблема:} $ x $ и $ z $ могут не коммутировать.\newline
-    \textbf{Решение:} $ x \approx \identity \cdot (\trace x / d) $.
-
-    \textbf{Проблема:} $ x $ и $ z $ могут быть близки к нулю.\newline
-    \textbf{Решение:} разложение в ряд Тейлора.
-
-    \textbf{Проблема:} $ x $ и $ z $ могут быть близки друг к другу.\newline
-    \textbf{Решение:} $ x = z + \delta $ и разложение в ряд Тейлора.
-\end{frame}
-
-\begin{frame}{Система ван дер Поля (первая компонента)}
-    \begin{center}
-        \includegraphics[width=0.95\textwidth]{./images/slides/van_der_Pol_double.png}
-    \end{center}
-\end{frame}
-
-\begin{frame}{Адаптированный двухстадийный SDIRK-метод}
-    Рассмотрим следующее семейство двухстадийных SDIRK-методов Рунге-Кутты~\cite{franko1997SDIRK},
-    заданное таблицей Бутчера
-    \[
-        \begin{array}{c|cc}
-            \alpha & \alpha & 0 \\
-            1      & 1 - \alpha & \alpha \\
-            \hline
-            & 1 - \alpha & \alpha
-        \end{array}
-        \qquad
-        \alpha \in \reals
-    \]
-    Воспользовавшись предложенным методом, получаем
-    \[
-        \alpha^\optimal(z) = \frac{1 - e^{-z}}{z} \pm e^{-z} \sqrt{\frac{1}{z^2} \left( e^z (z - 1) + 1 \right)}
-    \]
-\end{frame}
-
-\begin{frame}{Ограничения и дополнительные результаты}
-    Ограничения:
-    \begin{itemize}
-        \item
-            Требуется считать функцию от матрицы.
-            Возможное решение~--- применять функцию к усреднённому спектру ($ \trace A / d $).
-        \item
-            Неоднозначность выбора точки, в которой производится линеаризация.
-    \end{itemize}
-
-    Дополнителльные результаты:
-    \begin{itemize}
-        \item
-            В работе метод был опробован и на других задачах,
-            имеющих аналитическое решение (логистический рост, задача двух тел)
-    \end{itemize}
-\end{frame}
+% \begin{frame}{Дважды взвешенный метод Эйлера}
+%     Рассмотрим следующее семейство двухстадийных методов Рунге-Кутты,
+%     заданное таблицей Бутчера
+%     \[
+%         \begin{array}{c|cc}
+%             0 & 0 & 0 \\
+%             1 & 1 - \alpha & \alpha \\
+%             \hline
+%              & 1 - \beta & \beta
+%         \end{array}
+%         \qquad
+%         \alpha, \beta \in \reals
+%     \]
+%     Поскольку параметра два, можно произвести подгонку под две экспоненты:
+%     \[
+%         R(z) = \exp(z), \quad R(x) = \exp(x), \quad x \neq z
+%     \]
+% \end{frame}
+% 
+% \begin{frame}{Дважды взвешенный метод Эйлера}
+%     \[
+%         \begin{aligned}
+%             \alpha^\optimal(x,z) &= \frac{z^2 (e^x - 1 - x) - x^2 (e^z - 1 - z)}{x z( z (e^x - 1) - x (e^z - 1))} \approx \frac{1}{3} - \frac{x + z}{36} \\
+%             \beta^\optimal(x,z)  &= \frac{(x-z)(e^z - 1 - z)(e^x - 1 - x)}{x z (z(e^x - 1) - x (e^z - 1))} \approx \frac{1}{2} + \frac{x + z}{6}
+%         \end{aligned}
+%     \]
+%     В пределе сильно диссипативной системы имеем взвешенный метод Эйлера:
+%     \[
+%         \lim_{x \to -\infty} \alpha^\optimal(x,z) = \lim_{x \to -\infty} \beta^\optimal(x,z) = \Theta^\optimal(z)
+%     \]
+% \end{frame}
+% 
+% \begin{frame}{Дважды взвешенный метод Эйлера}
+%     \textbf{Проблема:} $ x $ и $ z $ могут не коммутировать.\newline
+%     \textbf{Решение:} $ x \approx \identity \cdot (\trace x / d) $.
+% 
+%     \textbf{Проблема:} $ x $ и $ z $ могут быть близки к нулю.\newline
+%     \textbf{Решение:} разложение в ряд Тейлора.
+% 
+%     \textbf{Проблема:} $ x $ и $ z $ могут быть близки друг к другу.\newline
+%     \textbf{Решение:} $ x = z + \delta $ и разложение в ряд Тейлора.
+% \end{frame}
+% 
+% \begin{frame}{Система ван дер Поля (первая компонента)}
+%     \begin{center}
+%         \includegraphics[width=0.95\textwidth]{./images/slides/van_der_Pol_double.png}
+%     \end{center}
+% \end{frame}
+% 
+% \begin{frame}{Адаптированный двухстадийный SDIRK-метод}
+%     Рассмотрим следующее семейство двухстадийных SDIRK-методов Рунге-Кутты~\cite{franko1997SDIRK},
+%     заданное таблицей Бутчера
+%     \[
+%         \begin{array}{c|cc}
+%             \alpha & \alpha & 0 \\
+%             1      & 1 - \alpha & \alpha \\
+%             \hline
+%             & 1 - \alpha & \alpha
+%         \end{array}
+%         \qquad
+%         \alpha \in \reals
+%     \]
+%     Воспользовавшись предложенным методом, получаем
+%     \[
+%         \alpha^\optimal(z) = \frac{1 - e^{-z}}{z} \pm e^{-z} \sqrt{\frac{1}{z^2} \left( e^z (z - 1) + 1 \right)}
+%     \]
+% \end{frame}
+% 
+% \begin{frame}{Ограничения и дополнительные результаты}
+%     Ограничения:
+%     \begin{itemize}
+%         \item
+%             Требуется считать функцию от матрицы.
+%             Возможное решение~--- применять функцию к усреднённому спектру ($ \trace A / d $).
+%         \item
+%             Неоднозначность выбора точки, в которой производится линеаризация.
+%     \end{itemize}
+% 
+%     Дополнителльные результаты:
+%     \begin{itemize}
+%         \item
+%             В работе метод был опробован и на других задачах,
+%             имеющих аналитическое решение (логистический рост, задача двух тел)
+%     \end{itemize}
+% \end{frame}
 
 \begin{frame}{Заключение}
     Сделаны первые шаги к построению новой модели белого тромба;

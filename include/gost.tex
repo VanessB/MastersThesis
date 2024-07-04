@@ -2,6 +2,21 @@
 \usepackage[left=3cm, right=1.5cm, top=2cm, bottom=2cm, bindingoffset=0cm]{geometry}
 %headheight=28pt
 
+%% Шрифт.
+\setmainfont{Tempora}[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    ItalicFont=*-Italic,
+    BoldFont=*-Bold,
+    BoldItalicFont=*-BoldItalic,
+]
+
+%% Оглавление.
+\renewcommand{\cftchapfont}{\normalfont}
+\renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftchapdotsep}{\cftdotsep}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+
 %% Работа с картинками.
 \captionsetup{justification=centering} % Центрирование подписей к картинкам.
 \captionsetup[figure]{name=Рисунок}    % Полное наименование рисунка.
@@ -18,8 +33,11 @@
 \makeatother
 
 % Отступы.
-\setlist[enumerate]{wide=\parindent}
-\setlist[itemize]{wide=\parindent}
+\setlist[enumerate]{wide=\parindent,noitemsep}
+\setlist[itemize]{wide=\parindent,noitemsep}
+
+% Список литературы.
+\defbibenvironment{bibliography}{\enumerate[wide=\parindent]}{\endenumerate}{\item}
 
 %% Интервалы.
 \linespread{1.5}              % Междустрочный интервал.
